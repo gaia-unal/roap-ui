@@ -4,12 +4,35 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
 
-import AppBar from 'material-ui/AppBar';
+import request from 'superagent';
+
+import SearchBar from 'material-ui-search-bar'
 import FlatButton from 'material-ui/FlatButton';
+
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 
 import Logged from './Logged';
 import Login from './Login';
 import Table from './Table';
+
+
+class LearningObjectSearchService {
+  constructor() {
+    this.url = 'http://localhost/back/object';
+  }
+
+  get(then, s) {
+    request
+      .get(this.url)
+      .query({ offset: 0, count: 10, search: s })
+      .end((err, res) => {
+        if (!err) then(res);
+        else console.error(err);
+      });
+  }
+}
 
 
 export class Home extends Component {
@@ -18,18 +41,45 @@ export class Home extends Component {
     actions: PropTypes.object.isRequired,
   };
 
+  learningObjectSearchService = new LearningObjectSearchService();
+
   state = {
     logged: false,
     showLogin: false,
+    textSearch: '',
+    learningObjectList: [],
   };
+
+  onRequestSearch() {
+    this.learningObjectSearchService.get(
+      res => this.setState({ learningObjectList: res.body }),
+      this.state.textSearch
+    );
+  }
 
   render() {
     return (
       <div>
-        <AppBar
-          title="Title"
-          iconElementRight={
-            this.state.logged ? (
+        {this.state.logged && (
+          <FloatingActionButton style={{ borderRadius: '50px', fontSize: '200%', fontWeight: 'bold', position: 'fixed', bottom: '20px', right: '20px' }}>
+            <ContentAdd />
+          </FloatingActionButton>
+        )}
+        <Toolbar>
+          <ToolbarGroup firstChild={true} float="left">
+            {'Roap'}
+          </ToolbarGroup>
+          <ToolbarGroup style={{ float: 'none', width: '200px', marginLeft: 'auto', marginRight: 'auto' }}>
+            <SearchBar
+              onChange={(s) => { this.setState({ textSearch: s }); }}
+              onRequestSearch={() => { this.onRequestSearch(); }}
+              style={{
+                maxWidth: 800
+              }}
+            />
+          </ToolbarGroup>
+          <ToolbarGroup lastChild={true} float="right">
+            {this.state.logged ? (
               <Logged
                 onSignOut={() => {
                   this.setState({ logged: !this.state.logged });
@@ -42,22 +92,22 @@ export class Home extends Component {
                   this.setState({ showLogin: !this.state.showLogin });
                 }}
               />
-            )
-          }
-        />
+            )}
+          </ToolbarGroup>
+        </Toolbar>
         <Login
           open={this.state.showLogin}
           onSubmit={() => {
             this.setState({
               logged: !this.state.logged,
-              showLogin: !this.state.showLogin
+              showLogin: !this.state.showLogin,
             });
           }}
           onCancel={() => {
             this.setState({ showLogin: !this.state.showLogin });
           }}
         />
-        <Table />
+        <Table learningObjectList={this.state.learningObjectList} />
       </div>
     );
   }
