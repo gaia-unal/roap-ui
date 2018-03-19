@@ -10,6 +10,7 @@ import request from 'superagent';
 import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
+import ActionInfo from 'material-ui/svg-icons/action/info';
 
 
 class LearningObjectService {
@@ -61,7 +62,16 @@ export class LearningObjectTable extends Component {
                   key={id}
                   primaryText={lo.metadata.general.title}
                   secondaryText={lo.created}
-                  leftAvatar={<Avatar size={50} style={{ fontSize: '20px' }}>{ String(lo.metadata.technical.format).substring(0, 3) }</Avatar>}
+                  leftAvatar={
+                    <Avatar size={50} style={{ fontSize: '20px' }}>
+                    {String(lo.metadata.technical.format).substring(0, 3)}
+                    </Avatar>
+                  }
+                  rightIcon={
+                    <ActionInfo
+                      onClick={() => { console.log('holi'); }}
+                    />
+                  }
                 />
               ))}
             </List>
