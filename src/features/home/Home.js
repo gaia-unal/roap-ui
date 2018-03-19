@@ -11,6 +11,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import ContentAddBox from 'material-ui/svg-icons/content/add-box';
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 
 import Logged from './Logged';
@@ -48,6 +49,7 @@ export class Home extends Component {
     showLogin: false,
     textSearch: '',
     learningObjectList: [],
+    floatingButtonOpen: false,
   };
 
   onRequestSearch() {
@@ -61,9 +63,21 @@ export class Home extends Component {
     return (
       <div>
         {this.state.logged && (
-          <FloatingActionButton style={{ borderRadius: '50px', fontSize: '200%', fontWeight: 'bold', position: 'fixed', bottom: '20px', right: '20px' }}>
-            <ContentAdd />
-          </FloatingActionButton>
+          <div style={{ position: 'fixed', bottom: '20px', right: '20px', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
+            <FloatingActionButton style={{ margin: '5px' }} onClick={() => { this.setState({ floatingButtonOpen: !this.state.floatingButtonOpen }); }}>
+              <ContentAdd />
+            </FloatingActionButton>
+            {this.state.floatingButtonOpen && (
+              <div style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
+                <FloatingActionButton style={{ margin: '5px' }} mini secondary>
+                  <ContentAddBox />
+                </FloatingActionButton>
+                <FloatingActionButton style={{ margin: '5px' }} mini secondary>
+                  <ContentAddBox />
+                </FloatingActionButton>
+              </div>
+            )}
+          </div>
         )}
         <Toolbar>
           <ToolbarGroup firstChild={true} float="left">
