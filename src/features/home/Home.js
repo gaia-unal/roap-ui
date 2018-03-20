@@ -11,30 +11,19 @@ import FlatButton from 'material-ui/FlatButton';
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import HardwareKeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
+import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
+import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ContentAddBox from 'material-ui/svg-icons/content/add-box';
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
+import Avatar from 'material-ui/Avatar';
+import IconButton from 'material-ui/IconButton';
 
 import Logged from './Logged';
 import Login from './Login';
 import Table from './Table';
 
-
-class LearningObjectSearchService {
-  constructor() {
-    this.url = 'http://localhost/back/object';
-  }
-
-  get(then, s) {
-    request
-      .get(this.url)
-      .query({ offset: 0, count: 10, search: s })
-      .end((err, res) => {
-        if (!err) then(res);
-        else console.error(err);
-      });
-  }
-}
-
+import LearningObjectCollectionService from './services/learningObject';
 
 export class Home extends Component {
   static propTypes = {
@@ -42,28 +31,68 @@ export class Home extends Component {
     actions: PropTypes.object.isRequired,
   };
 
-  learningObjectSearchService = new LearningObjectSearchService();
-
   state = {
     logged: false,
     showLogin: false,
     textSearch: '',
     learningObjectList: [],
     floatingButtonOpen: false,
+    offset: 0,
+    count: 6,
+    page: 1,
   };
 
-  onRequestSearch() {
-    this.learningObjectSearchService.get(
-      res => this.setState({ learningObjectList: res.body }),
-      this.state.textSearch
+  learningObjectService = new LearningObjectCollectionService();
+
+  getLearningObjectList() {
+    this.learningObjectService.get(
+      this.state.offset,
+      this.state.count,
+      this.state.textSearch,
+      res => this.setState({
+        learningObjectList: res.body
+      })
     );
+  }
+
+  componentDidMount() {
+    this.getLearningObjectList();
   }
 
   render() {
     return (
       <div>
+        <div style={{ position: 'fixed', bottom: '3%', right: '50%', marginRight: '-106px', display: 'flex', alignItems: 'center', flexDirection: 'row'}}>
+          <FloatingActionButton
+            style={{ margin: '10px' }}
+            onClick={ () => {
+              this.setState(
+                { offset: this.state.offset - this.state.count, page: this.state.page - 1 },
+                () => {this.getLearningObjectList();}
+              );
+            }}
+            disabled={this.state.offset==0}
+          >
+            <HardwareKeyboardArrowLeft />
+          </FloatingActionButton>
+          <Avatar style={{ margin: '10px' }}>
+            {this.state.page}
+          </Avatar>
+          <FloatingActionButton
+            style={{ margin: '10px' }}
+            onClick={ () => {
+              this.setState(
+                { offset: this.state.offset + this.state.count, page: this.state.page + 1 },
+                () => {this.getLearningObjectList();}
+              );
+            }}
+            disabled={this.state.learningObjectList.length<this.state.count}
+          >
+            <HardwareKeyboardArrowRight />
+          </FloatingActionButton>
+        </div>
         {this.state.logged && (
-          <div style={{ position: 'fixed', bottom: '20px', right: '20px', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
+          <div style={{ position: 'fixed', bottom: '3%', right: '3px', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
             <FloatingActionButton style={{ margin: '5px' }} onClick={() => { this.setState({ floatingButtonOpen: !this.state.floatingButtonOpen }); }}>
               <ContentAdd />
             </FloatingActionButton>
@@ -86,7 +115,12 @@ export class Home extends Component {
           <ToolbarGroup style={{ float: 'none', width: '200px', marginLeft: 'auto', marginRight: 'auto' }}>
             <SearchBar
               onChange={(s) => { this.setState({ textSearch: s }); }}
-              onRequestSearch={() => { this.onRequestSearch(); }}
+              onRequestSearch={() => {
+                this.setState(
+                  { offset: 10, page: 1 },
+                  () => { this.getLearningObjectList(); }
+                );
+              }}
               style={{
                 maxWidth: 800
               }}
@@ -100,12 +134,16 @@ export class Home extends Component {
                 }}
               />
             ) : (
-              <FlatButton
-                label="Login"
-                onClick={() => {
-                  this.setState({ showLogin: !this.state.showLogin });
-                }}
-              />
+              <IconButton
+                style={{padding: '4px', width: '60', height: '60'}}
+                iconStyle={{ marginRight: '20px' }}
+              >
+                <ActionAccountCircle
+                  onClick={() => {
+                    this.setState({ showLogin: !this.state.showLogin });
+                  }}
+                />
+              </IconButton>
             )}
           </ToolbarGroup>
         </Toolbar>
