@@ -9,6 +9,14 @@ import request from 'superagent';
 import SearchBar from 'material-ui-search-bar'
 import FlatButton from 'material-ui/FlatButton';
 
+import {
+  blueGrey300, blueGrey600
+} from 'material-ui/styles/colors';
+
+import FileFileDownload from 'material-ui/svg-icons/file/file-download';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Paper from 'material-ui/Paper';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import HardwareKeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
@@ -38,7 +46,7 @@ export class Home extends Component {
     learningObjectList: [],
     floatingButtonOpen: false,
     offset: 0,
-    count: 6,
+    count: 20,
     page: 1,
   };
 
@@ -61,54 +69,8 @@ export class Home extends Component {
 
   render() {
     return (
-      <div>
-        <div style={{ position: 'fixed', bottom: '3%', right: '50%', marginRight: '-106px', display: 'flex', alignItems: 'center', flexDirection: 'row'}}>
-          <FloatingActionButton
-            style={{ margin: '10px' }}
-            onClick={ () => {
-              this.setState(
-                { offset: this.state.offset - this.state.count, page: this.state.page - 1 },
-                () => {this.getLearningObjectList();}
-              );
-            }}
-            disabled={this.state.offset==0}
-          >
-            <HardwareKeyboardArrowLeft />
-          </FloatingActionButton>
-          <Avatar style={{ margin: '10px' }}>
-            {this.state.page}
-          </Avatar>
-          <FloatingActionButton
-            style={{ margin: '10px' }}
-            onClick={ () => {
-              this.setState(
-                { offset: this.state.offset + this.state.count, page: this.state.page + 1 },
-                () => {this.getLearningObjectList();}
-              );
-            }}
-            disabled={this.state.learningObjectList.length<this.state.count}
-          >
-            <HardwareKeyboardArrowRight />
-          </FloatingActionButton>
-        </div>
-        {this.state.logged && (
-          <div style={{ position: 'fixed', bottom: '3%', right: '3px', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
-            <FloatingActionButton style={{ margin: '5px' }} onClick={() => { this.setState({ floatingButtonOpen: !this.state.floatingButtonOpen }); }}>
-              <ContentAdd />
-            </FloatingActionButton>
-            {this.state.floatingButtonOpen && (
-              <div style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
-                <FloatingActionButton style={{ margin: '5px' }} mini secondary>
-                  <ContentAddBox />
-                </FloatingActionButton>
-                <FloatingActionButton style={{ margin: '5px' }} mini secondary>
-                  <ContentAddBox />
-                </FloatingActionButton>
-              </div>
-            )}
-          </div>
-        )}
-        <Toolbar>
+      <div style={{ paddingTop: '4em', paddingBottom: '5em' }}>
+        <Toolbar style={{ zIndex: 1, position: 'fixed', width: '100%', top: '0px', left: '0px' }}>
           <ToolbarGroup firstChild={true} float="left">
             {'Roap'}
           </ToolbarGroup>
@@ -147,6 +109,23 @@ export class Home extends Component {
             )}
           </ToolbarGroup>
         </Toolbar>
+        {this.state.logged && (
+          <div style={{ position: 'fixed', bottom: '3%', right: '3px', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
+            <FloatingActionButton style={{ margin: '5px' }} onClick={() => { this.setState({ floatingButtonOpen: !this.state.floatingButtonOpen }); }}>
+              <ContentAdd />
+            </FloatingActionButton>
+            {this.state.floatingButtonOpen && (
+              <div style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
+                <FloatingActionButton style={{ margin: '5px' }} mini secondary>
+                  <ContentAddBox />
+                </FloatingActionButton>
+                <FloatingActionButton style={{ margin: '5px' }} mini secondary>
+                  <ContentAddBox />
+                </FloatingActionButton>
+              </div>
+            )}
+          </div>
+        )}
         <Login
           open={this.state.showLogin}
           onSubmit={() => {
@@ -160,6 +139,36 @@ export class Home extends Component {
           }}
         />
         <Table learningObjectList={this.state.learningObjectList} />
+        <Paper style={{ background: blueGrey300, padding: '2px', zIndex: 1, position: 'fixed', bottom: '10px', right: '50%', marginRight: '-106px', display: 'flex', alignItems: 'center', flexDirection: 'row', borderRadius: '25px'}}>
+          <FloatingActionButton
+            style={{ marginRight: '10px' }}
+            onClick={() => {
+              this.setState(
+                { offset: this.state.offset - this.state.count, page: this.state.page - 1 },
+                () => { this.getLearningObjectList(); }
+              );
+            }}
+            disabled={this.state.page < 2}
+          >
+            <HardwareKeyboardArrowLeft />
+          </FloatingActionButton>
+          <Avatar style={{ background: blueGrey600 }}>
+            {this.state.page}
+          </Avatar>
+          <FloatingActionButton
+            style={{ marginLeft: '10px' }}
+            onClick={() => {
+              this.setState(
+                { offset: this.state.offset + this.state.count, page: this.state.page + 1 },
+                () => { this.getLearningObjectList(); }
+              );
+              window.scrollTo(0, 0);
+            }}
+            disabled={this.state.learningObjectList.length < this.state.count}
+          >
+            <HardwareKeyboardArrowRight />
+          </FloatingActionButton>
+        </Paper>
       </div>
     );
   }
