@@ -16,9 +16,9 @@ class LearningObjectScoreService {
       });
   }
 
-  get(_id, then) {
+  get(_ids, then) {
     request
-      .get(this.url + '/' + _id)
+      .get(this.url + '/' + _ids.join("&"))
       .end((err, res) => {
         if (!err) then(res);
         else console.error(err);
