@@ -40,17 +40,20 @@ export class LearningObjectTable extends Component {
   };
 
   insertSvgIconIntoIconButton(tooltip, color, SvgIcon) {
-    return <IconButton
-      tooltip={tooltip}
-      tooltipPosition='top-right'
-      style={{padding: '4px', width: '60', height: '60'}}
-      iconStyle={{ margin: '-2px', color: color }}
-    >
-      {SvgIcon}
-    </IconButton>
+    return (
+        <IconButton
+        tooltip={tooltip}
+        tooltipPosition='top-left'
+        style={{padding: '4px', width: '60', height: '60'}}
+        iconStyle={{ margin: '-2px', color: color }}
+      >
+        {SvgIcon}
+      </IconButton>
+    );
   }
 
   getRankingIcon(ranking, tooltip) {
+    console.log(ranking);
     switch(ranking) {
       case 1: 
         return this.insertSvgIconIntoIconButton(tooltip, red900,
@@ -77,6 +80,11 @@ export class LearningObjectTable extends Component {
           <SocialVerySatisfied hoverColor={blueGrey200} />
         );
         break;
+      default:
+        return this.insertSvgIconIntoIconButton(tooltip, blueGrey200,
+          <SocialNeutral hoverColor={blueGrey200} />
+        );
+        break;
     }
   }
 
@@ -92,12 +100,14 @@ export class LearningObjectTable extends Component {
 
   learningObjectScoreService = new LearningObjectScoreService();
 
-  getLearningObjectScore(_id) {
+  getLearningObjectScore(_ids) {
     this.learningObjectScoreService.get(
-      _id,
-      res => {this.setState( {
-        learningObjectScore: [...this.state.learningObjectScore, res.body]
-      })}
+      _ids,
+      res => {
+        this.setState({
+          learningObjectScore: res.body
+        });
+      }
     )
   }
 
@@ -105,9 +115,7 @@ export class LearningObjectTable extends Component {
     this.setState({ learningObjectScore: [] }, () => {
       this.setState(
         { learningObjectList: nextProps.learningObjectList },
-        () => { _.map(
-          this.state.learningObjectList, (lo) => {this.getLearningObjectScore(lo._id)}
-        ) }
+        () => { this.getLearningObjectScore(this.state.learningObjectList.map((lo) => { return lo._id; }))}
       );
     });
   }
@@ -120,7 +128,7 @@ export class LearningObjectTable extends Component {
           open={this.state.showDescription}
           onRequestClose={() => { this.setState({ showDescription: false, showMetadata: false }); }}
         >
-          <span style={{color: darkBlack}}>{this.state.learningObjectTitle}</span><br />
+          <span style={{ color: darkBlack }}>{this.state.learningObjectTitle}</span><br />
           {this.state.learningObjectDescription}
         </Dialog>
         <Dialog
@@ -132,7 +140,7 @@ export class LearningObjectTable extends Component {
           {this.state.learningObjectMetadata}
         </Dialog>
         <center>
-          <Paper zDepth={4} style={{ width: '65%', height: '70%', padding: 10, minWidth: '480px' }}>
+          <Paper zDepth={4} style={{ marginRight: '5%', marginLeft: '5%', height: '70%', padding: 10, minWidth: '480px' }}>
             <List>
               {_.map(this.state.learningObjectList, (lo, id) => (
                 <div key={id}>
@@ -161,19 +169,24 @@ export class LearningObjectTable extends Component {
                     }
                     rightIcon={
                       <div>
-                        {this.state.learningObjectScore[id] && (
+                        {this.state.learningObjectScore[lo._id] ? (
                           <div>
                             {this.getRankingIcon(
-                              Math.round(this.state.learningObjectScore[id].creator!=undefined?this.state.learningObjectScore[id].creator:1),
-                              'Creator score: ' + (this.state.learningObjectScore[id].creator!=undefined?this.state.learningObjectScore[id].creator:1))}
+                              this.state.learningObjectScore[lo._id].creator,
+                              'Creator score: ' + (this.state.learningObjectScore[lo._id].creator  || 'has not been rated'))}
                             {this.getRankingIcon(
-                              Math.round(this.state.learningObjectScore[id].expert!=undefined?this.state.learningObjectScore[id].expert:1),
-                              'Expert score: ' + (this.state.learningObjectScore[id].expert!=undefined?this.state.learningObjectScore[id].expert:1))}
+                              this.state.learningObjectScore[lo._id].expert,
+                              'Expert score: ' + (this.state.learningObjectScore[lo._id].expert|| 'has not been rated'))}
+                          </div>
+                        ): (
+                          <div>
+                            {this.insertSvgIconIntoIconButton('tooltip', blueGrey200, <SocialNeutral hoverColor={blueGrey200} />)}
+                            {this.insertSvgIconIntoIconButton('tooltip', blueGrey200, <SocialNeutral hoverColor={blueGrey200} />)}
                           </div>
                         )}
                       <IconButton
                         tooltip={'View full description'}
-                        tooltipPosition='top-right'
+                        tooltipPosition='top-left'
                         style={{padding: '4px', width: '60', height: '60'}}
                         iconStyle={{ margin: '-2px', color: blueGrey500 }}
                       >
