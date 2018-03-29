@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -7,8 +8,9 @@ import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 
 export default class Logged extends Component {
   static propTypes = {
-
+    onSignOut: PropTypes.func.isRequired,
   };
+
   render() {
     return (
       <IconMenu
