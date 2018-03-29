@@ -6,21 +6,22 @@ class LearningObjectCollectionService {
     this.url = 'http://localhost/back/object';
   }
 
-  get(offset, count, search, then) {
-    let query = {
-      offset: offset, count: count
+  get(offset, count, search, response, error) {
+    let query = { offset, count };
+
+    if (search !== '') {
+      query = { offset, count, search };
     }
-    if (search != '') {
-      query = {
-        offset: offset, count: count, search: search
-      }
-    }
+
     request
       .get(this.url)
       .query(query)
       .end((err, res) => {
-        if (!err) then(res);
-        else console.error(err);
+        if (!err) {
+          response(res);
+        } else {
+          error(err);
+        }
       });
   }
 }

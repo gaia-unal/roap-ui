@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from './redux/actions';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+
+import * as actions from './redux/actions';
 
 export class Login extends Component {
   static propTypes = {
@@ -18,13 +19,13 @@ export class Login extends Component {
     const actions = [
       <FlatButton
         label="Cancel"
-        primary={true}
-        onClick={this.props.onCancel}
+        primary
+        onClick={this.props.onSuccess}
       />,
       <FlatButton
         label="Submit"
-        primary={true}
-        onClick={this.props.onSubmit}
+        primary
+        onClick={this.props.actions.logIn}
       />,
     ];
 
