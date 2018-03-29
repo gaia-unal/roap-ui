@@ -1,6 +1,14 @@
 import initialState from './initialState';
+import { reducer as getLearningObjectListReducer } from './getLearningObjectList';
+import { reducer as goToPreviousPageReducer } from './goToPreviousPage';
+import { reducer as goToNextPageReducer } from './goToNextPage';
+import { reducer as searchTextReducer } from './searchText';
 
 const reducers = [
+  getLearningObjectListReducer,
+  goToPreviousPageReducer,
+  goToNextPageReducer,
+  searchTextReducer,
 ];
 
 export default function reducer(state = initialState, action) {
