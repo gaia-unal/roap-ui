@@ -24,7 +24,7 @@ export class Signin extends Component {
     nameErrorText: '',
     emailErrorText: '',
     buttonDisabled: true,
-    showLogin: false,
+    showHome: false,
   };
 
   setEmail(event) {
@@ -81,14 +81,14 @@ export class Signin extends Component {
       );
     });
     promise.then(() => {
-      this.setState({ showLogin: (this.props.home.userToken !== null) });
+      this.setState({ showHome: (this.props.home.userToken !== null) });
     });
   }
 
   render() {
     return (
       <div className="home-login">
-        {this.state.showLogin && <Redirect push to="/login" />}
+        {this.state.showHome && <Redirect push to="/home" />}
         <center>
           <div>
             <TextField
