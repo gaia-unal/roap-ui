@@ -3,12 +3,18 @@ import { reducer as getLearningObjectListReducer } from './getLearningObjectList
 import { reducer as goToPreviousPageReducer } from './goToPreviousPage';
 import { reducer as goToNextPageReducer } from './goToNextPage';
 import { reducer as searchTextReducer } from './searchText';
+import { reducer as loginUserReducer } from './loginUser';
+import { reducer as signinUserReducer } from './signinUser';
+import { reducer as getUserListReducer } from './getUserList';
 
 const reducers = [
   getLearningObjectListReducer,
   goToPreviousPageReducer,
   goToNextPageReducer,
   searchTextReducer,
+  loginUserReducer,
+  signinUserReducer,
+  getUserListReducer,
 ];
 
 export default function reducer(state = initialState, action) {
