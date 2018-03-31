@@ -78,6 +78,7 @@ export function reducer(state, action) {
       // The request is failed
       return {
         ...state,
+        learningObjectList: [],
         getLearningObjectListPending: false,
         getLearningObjectListError: action.getLearningObjectListError,
       };

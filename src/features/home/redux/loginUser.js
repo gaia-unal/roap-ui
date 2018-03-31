@@ -85,6 +85,7 @@ export function reducer(state, action) {
         ...state,
         loginUserPending: false,
         loginUserError: action.loginUserError,
+        user: null,
       };
 
     case HOME_LOGIN_USER_DISMISS_ERROR:

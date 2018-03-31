@@ -14,6 +14,8 @@ const initialState = {
   userList: [],
   getUserListPending: false,
   getUserListError: null,
+  userValidatePending: false,
+  userValidateError: null,
 };
 
 export default initialState;

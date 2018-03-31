@@ -6,6 +6,7 @@ import { reducer as searchTextReducer } from './searchText';
 import { reducer as loginUserReducer } from './loginUser';
 import { reducer as signinUserReducer } from './signinUser';
 import { reducer as getUserListReducer } from './getUserList';
+import { reducer as userValidateReducer } from './userValidate';
 
 const reducers = [
   getLearningObjectListReducer,
@@ -15,6 +16,7 @@ const reducers = [
   loginUserReducer,
   signinUserReducer,
   getUserListReducer,
+  userValidateReducer,
 ];
 
 export default function reducer(state = initialState, action) {
