@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import { Redirect } from 'react-router';
+
 import SearchBar from 'material-ui-search-bar';
 
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ViewList from 'material-ui/svg-icons/action/view-list';
 import IconButton from 'material-ui/IconButton';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 import * as actions from './redux/actions';
-
-import Login from './Login';
-import Logged from './Logged';
 
 export class PrincipalBar extends Component {
     static propTypes = {
@@ -23,27 +24,71 @@ export class PrincipalBar extends Component {
 
     state = {
       showLogin: false,
+      showSignin: false,
+      showNewUsers: false,
       textSearch: '',
+    }
+
+    getUserMenu() {
+      return (
+        <IconMenu
+          iconButtonElement={
+            <IconButton> <ActionAccountCircle /> </IconButton>
+          }
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          {this.props.home.user ? (
+            <div>
+              <MenuItem
+                primaryText="Log out"
+              />
+              {this.props.home.user.role === 'administrator' && (
+                <MenuItem
+                  primaryText="New users"
+                  onClick={() => {
+                    this.setState({ showNewUsers: !this.state.showNewUsers });
+                  }}
+                />
+              )}
+            </div>
+          ) : (
+            <div>
+              <MenuItem
+                primaryText="Log in"
+                onClick={() => {
+                  this.setState({ showLogin: !this.state.showLogin });
+                }}
+              />
+              <MenuItem
+                primaryText="Sign in"
+                onClick={() => {
+                  this.setState({ showSignin: !this.state.showSignin });
+                }}
+              />
+            </div>
+          )}
+        </IconMenu>
+      );
     }
 
     render() {
       return (
         <div className="home-principal-bar">
-          <Login
-            open={this.state.showLogin}
-            onSuccess={() => this.setState({ showLogin: false })}
-          />
+          {this.state.showLogin && <Redirect push to="/login" />}
+          {this.state.showSignin && <Redirect push to="/signin" />}
+          {this.state.showNewUsers && <Redirect push to="/user-list" />}
           <Toolbar className="home-tool-bar">
             <ToolbarGroup firstChild float="left">
-              <IconButton>
+              <IconButton
+                tooltip={this.props.home.userToken || 'Anonymus'}
+                tooltipPosition="bottom-right"
+              >
                 <ViewList />
               </IconButton>
             </ToolbarGroup>
             <ToolbarGroup className="search-bar">
               <SearchBar
-                onChange={(s) => {
-                  this.setState({ textSearch: s });
-                }}
+                onChange={(s) => { this.setState({ textSearch: s }); }}
                 onRequestSearch={() => {
                   const promise = new Promise((resolve) => {
                     resolve(this.props.actions.searchText(
@@ -62,19 +107,11 @@ export class PrincipalBar extends Component {
               />
             </ToolbarGroup>
             <ToolbarGroup lastChild float="right">
-              {this.props.home.logged ? (
-                <Logged
-                  onSignOut={() => { this.props.home.onSignOut(); }}
-                />
-              ) : (
-                <IconButton>
-                  <ActionAccountCircle
-                    onClick={() => {
-                      this.setState({ showLogin: !this.state.showLogin });
-                    }}
-                  />
-                </IconButton>
-              )}
+              <b>
+                {this.props.home.user ? this.props.home.user.name : 'Anonymus'}
+              </b>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+              {this.getUserMenu()}
             </ToolbarGroup>
           </Toolbar>
         </div>

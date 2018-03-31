@@ -11,19 +11,20 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import * as actions from './redux/actions';
 
-
-export class Login extends Component {
+export class Signin extends Component {
   static propTypes = {
     home: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired,
   };
 
   state = {
+    name: '',
     email: '',
     password: '',
+    nameErrorText: '',
     emailErrorText: '',
     buttonDisabled: true,
-    showHome: false,
+    showLogin: false,
   };
 
   setEmail(event) {
@@ -36,37 +37,66 @@ export class Login extends Component {
     }
     this.setState({
       emailErrorText,
-      buttonDisabled: (event.target.value === '' || this.state.password === '' || emailErrorText === 'Invalid field')
+      buttonDisabled: (
+        event.target.value === '' ||
+        this.state.password === '' ||
+        this.state.name === '' ||
+        emailErrorText === 'Invalid field'
+      )
     });
   }
 
   setPassword(event) {
     this.setState({
       password: event.target.value,
-      buttonDisabled: (this.state.email === '' || event.target.value === '' || this.state.emailErrorText === 'Invalid field')
+      buttonDisabled: (
+        this.state.email === '' ||
+        event.target.value === '' ||
+        this.state.name === '' ||
+        this.state.emailErrorText === 'Invalid field'
+      )
+    });
+  }
+
+  setName(event) {
+    this.setState({
+      name: event.target.value,
+      buttonDisabled: (
+        this.state.email === '' ||
+        this.state.password === '' ||
+        event.target.value === '' ||
+        this.state.emailErrorText === 'Invalid field'
+      )
     });
   }
 
   handleSubmit() {
     const promise = new Promise((resolve) => {
       resolve(
-        this.props.actions.loginUser({
+        this.props.actions.signinUser({
           email: this.state.email,
           password: this.state.password,
+          name: this.state.name,
         })
       );
     });
     promise.then(() => {
-      this.setState({ showHome: (this.props.home.userToken !== null) });
+      this.setState({ showLogin: (this.props.home.userToken !== null) });
     });
   }
 
   render() {
     return (
       <div className="home-login">
-        {this.state.showHome && <Redirect push to="/home" />}
+        {this.state.showLogin && <Redirect push to="/login" />}
         <center>
           <div>
+            <TextField
+              floatingLabelText="Name"
+              errorText={this.state.nameErrorText}
+              onChange={(e) => { this.setName(e); }}
+            />
+            <br />
             <TextField
               floatingLabelText="E-mail"
               errorText={this.state.emailErrorText}
@@ -109,4 +139,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Login);
+)(Signin);
