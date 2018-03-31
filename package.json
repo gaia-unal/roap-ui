@@ -47,6 +47,7 @@
     "file-loader": "^1.1.6",
     "history": "^4.7.2",
     "jsdom": "^11.5.1",
+    "jsrsasign": "^8.0.7",
     "lodash": "^4.17.5",
     "lodash-webpack-plugin": "^0.11.4",
     "material-ui": "^0.20.0",

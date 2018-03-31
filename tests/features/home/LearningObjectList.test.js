@@ -1,20 +1,20 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import { Table } from 'src/features/home/Table';
+import { LearningObjectList } from 'src/features/home/LearningObjectList';
 
-describe('home/Table', () => {
+describe('home/LearningObjectList', () => {
   it('renders node with correct class name', () => {
     const props = {
       home: {},
       actions: {},
     };
     const renderedComponent = shallow(
-      <Table {...props} />
+      <LearningObjectList {...props} />
     );
 
     expect(
-      renderedComponent.find('.home-table').getElement()
+      renderedComponent.find('.home-learning-object-list').getElement()
     ).to.exist;
   });
 });

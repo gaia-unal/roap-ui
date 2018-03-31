@@ -1,16 +1,20 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import { Logged } from 'src/features/home';
+import { Signin } from 'src/features/home/Signin';
 
-describe('home/Logged', () => {
+describe('home/Signin', () => {
   it('renders node with correct class name', () => {
+    const props = {
+      home: {},
+      actions: {},
+    };
     const renderedComponent = shallow(
-      <Logged />
+      <Signin {...props} />
     );
 
     expect(
-      renderedComponent.find('.home-logged').getElement()
+      renderedComponent.find('.home-signin').getElement()
     ).to.exist;
   });
 });

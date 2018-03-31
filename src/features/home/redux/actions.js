@@ -2,3 +2,6 @@ export { getLearningObjectList, dismissGetLearningObjectListError } from './getL
 export { goToPreviousPage } from './goToPreviousPage';
 export { goToNextPage } from './goToNextPage';
 export { searchText } from './searchText';
+export { loginUser, dismissLoginUserError } from './loginUser';
+export { signinUser, dismissSigninUserError } from './signinUser';
+export { getUserList, dismissGetUserListError } from './getUserList';

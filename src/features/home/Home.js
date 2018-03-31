@@ -4,11 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import ContentAddBox from 'material-ui/svg-icons/content/add-box';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 import * as actions from './redux/actions';
-import Table from './Table';
+import LearningObjectList from './LearningObjectList';
 import PrincipalBar from './PrincipalBar';
 import PaginationButtons from './PaginationButtons';
 
@@ -19,7 +18,6 @@ export class Home extends Component {
   };
 
   state = {
-    logged: false,
     floatingButtonOpen: false,
   };
 
@@ -27,7 +25,7 @@ export class Home extends Component {
     return (
       <div style={{ paddingTop: '4em', paddingBottom: '5em' }}>
         <PrincipalBar />
-        {this.state.logged && (
+        {this.props.home.user && (
           <div style={{ position: 'fixed', bottom: '3%', right: '3px', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
             <FloatingActionButton style={{ margin: '5px' }} onClick={() => { this.setState({ floatingButtonOpen: !this.state.floatingButtonOpen }); }}>
               <ContentAdd />
@@ -35,17 +33,17 @@ export class Home extends Component {
             {this.state.floatingButtonOpen && (
               <div style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
                 <FloatingActionButton style={{ margin: '5px' }} mini secondary>
-                  <ContentAddBox />
+                  <ContentAdd />
                 </FloatingActionButton>
                 <FloatingActionButton style={{ margin: '5px' }} mini secondary>
-                  <ContentAddBox />
+                  <ContentAdd />
                 </FloatingActionButton>
               </div>
             )}
           </div>
         )}
 
-        <Table />
+        <LearningObjectList />
         <PaginationButtons />
       </div>
     );
