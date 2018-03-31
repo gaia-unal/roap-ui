@@ -6,3 +6,4 @@ export { default as PrincipalBar } from './PrincipalBar';
 export { default as PaginationButtons } from './PaginationButtons';
 export { default as Signin } from './Signin';
 export { default as UserList } from './UserList';
+export { default as UserValidate } from './UserValidate';
