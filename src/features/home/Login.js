@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 
 import { Redirect } from 'react-router';
 
+import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import * as actions from './redux/actions';
@@ -63,31 +64,35 @@ export class Login extends Component {
 
   render() {
     return (
-      <div className="home-login">
-        {this.state.showHome && <Redirect push to="/home" />}
-        <center>
-          <div>
-            <TextField
-              floatingLabelText="E-mail"
-              errorText={this.state.emailErrorText}
-              onChange={(e) => { this.setEmail(e); }}
-            />
-            <br />
-            <TextField
-              type="password"
-              floatingLabelText="Password"
-              onChange={(e) => { this.setPassword(e); }}
-            />
-            <br />
-            <RaisedButton
-              label="Submit"
-              primary
-              disabled={this.state.buttonDisabled}
-              onClick={() => { this.handleSubmit(); }}
-            />
-          </div>
-        </center>
-      </div>
+      <center>
+        <Paper
+          className="home-login"
+          style={{
+            width: '300px',
+            height: '200px',
+          }}
+        >
+          {this.state.showHome && <Redirect push to="/home" />}
+          <TextField
+            floatingLabelText="E-mail"
+            errorText={this.state.emailErrorText}
+            onChange={(e) => { this.setEmail(e); }}
+          />
+          <br />
+          <TextField
+            type="password"
+            floatingLabelText="Password"
+            onChange={(e) => { this.setPassword(e); }}
+          />
+          <br />
+          <RaisedButton
+            label="Login"
+            primary
+            disabled={this.state.buttonDisabled}
+            onClick={() => { this.handleSubmit(); }}
+          />
+        </Paper>
+      </center>
     );
   }
 }
