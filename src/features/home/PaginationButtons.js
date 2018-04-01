@@ -22,8 +22,23 @@ export class PaginationButtons extends Component {
 
   render() {
     return (
-      <Paper style={{ background: blueGrey300, padding: '2px', zIndex: 1, position: 'fixed', bottom: '10px', right: '50%', marginRight: '-106px', display: 'flex', alignItems: 'center', flexDirection: 'row', borderRadius: '25px' }}>
+      <Paper
+        style={{
+          background: blueGrey300,
+          padding: '2px',
+          zIndex: 1,
+          position: 'fixed',
+          bottom: '10px',
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'row',
+          borderRadius: '22px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+        }}
+      >
         <FloatingActionButton
+          mini
           style={{ marginRight: '10px' }}
           onClick={() => {
             const promise = new Promise((resolve) => {
@@ -41,10 +56,11 @@ export class PaginationButtons extends Component {
         >
           <HardwareKeyboardArrowLeft />
         </FloatingActionButton>
-        <Avatar style={{ background: blueGrey600 }}>
+        <Avatar size="30px" style={{ background: blueGrey600 }}>
           {this.props.home.page}
         </Avatar>
         <FloatingActionButton
+          mini
           style={{ marginLeft: '10px' }}
           onClick={() => {
             const promise = new Promise((resolve) => {
