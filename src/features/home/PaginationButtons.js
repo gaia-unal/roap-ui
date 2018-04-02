@@ -56,7 +56,7 @@ export class PaginationButtons extends Component {
         >
           <HardwareKeyboardArrowLeft />
         </FloatingActionButton>
-        <Avatar size="30px" style={{ background: blueGrey600 }}>
+        <Avatar size={30} style={{ background: blueGrey600 }}>
           {this.props.home.page}
         </Avatar>
         <FloatingActionButton
