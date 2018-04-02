@@ -6,9 +6,9 @@ class userService {
     this.url = 'http://localhost/back/user';
   }
 
-  post(email, password, name, response, error) {
+  post(email, password, name, requestedRole, response, error) {
     const user = {
-      email, password, name
+      email, password, name, requested_role: requestedRole,
     };
     request
       .post(this.url)
