@@ -27,6 +27,7 @@ export function signinUser(args = {}) {
         args.email,
         args.password,
         args.name,
+        args.requestedRole,
         (res) => {
           dispatch({
             type: HOME_SIGNIN_USER_SUCCESS,
