@@ -7,6 +7,9 @@ import TextField from 'material-ui/TextField';
 
 import { Redirect } from 'react-router';
 
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import * as actions from './redux/actions';
@@ -21,7 +24,7 @@ export class Signin extends Component {
     name: '',
     email: '',
     password: '',
-    nameErrorText: '',
+    role: 'creator',
     emailErrorText: '',
     buttonDisabled: true,
     showHome: false,
@@ -41,6 +44,7 @@ export class Signin extends Component {
         event.target.value === '' ||
         this.state.password === '' ||
         this.state.name === '' ||
+        this.state.role === '' ||
         emailErrorText === 'Invalid field'
       )
     });
@@ -53,6 +57,7 @@ export class Signin extends Component {
         this.state.email === '' ||
         event.target.value === '' ||
         this.state.name === '' ||
+        this.state.role === '' ||
         this.state.emailErrorText === 'Invalid field'
       )
     });
@@ -65,49 +70,75 @@ export class Signin extends Component {
         this.state.email === '' ||
         this.state.password === '' ||
         event.target.value === '' ||
+        this.state.role === '' ||
         this.state.emailErrorText === 'Invalid field'
       )
     });
   }
 
   handleSubmit() {
-    const promise = new Promise((resolve) => {
-      resolve(
-        this.props.actions.signinUser({
-          email: this.state.email,
-          password: this.state.password,
-          name: this.state.name,
-        })
-      );
+    const promise = this.props.actions.signinUser({
+      email: this.state.email,
+      password: this.state.password,
+      name: this.state.name,
+      requestedRole: this.state.role,
     });
     promise.then(() => {
-      this.setState({ showHome: (this.props.home.userToken !== null) });
+      this.setState({ showHome: true });
+    });
+    promise.catch(() => {
+      this.setState({ name: '', email: '', password: '', role: 'creator', });
     });
   }
 
   render() {
     return (
-      <div className="home-login">
+      <div
+        className="home-login"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
         {this.state.showHome && <Redirect push to="/home" />}
-        <center>
-          <div>
+        <Paper
+          className="home-login"
+          style={{
+            width: '300px',
+            height: '320px',
+          }}
+        >
+          <center>
             <TextField
               floatingLabelText="Name"
-              errorText={this.state.nameErrorText}
+              value={this.state.name}
               onChange={(e) => { this.setName(e); }}
             />
             <br />
             <TextField
               floatingLabelText="E-mail"
+              value={this.state.email}
               errorText={this.state.emailErrorText}
               onChange={(e) => { this.setEmail(e); }}
             />
             <br />
             <TextField
               type="password"
+              value={this.state.password}
               floatingLabelText="Password"
               onChange={(e) => { this.setPassword(e); }}
             />
+            <DropDownMenu
+              value={this.state.role}
+              onChange={(event, index, value) => { this.setState({ role: value }); }}
+              style={{ width: '100%' }}
+            >
+              <MenuItem value="creator" primaryText="Creator" />
+              <MenuItem value="expert" primaryText="Expert" />
+              <MenuItem value="administrator" primaryText="Administrator" />
+            </DropDownMenu>
             <br />
             <RaisedButton
               label="Submit"
@@ -115,8 +146,8 @@ export class Signin extends Component {
               disabled={this.state.buttonDisabled}
               onClick={() => { this.handleSubmit(); }}
             />
-          </div>
-        </center>
+          </center>
+        </Paper>
       </div>
     );
   }
