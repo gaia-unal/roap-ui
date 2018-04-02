@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import TextField from 'material-ui/TextField';
-
+import Dialog from 'material-ui/Dialog';
 import { Redirect } from 'react-router';
 
 import Paper from 'material-ui/Paper';
@@ -25,6 +25,7 @@ export class Login extends Component {
     emailErrorText: '',
     buttonDisabled: true,
     showHome: false,
+    showUnknownUser: false,
   };
 
   setEmail(event) {
@@ -49,22 +50,34 @@ export class Login extends Component {
   }
 
   handleSubmit() {
-    const promise = new Promise((resolve) => {
-      resolve(
-        this.props.actions.loginUser({
-          email: this.state.email,
-          password: this.state.password,
-        })
-      );
+    const promise = this.props.actions.loginUser({
+      email: this.state.email,
+      password: this.state.password,
     });
     promise.then(() => {
-      this.setState({ showHome: (this.props.home.userToken !== null) });
+      this.setState({ showHome: (this.props.home.user !== null) });
+    });
+    promise.catch(() => {
+      this.setState({ showUnknownUser: true, email: '', password: '', });
     });
   }
 
   render() {
     return (
-      <center>
+      <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <Dialog
+          title="Unknown user"
+          open={this.state.showUnknownUser}
+          onRequestClose={() => { this.setState({ showUnknownUser: false }); }}
+        >
+          Unknown user, please try again.
+        </Dialog>
         <Paper
           className="home-login"
           style={{
@@ -72,27 +85,31 @@ export class Login extends Component {
             height: '200px',
           }}
         >
-          {this.state.showHome && <Redirect push to="/home" />}
-          <TextField
-            floatingLabelText="E-mail"
-            errorText={this.state.emailErrorText}
-            onChange={(e) => { this.setEmail(e); }}
-          />
-          <br />
-          <TextField
-            type="password"
-            floatingLabelText="Password"
-            onChange={(e) => { this.setPassword(e); }}
-          />
-          <br />
-          <RaisedButton
-            label="Login"
-            primary
-            disabled={this.state.buttonDisabled}
-            onClick={() => { this.handleSubmit(); }}
-          />
+          <center>
+            {this.state.showHome && <Redirect push to="/home" />}
+            <TextField
+              floatingLabelText="E-mail"
+              errorText={this.state.emailErrorText}
+              value={this.state.email}
+              onChange={(e) => { this.setEmail(e); }}
+            />
+            <br />
+            <TextField
+              type="password"
+              floatingLabelText="Password"
+              value={this.state.password}
+              onChange={(e) => { this.setPassword(e); }}
+            />
+            <br />
+            <RaisedButton
+              label="Login"
+              primary
+              disabled={this.state.buttonDisabled}
+              onClick={() => { this.handleSubmit(); }}
+            />
+          </center>
         </Paper>
-      </center>
+      </div>
     );
   }
 }
