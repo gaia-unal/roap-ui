@@ -37,7 +37,7 @@ export function signinUser(args = {}) {
         (err) => {
           dispatch({
             type: HOME_SIGNIN_USER_FAILURE,
-            signinUserError: err,
+            signinUserError: err.response.body.description,
           });
           reject(err);
         }
@@ -79,7 +79,7 @@ export function reducer(state, action) {
       return {
         ...state,
         signinUserPending: false,
-        signinUserError: action.data.error,
+        signinUserError: action.signinUserError,
       };
 
     case HOME_SIGNIN_USER_DISMISS_ERROR:

@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 
 import { Redirect } from 'react-router';
 
+import Dialog from 'material-ui/Dialog';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Paper from 'material-ui/Paper';
@@ -28,6 +29,7 @@ export class Signin extends Component {
     emailErrorText: '',
     buttonDisabled: true,
     showHome: false,
+    showMessage: false,
   };
 
   setEmail(event) {
@@ -84,10 +86,10 @@ export class Signin extends Component {
       requestedRole: this.state.role,
     });
     promise.then(() => {
-      this.setState({ showHome: true });
+      this.setState({ showMessage: true });
     });
     promise.catch(() => {
-      this.setState({ name: '', email: '', password: '', role: 'creator', });
+      this.setState({ showMessage: true, name: '', email: '', password: '', role: 'creator', });
     });
   }
 
@@ -102,6 +104,15 @@ export class Signin extends Component {
           height: '100vh',
         }}
       >
+        <Dialog
+          title="Unknown user"
+          open={this.state.showMessage}
+          onRequestClose={() => { this.setState({ showMessage: false }); }}
+        >
+          {this.props.home.signinUserError === null ? 'Please, check your email and validate your account.' : (
+            JSON.stringify(this.props.home.signinUserError)
+          )}
+        </Dialog>
         {this.state.showHome && <Redirect push to="/home" />}
         <Paper
           className="home-login"
