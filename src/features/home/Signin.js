@@ -93,6 +93,8 @@ export class Signin extends Component {
     });
   }
 
+  /* remove administrator from role options. */
+
   render() {
     return (
       <div

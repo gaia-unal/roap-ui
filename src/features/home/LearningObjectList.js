@@ -118,6 +118,12 @@ export class LearningObjectList extends Component {
     );
   }
 
+  /*
+  TODO: Add description, palabras clave, formato, idioma to lo description.
+    Add search help
+    
+  */
+
   insertSvgIconIntoIconButton(tooltip, color, SvgIcon) {
     return (
       <IconButton
