@@ -16,6 +16,8 @@ const initialState = {
   getUserListError: null,
   userValidatePending: false,
   userValidateError: null,
+  getLearningObjectMetadataSchemaPending: false,
+  getLearningObjectMetadataSchemaError: null,
 };
 
 export default initialState;
