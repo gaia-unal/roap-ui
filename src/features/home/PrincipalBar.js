@@ -26,6 +26,7 @@ export class PrincipalBar extends Component {
       showLogin: false,
       showSignin: false,
       showNewUsers: false,
+      showCreateLearningObject: false,
       textSearch: '',
     }
 
@@ -41,6 +42,12 @@ export class PrincipalBar extends Component {
             <div>
               <MenuItem
                 primaryText="Log out"
+              />
+              <MenuItem
+                primaryText="Create learning object"
+                onClick={() => {
+                  this.setState({ showCreateLearningObject: !this.state.showCreateLearningObject });
+                }}
               />
               {this.props.home.user.role === 'administrator' && (
                 <MenuItem
@@ -77,6 +84,7 @@ export class PrincipalBar extends Component {
           {this.state.showLogin && <Redirect push to="/login" />}
           {this.state.showSignin && <Redirect push to="/signin" />}
           {this.state.showNewUsers && <Redirect push to="/user-list" />}
+          {this.state.showCreateLearningObject && <Redirect push to="/create-learning-object" />}
           <Toolbar className="home-tool-bar">
             <ToolbarGroup firstChild float="left">
               <IconButton
