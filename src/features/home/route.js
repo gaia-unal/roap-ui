@@ -4,6 +4,7 @@ import {
   Signin,
   UserList,
   UserValidate,
+  CreateLearningObject,
 } from './';
 
 export default {
@@ -15,5 +16,6 @@ export default {
     { path: 'signin', name: 'Signin', component: Signin },
     { path: 'user-list', name: 'User list', component: UserList },
     { path: 'user-validate/:token', name: 'User validate', component: UserValidate },
+    { path: 'create-learning-object', name: 'Create learning object', component: CreateLearningObject },
   ],
 };
