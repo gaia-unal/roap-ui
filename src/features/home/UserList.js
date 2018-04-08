@@ -22,6 +22,7 @@ export class UserList extends Component {
   }
 
   getUserList() {
+    // TODO: change offset and count
     this.props.actions.getUserList({
       query: {
         role: 'unknown',
