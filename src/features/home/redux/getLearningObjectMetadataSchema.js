@@ -35,7 +35,7 @@ export function getLearningObjectMetadataSchema(args = {}) {
         (err) => {
           dispatch({
             type: HOME_GET_LEARNING_OBJECT_METADATA_SCHEMA_FAILURE,
-            learningObjectMetadataSchema: err,
+            getLearningObjectMetadataSchemaError: err,
           });
           reject(err);
         }
@@ -78,7 +78,7 @@ export function reducer(state, action) {
       return {
         ...state,
         getLearningObjectMetadataSchemaPending: false,
-        getLearningObjectMetadataSchemaError: action.data.error,
+        getLearningObjectMetadataSchemaError: action.getLearningObjectMetadataSchemaError,
         learningObjectMetadataSchema: null,
       };
 
