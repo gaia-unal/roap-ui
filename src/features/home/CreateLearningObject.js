@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+import LearningObjectForm from './LearningObjectForm';
+
+import _ from 'lodash';
+
 import * as actions from './redux/actions';
 
 export class CreateLearningObject extends Component {
@@ -26,9 +31,13 @@ export class CreateLearningObject extends Component {
     return (
       <div
         className="home-create-learning-object"
-        style={{ margin: '20%' }}
+        style={{ marginLeft: '20%' }}
       >
-        {JSON.stringify(this.props.home.learningObjectMetadataSchema)}
+        {this.props.home.learningObjectMetadataSchema &&
+          <div>
+            <LearningObjectForm lom={this.props.home.learningObjectMetadataSchema.lom} />
+          </div>
+        }
       </div>
     );
   }

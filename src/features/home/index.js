@@ -8,3 +8,4 @@ export { default as Signin } from './Signin';
 export { default as UserList } from './UserList';
 export { default as UserValidate } from './UserValidate';
 export { default as CreateLearningObject } from './CreateLearningObject';
+export { default as LearningObjectForm } from './LearningObjectForm';
