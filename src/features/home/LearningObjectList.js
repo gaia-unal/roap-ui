@@ -9,7 +9,7 @@ import Paper from 'material-ui/Paper';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 import { List, ListItem } from 'material-ui/List';
-import ActionDescription from 'material-ui/svg-icons/action/description';
+import ActionInfo from 'material-ui/svg-icons/action/info';
 import SocialVeryDissatisfied from 'material-ui/svg-icons/social/sentiment-very-dissatisfied';
 import SocialDissatisfied from 'material-ui/svg-icons/social/sentiment-dissatisfied';
 import SocialNeutral from 'material-ui/svg-icons/social/sentiment-neutral';
@@ -97,7 +97,7 @@ export class LearningObjectList extends Component {
           style={{ padding: '8px', width: '60', height: '60' }}
           iconStyle={{ margin: '-2px', color: blueGrey500 }}
         >
-          <ActionDescription
+          <ActionInfo
             onClick={() => {
               this.setState({
                 showDescription: true,

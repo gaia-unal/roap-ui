@@ -24,6 +24,21 @@ class LearningObjectCollectionService {
         }
       });
   }
+
+  post(file, learningObjectMetadata, token, response, error) {
+    request
+      .post(this.url)
+      .set('AUTHORIZATION', token)
+      .field('learningObjectMetadata', JSON.stringify(learningObjectMetadata))
+      .attach('file', file)
+      .end((err, res) => {
+        if (!err) {
+          response(res);
+        } else {
+          error(err);
+        }
+      });
+  }
 }
 
 export default LearningObjectCollectionService;

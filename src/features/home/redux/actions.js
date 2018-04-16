@@ -7,3 +7,4 @@ export { signinUser, dismissSigninUserError } from './signinUser';
 export { getUserList, dismissGetUserListError } from './getUserList';
 export { userValidate, dismissUserValidateError } from './userValidate';
 export { getLearningObjectMetadataSchema, dismissGetLearningObjectMetadataSchemaError } from './getLearningObjectMetadataSchema';
+export { createLearningObject, dismissCreateLearningObjectError } from './createLearningObject';

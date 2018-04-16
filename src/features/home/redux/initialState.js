@@ -19,6 +19,8 @@ const initialState = {
   getLearningObjectMetadataSchemaPending: false,
   getLearningObjectMetadataSchemaError: null,
   learningObjectMetadataSchema: null,
+  createLearningObjectPending: false,
+  createLearningObjectError: null,
 };
 
 export default initialState;
