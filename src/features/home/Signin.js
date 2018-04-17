@@ -115,7 +115,7 @@ export class Signin extends Component {
             JSON.stringify(this.props.home.signinUserError)
           )}
         </Dialog>
-        {this.state.showHome && <Redirect push to="/home" />}
+        {this.state.showHome && <Redirect push to="/" />}
         <Paper
           className="home-login"
           style={{

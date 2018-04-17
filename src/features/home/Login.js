@@ -86,7 +86,7 @@ export class Login extends Component {
           }}
         >
           <center>
-            {this.state.showHome && <Redirect push to="/home" />}
+            {this.state.showHome && <Redirect push to="/" />}
             <TextField
               floatingLabelText="E-mail"
               errorText={this.state.emailErrorText}
