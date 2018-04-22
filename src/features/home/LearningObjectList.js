@@ -172,12 +172,12 @@ export class LearningObjectList extends Component {
                             });
                           }}
                           style={{ textAlign: 'left', padding: '15px' }}
-                          primaryText={lo.metadata.general.title}
+                          primaryText={lo.metadata.general && lo.metadata.general.title}
                           secondaryText={
                             <p>
                               <span style={{ color: darkBlack }}>{lo.category}</span>{ ' -- ' }
                               <span style={{ color: darkBlack }}>{lo.created}</span>{ ' -- ' }
-                              {lo.metadata.general.description}
+                              {lo.metadata.general && lo.metadata.general.description}
                             </p>
                           }
                           secondaryTextLines={2}
