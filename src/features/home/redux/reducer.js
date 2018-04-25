@@ -9,6 +9,7 @@ import { reducer as getUserListReducer } from './getUserList';
 import { reducer as userValidateReducer } from './userValidate';
 import { reducer as getLearningObjectMetadataSchemaReducer } from './getLearningObjectMetadataSchema';
 import { reducer as createLearningObjectReducer } from './createLearningObject';
+import { reducer as getLearningObjectFilesReducer } from './getLearningObjectFiles';
 
 const reducers = [
   getLearningObjectListReducer,
@@ -21,6 +22,7 @@ const reducers = [
   userValidateReducer,
   getLearningObjectMetadataSchemaReducer,
   createLearningObjectReducer,
+  getLearningObjectFilesReducer,
 ];
 
 export default function reducer(state = initialState, action) {

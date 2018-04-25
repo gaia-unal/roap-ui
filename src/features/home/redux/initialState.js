@@ -21,6 +21,9 @@ const initialState = {
   learningObjectMetadataSchema: null,
   createLearningObjectPending: false,
   createLearningObjectError: null,
+  getLearningObjectFilesPending: false,
+  getLearningObjectFilesError: null,
+  learningObjectFileMetadata: null,
 };
 
 export default initialState;
