@@ -7,12 +7,15 @@ import { Redirect } from 'react-router';
 
 import SearchBar from 'material-ui-search-bar';
 
+import Paper from 'material-ui/Paper';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ViewList from 'material-ui/svg-icons/action/view-list';
 import IconButton from 'material-ui/IconButton';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+
+import { grey200 } from 'material-ui/styles/colors';
 
 import * as actions from './redux/actions';
 
@@ -34,7 +37,12 @@ export class PrincipalBar extends Component {
       return (
         <IconMenu
           iconButtonElement={
-            <IconButton> <ActionAccountCircle /> </IconButton>
+            <IconButton
+              tooltip={this.props.home.user ? this.props.home.user.name : 'user options'}
+              tooltipPosition="bottom-left"
+            >
+              <ActionAccountCircle />
+            </IconButton>
           }
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
@@ -87,12 +95,13 @@ export class PrincipalBar extends Component {
           {this.state.showCreateLearningObject && <Redirect push to="/create-learning-object" />}
           <Toolbar className="home-tool-bar">
             <ToolbarGroup firstChild float="left">
-              <IconButton
-                tooltip={this.props.home.userToken || 'Anonymus'}
-                tooltipPosition="bottom-right"
-              >
-                <ViewList />
-              </IconButton>
+              <Paper style={{ background: grey200 }}>
+                <img
+                  src="../../images/banner.png"
+                  width="200"
+                  alt="-"
+                />
+              </Paper>
             </ToolbarGroup>
             <ToolbarGroup className="search-bar">
               <SearchBar
@@ -116,10 +125,16 @@ export class PrincipalBar extends Component {
             </ToolbarGroup>
             <ToolbarGroup lastChild float="right">
               <b>
-                {this.props.home.user ? this.props.home.user.name : 'Anonymus'}
+                {this.props.home.user && this.props.home.user.name}
               </b>
               <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
               {this.getUserMenu()}
+              <IconButton
+                tooltip="Collections"
+                tooltipPosition="bottom-left"
+              >
+                <ViewList />
+              </IconButton>
             </ToolbarGroup>
           </Toolbar>
         </div>

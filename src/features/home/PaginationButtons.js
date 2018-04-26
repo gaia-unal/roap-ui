@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 
 import HardwareKeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
-import Paper from 'material-ui/Paper';
-import { blueGrey300, blueGrey600 } from 'material-ui/styles/colors';
+import { grey300, blueGrey700, grey900, blue500 } from 'material-ui/styles/colors';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Avatar from 'material-ui/Avatar';
 
@@ -22,9 +21,8 @@ export class PaginationButtons extends Component {
 
   render() {
     return (
-      <Paper
+      <div
         style={{
-          background: blueGrey300,
           padding: '2px',
           zIndex: 1,
           position: 'fixed',
@@ -38,7 +36,7 @@ export class PaginationButtons extends Component {
         }}
       >
         <FloatingActionButton
-          mini
+          backgroundColor={blueGrey700}
           style={{ marginRight: '10px' }}
           onClick={() => {
             const promise = new Promise((resolve) => {
@@ -56,11 +54,11 @@ export class PaginationButtons extends Component {
         >
           <HardwareKeyboardArrowLeft />
         </FloatingActionButton>
-        <Avatar size={30} style={{ background: blueGrey600 }}>
-          {this.props.home.page}
+        <Avatar size={30} style={{ background: grey300 }}>
+          <p style={{ color: grey900 }}>{this.props.home.page}</p>
         </Avatar>
         <FloatingActionButton
-          mini
+          backgroundColor={blueGrey700}
           style={{ marginLeft: '10px' }}
           onClick={() => {
             const promise = new Promise((resolve) => {
@@ -78,7 +76,7 @@ export class PaginationButtons extends Component {
         >
           <HardwareKeyboardArrowRight />
         </FloatingActionButton>
-      </Paper>
+      </div>
     );
   }
 }

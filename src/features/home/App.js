@@ -11,13 +11,11 @@ const getTheme = () => {
   const overwrites = {
     palette: {
       accent1Color: Colors.blueGrey500,
-      accent2Color: Colors.blueGrey700,
-      accent3Color: Colors.blueGrey800,
-      primary1Color: Colors.blueGrey700,
-      primary2Color: Colors.blueGrey700,
-      pickerHeaderColor: Colors.blueGrey300,
-      textColor: Colors.black
-    }
+      pickerHeaderColor: Colors.blueGrey500,
+      primary1Color: Colors.blueGrey500,
+      accent2Color: Colors.blueGrey500,
+      accent3Color: Colors.white
+    },
   };
   return getMuiTheme(baseTheme, overwrites);
 };

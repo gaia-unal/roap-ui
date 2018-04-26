@@ -150,8 +150,13 @@ export class LearningObjectList extends Component {
         </Dialog>
         <center>
           <Paper
-            zDepth={4}
-            style={{ marginRight: '5%', marginLeft: '5%', height: '70%', padding: 10, minWidth: '480px' }}
+            style={{
+              marginRight: '2%',
+              marginLeft: '2%',
+              height: '70%',
+              padding: 10,
+              minWidth: '480px'
+            }}
           >
             <List>
               {this.props.home.getLearningObjectListError ? (
@@ -177,7 +182,7 @@ export class LearningObjectList extends Component {
                           {' -- '}
                           <span style={{ color: darkBlack }}>{lo.created}</span>
                           {' -- '}
-                          <span style={{ color: darkBlack }}>{lo.file_path}</span>
+                          <span style={{ color: darkBlack }}>{lo.file_path.split('.').pop()}</span>
                           {' -- '}
                           {lo.metadata.general && lo.metadata.general.description}
                         </p>
