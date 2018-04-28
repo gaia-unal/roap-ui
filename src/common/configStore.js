@@ -4,6 +4,8 @@ import { routerMiddleware } from 'react-router-redux';
 import history from './history';
 import rootReducer from './rootReducer';
 
+import persistState from 'redux-localstorage';
+
 const router = routerMiddleware(history);
 
 // NOTE: Do not change middleares delaration pattern since rekit plugins may register middlewares to it.
@@ -29,7 +31,7 @@ if (process.env.NODE_ENV === 'dev') {
 export default function configureStore(initialState) {
   const store = createStore(rootReducer, initialState, compose(
     applyMiddleware(...middlewares),
-    devToolsExtension
+    persistState()
   ));
 
   /* istanbul ignore if  */
