@@ -39,18 +39,22 @@ export class PaginationButtons extends Component {
           backgroundColor={blueGrey700}
           style={{ marginRight: '10px' }}
           onClick={() => {
-            const promise = new Promise((resolve) => {
-              resolve(this.props.actions.goToPreviousPage());
-            });
-            promise.then(() => {
-              this.props.actions.getLearningObjectList({
-                offset: this.props.home.offset,
-                count: this.props.home.count,
-                textSearch: this.props.home.textSearch,
+            if (!this.props.home.getLearningObjectListPending) {
+              const promise = new Promise((resolve) => {
+                resolve(this.props.actions.goToPreviousPage());
               });
-            });
+              promise.then(() => {
+                this.props.actions.getLearningObjectList({
+                  offset: this.props.home.offset,
+                  count: this.props.home.count,
+                  textSearch: this.props.home.textSearch,
+                });
+              });
+            }
           }}
-          disabled={this.props.home.page < 2}
+          disabled={
+            this.props.home.page < 2
+          }
         >
           <HardwareKeyboardArrowLeft />
         </FloatingActionButton>
@@ -61,18 +65,22 @@ export class PaginationButtons extends Component {
           backgroundColor={blueGrey700}
           style={{ marginLeft: '10px' }}
           onClick={() => {
-            const promise = new Promise((resolve) => {
-              resolve(this.props.actions.goToNextPage());
-            });
-            promise.then(() => {
-              this.props.actions.getLearningObjectList({
-                offset: this.props.home.offset,
-                count: this.props.home.count,
-                textSearch: this.props.home.textSearch,
+            if (!this.props.home.getLearningObjectListPending) {
+              const promise = new Promise((resolve) => {
+                resolve(this.props.actions.goToNextPage());
               });
-            });
+              promise.then(() => {
+                this.props.actions.getLearningObjectList({
+                  offset: this.props.home.offset,
+                  count: this.props.home.count,
+                  textSearch: this.props.home.textSearch,
+                });
+              });
+            }
           }}
-          disabled={this.props.home.learningObjectList.length < this.props.home.count}
+          disabled={
+            this.props.home.learningObjectList.length < this.props.home.count
+          }
         >
           <HardwareKeyboardArrowRight />
         </FloatingActionButton>
