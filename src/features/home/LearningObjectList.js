@@ -7,28 +7,29 @@ import { Redirect } from 'react-router';
 
 import _ from 'lodash';
 
-import Paper from 'material-ui/Paper';
-import Avatar from 'material-ui/Avatar';
-import Divider from 'material-ui/Divider';
-import { List, ListItem } from 'material-ui/List';
-import ActionInfo from 'material-ui/svg-icons/action/info';
 import SocialVeryDissatisfied from 'material-ui/svg-icons/social/sentiment-very-dissatisfied';
 import SocialDissatisfied from 'material-ui/svg-icons/social/sentiment-dissatisfied';
 import SocialNeutral from 'material-ui/svg-icons/social/sentiment-neutral';
 import SocialSatisfied from 'material-ui/svg-icons/social/sentiment-satisfied';
 import SocialVerySatisfied from 'material-ui/svg-icons/social/sentiment-very-satisfied';
+import ActionPageview from 'material-ui/svg-icons/action/pageview';
+import HardwareKeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+import HardwareKeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import Paper from 'material-ui/Paper';
 import {
-  darkBlack,
   blueGrey200,
-  blueGrey500,
+  grey600,
   red900,
   orange900,
   yellow900,
   lightGreen900,
   green900,
 } from 'material-ui/styles/colors';
-import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
+import { Card, CardActions, CardText, CardTitle } from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
+
+import { Rating } from 'material-ui-rating';
 
 import * as actions from './redux/actions';
 
@@ -39,12 +40,10 @@ export class LearningObjectList extends Component {
   };
 
   state = {
-    showDescription: false,
     showLearningObject: false,
-    learningObjectDescription: '',
-    learningObjectTitle: '',
     learningObjectMetadata: '',
     learningObjectId: '',
+    expanded: -1
   };
 
   componentDidMount() {
@@ -59,77 +58,27 @@ export class LearningObjectList extends Component {
     });
   }
 
-  getRankingIcon(ranking, tooltip) {
+  getRankingIcon2(ranking, n) {
     switch (ranking) {
       case 1:
-        return this.insertSvgIconIntoIconButton(tooltip, red900, <SocialVeryDissatisfied hoverColor={blueGrey200} />);
+        return <SocialVeryDissatisfied color={ranking === n ? red900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : red900} />;
       case 2:
-        return this.insertSvgIconIntoIconButton(tooltip, orange900, <SocialDissatisfied hoverColor={blueGrey200} />);
+        return <SocialDissatisfied color={ranking === n ? orange900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : orange900} />;
       case 3:
-        return this.insertSvgIconIntoIconButton(tooltip, yellow900, <SocialNeutral hoverColor={blueGrey200} />);
+        return <SocialNeutral color={ranking === n ? yellow900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : yellow900} />;
       case 4:
-        return this.insertSvgIconIntoIconButton(tooltip, lightGreen900, <SocialSatisfied hoverColor={blueGrey200} />);
+        return <SocialSatisfied color={ranking === n ? lightGreen900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : lightGreen900} />;
       case 5:
-        return this.insertSvgIconIntoIconButton(tooltip, green900, <SocialVerySatisfied hoverColor={blueGrey200} />);
+        return <SocialVerySatisfied color={ranking === n ? green900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : green900} />;
       default:
-        return this.insertSvgIconIntoIconButton(tooltip, blueGrey200, <SocialNeutral hoverColor={blueGrey200} />);
+        return <SocialNeutral color={ranking === n ? blueGrey200 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : blueGrey200} />;
     }
-  }
-
-  getRightIcons(lo) {
-    return (
-      <Paper style={{ zIndex: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {this.getRankingIcon(
-          Math.round(lo.user_scores.creator),
-          `Creator score: ${lo.user_scores.creator || 'has not been rated'}`
-        )}
-        {this.getRankingIcon(
-          Math.round(lo.user_scores.expert),
-          `Creator score: ${lo.user_scores.expert || 'has not been rated'}`
-        )}
-        <IconButton
-          tooltip="View full description"
-          tooltipPosition="top-left"
-          style={{ padding: '8px', width: '60', height: '60' }}
-          iconStyle={{ margin: '-2px', color: blueGrey500 }}
-        >
-          <ActionInfo
-            onClick={() => {
-              this.setState({
-                showDescription: true,
-                learningObjectDescription: lo.metadata.general.description,
-                learningObjectTitle: lo.metadata.general.title,
-              });
-            }}
-            hoverColor={blueGrey200}
-          />
-        </IconButton>
-      </Paper>
-    );
-  }
-
-  getLeftAvatar(id) {
-    return <Avatar> {id + 1 + this.props.home.offset} </Avatar>;
   }
 
   /*
   TODO: Add description, palabras clave, formato, idioma to lo description.
     Add search help
-    
   */
-
-  insertSvgIconIntoIconButton(tooltip, color, SvgIcon) {
-    return (
-      <IconButton
-        tooltip={tooltip}
-        tooltipPosition="top-left"
-        style={{ padding: '4px', width: '60', height: '60' }}
-        iconStyle={{ margin: '-2px', color }}
-      >
-        {SvgIcon}
-      </IconButton>
-    );
-  }
 
   render() {
     return (
@@ -137,67 +86,170 @@ export class LearningObjectList extends Component {
         {this.state.showLearningObject && (
           <Redirect push to={`/learning-object/${this.state.learningObjectId}`} />
         )}
-        <Dialog
-          title="Description"
-          open={this.state.showDescription}
-          onRequestClose={() => {
-            this.setState({ showDescription: false });
+        <div
+          style={{
+            marginRight: '2%',
+            marginLeft: '2%',
+            height: '70%',
+            padding: 10,
+            minWidth: '480px'
           }}
         >
-          <span style={{ color: darkBlack }}>{this.state.learningObjectTitle}</span>
-          <br />
-          {this.state.learningObjectDescription}
-        </Dialog>
-        <center>
-          <Paper
-            style={{
-              marginRight: '2%',
-              marginLeft: '2%',
-              height: '70%',
-              padding: 10,
-              minWidth: '480px'
-            }}
-          >
-            <List>
-              {this.props.home.getLearningObjectListError ? (
-                <ListItem primaryText="Connection error" />
-              ) : this.props.home.learningObjectList.length === 0 && !this.props.home.getLearningObjectListPending ? (
-                <ListItem primaryText="No results" />
-              ) : (
-                _.map(this.props.home.learningObjectList, (lo, id) => (
-                  <div key={id}>
-                    <ListItem
-                      onClick={() => {
-                        this.setState({
+          {this.props.home.getLearningObjectListError ? (
+            <p> Connection error </p>
+          ) : this.props.home.learningObjectList.length === 0 && !this.props.home.getLearningObjectListPending ? (
+            <p> No results </p>
+          ) : (
+            _.map(this.props.home.learningObjectList, (lo, id) => (
+              <Paper style={{ margin: '5px' }} key={id} zDepth={id === this.state.expanded ? 5 : 0}>
+                <Card expanded={id === this.state.expanded}>
+                  <CardTitle>
+                    {lo.metadata.general && lo.metadata.general.title}
+                  </CardTitle>
+                  <CardText style={{ paddingTop: '0', paddingBottom: '0' }}>
+                    <div style={{
+                        alignItems: 'flex-top',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        flexWrap: 'wrap'
+                      }}
+                    >
+                      <div
+                        style={{
+                          maxWidth: '70%',
+                          display: 'inline-block'
+                        }}
+                      >
+                        <p>
+                          <span style={{ color: grey600 }}>
+                            Description:
+                          </span> {lo.metadata.general && lo.metadata.general.description}
+                        </p>
+                      </div>
+                      <div
+                        style={{
+                          alignSelf: 'auto',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'flex-end',
+                          alignItems: 'flex-end'
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <p>Users rating</p>
+                          <Rating
+                            itemIconStyle={{
+                              width: 20,
+                              height: 20
+                            }}
+                            itemStyle={{
+                              width: 20,
+                              height: 20,
+                              padding: 5
+                            }}
+                            iconFilledRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.creator))}
+                            iconHoveredRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.creator))}
+                            iconNormalRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.creator))}
+                            value={Math.round(lo.user_scores.creator)}
+                            max={5}
+                            onChange={value => console.log(`Rated with value ${value}`)}
+                            tooltipRenderer={({ index }) => <span>{index}{': 5 times'}</span>}
+                            tooltipPosition="top-center"
+                          />
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <p>Expert rating</p>
+                          <Rating
+                            itemIconStyle={{
+                              width: 20,
+                              height: 20
+                            }}
+                            itemStyle={{
+                              width: 20,
+                              height: 20,
+                              padding: 5
+                            }}
+                            iconFilledRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.expert))}
+                            iconHoveredRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.expert))}
+                            iconNormalRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.expert))}
+                            value={Math.round(lo.user_scores.expert)}
+                            max={5}
+                            onChange={value => console.log(`Rated with value ${value}`)}
+                            tooltipRenderer={({ index }) => <span>{index}{': 5 times'}</span>}
+                            tooltipPosition="bottom-center"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </CardText>
+                  <CardText expandable>
+                    <p>
+                      <span style={{ color: grey600 }}>Collection:</span> {lo.category}
+                      <br />
+                      <span style={{ color: grey600 }}>Created:</span> {lo.created}
+                      <br />
+                      <span style={{ color: grey600 }}>Format:</span> {lo.file_path.split('.').pop()}
+                    </p>
+                  </CardText>
+                  <CardActions>
+                    <div
+                      style={{
+                        justifyContent: 'flex-start',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'left'
+                      }}
+                    >
+                      <RaisedButton
+                        style={{ marginRight: '20px' }}
+                        backgroundColor={blueGrey200}
+                        onClick={() => this.setState({
                           showLearningObject: !this.state.showLearningObject,
                           learningObjectMetadata: <pre> {JSON.stringify(lo.metadata, undefined, 4)} </pre>,
                           learningObjectId: lo.file_path.includes('zip') ? lo._id : lo.file_path,
-                        });
-                      }}
-                      style={{ textAlign: 'left', padding: '15px' }}
-                      primaryText={lo.metadata.general && lo.metadata.general.title}
-                      secondaryText={
-                        <p>
-                          <span style={{ color: darkBlack }}>{lo.category}</span>
-                          {' -- '}
-                          <span style={{ color: darkBlack }}>{lo.created}</span>
-                          {' -- '}
-                          <span style={{ color: darkBlack }}>{lo.file_path.split('.').pop()}</span>
-                          {' -- '}
-                          {lo.metadata.general && lo.metadata.general.description}
-                        </p>
-                      }
-                      secondaryTextLines={2}
-                      leftAvatar={this.getLeftAvatar(id)}
-                      rightIconButton={this.getRightIcons(lo)}
-                    />
-                    <Divider inset />
-                  </div>
-                ))
-              )}
-            </List>
-          </Paper>
-        </center>
+                        })}
+                        label="View"
+                        icon={<ActionPageview />}
+                      />
+                      <RaisedButton
+                        label={
+                          id === this.state.expanded ? (
+                            'Less'
+                          ) : (
+                            'More'
+                          )
+                        }
+                        backgroundColor={blueGrey200}
+                        style={{ marginLeft: '20px' }}
+                        onClick={() => this.setState({ expanded: id === this.state.expanded ? -1 : id })}
+                        icon={
+                          id === this.state.expanded ? (
+                            <HardwareKeyboardArrowUp />
+                          ) : (
+                            <HardwareKeyboardArrowDown />
+                          )
+                        }
+                      />
+                    </div>
+                  </CardActions>
+                </Card>
+              </Paper>
+            ))
+          )}
+        </div>
       </div>
     );
   }
