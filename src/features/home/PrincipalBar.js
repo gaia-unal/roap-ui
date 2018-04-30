@@ -23,6 +23,7 @@ export class PrincipalBar extends Component {
     static propTypes = {
       home: PropTypes.object.isRequired,
       actions: PropTypes.object.isRequired,
+      searchField: PropTypes.bool.isRequired,
     };
 
     state = {
@@ -32,6 +33,8 @@ export class PrincipalBar extends Component {
       showCreateLearningObject: false,
       textSearch: '',
     }
+
+    // TODO: logout
 
     getUserMenu() {
       return (
@@ -104,24 +107,26 @@ export class PrincipalBar extends Component {
               </Paper>
             </ToolbarGroup>
             <ToolbarGroup className="search-bar">
-              <SearchBar
-                onChange={(s) => { this.setState({ textSearch: s }); }}
-                onRequestSearch={() => {
-                  const promise = new Promise((resolve) => {
-                    resolve(this.props.actions.searchText(
-                      this.state.textSearch,
-                    ));
-                  });
-                  promise.then(() => {
-                    this.props.actions.getLearningObjectList({
-                      offset: this.props.home.offset,
-                      count: this.props.home.count,
-                      textSearch: this.state.textSearch,
+              {this.props.searchField && (
+                <SearchBar
+                  onChange={(s) => { this.setState({ textSearch: s }); }}
+                  onRequestSearch={() => {
+                    const promise = new Promise((resolve) => {
+                      resolve(this.props.actions.searchText(
+                        this.state.textSearch,
+                      ));
                     });
-                  });
-                }}
-                style={{ maxWidth: 800 }}
-              />
+                    promise.then(() => {
+                      this.props.actions.getLearningObjectList({
+                        offset: this.props.home.offset,
+                        count: this.props.home.count,
+                        textSearch: this.state.textSearch,
+                      });
+                    });
+                  }}
+                  style={{ maxWidth: 800 }}
+                />
+              )}
             </ToolbarGroup>
             <ToolbarGroup lastChild float="right">
               <b>

@@ -45,6 +45,8 @@ export default class LearningObjectForm extends Component {
     return Object.keys(obj[0])[0];
   }
 
+  // TODO: validate fields.
+
   render() {
     return (
       <div className="comments">

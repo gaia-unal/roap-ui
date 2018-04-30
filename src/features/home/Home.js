@@ -24,7 +24,7 @@ export class Home extends Component {
   render() {
     return (
       <div style={{ paddingTop: '4em', paddingBottom: '5em' }}>
-        <PrincipalBar />
+        <PrincipalBar searchField />
         {this.props.home.user && (
           <div style={{ position: 'fixed', bottom: '3%', right: '3px', display: 'flex', flexDirection: 'column-reverse', alignItems: 'center' }}>
             <FloatingActionButton style={{ margin: '5px' }} onClick={() => { this.setState({ floatingButtonOpen: !this.state.floatingButtonOpen }); }}>

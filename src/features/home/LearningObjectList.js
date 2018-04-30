@@ -12,9 +12,9 @@ import SocialDissatisfied from 'material-ui/svg-icons/social/sentiment-dissatisf
 import SocialNeutral from 'material-ui/svg-icons/social/sentiment-neutral';
 import SocialSatisfied from 'material-ui/svg-icons/social/sentiment-satisfied';
 import SocialVerySatisfied from 'material-ui/svg-icons/social/sentiment-very-satisfied';
-import ActionPageview from 'material-ui/svg-icons/action/pageview';
 import HardwareKeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import HardwareKeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
+import ActionPageview from 'material-ui/svg-icons/action/pageview';
 import Paper from 'material-ui/Paper';
 import {
   blueGrey200,
@@ -25,18 +25,18 @@ import {
   lightGreen900,
   green900,
 } from 'material-ui/styles/colors';
-import IconButton from 'material-ui/IconButton';
 import { Card, CardActions, CardText, CardTitle } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import { Rating } from 'material-ui-rating';
 
 import * as actions from './redux/actions';
+import history from '../../common/history';
 
 export class LearningObjectList extends Component {
   static propTypes = {
     home: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
   };
 
   state = {
@@ -83,9 +83,11 @@ export class LearningObjectList extends Component {
   render() {
     return (
       <div className="home-learning-object-list">
-        {this.state.showLearningObject && (
-          <Redirect push to={`/learning-object/${this.state.learningObjectId}`} />
-        )}
+        {
+          this.state.showLearningObject && (
+            <Redirect push to={`/learning-object/${this.state.learningObjectId}`} />
+          )
+        }
         <div
           style={{
             marginRight: '2%',
@@ -154,10 +156,10 @@ export class LearningObjectList extends Component {
                               height: 20,
                               padding: 5
                             }}
-                            iconFilledRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.creator))}
-                            iconHoveredRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.creator))}
-                            iconNormalRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.creator))}
-                            value={Math.round(lo.user_scores.creator)}
+                            iconFilledRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.creator))}
+                            iconHoveredRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.creator))}
+                            iconNormalRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.creator))}
+                            value={Math.round(lo.user_ratings.creator)}
                             max={5}
                             onChange={value => console.log(`Rated with value ${value}`)}
                             tooltipRenderer={({ index }) => <span>{index}{': 5 times'}</span>}
@@ -182,10 +184,10 @@ export class LearningObjectList extends Component {
                               height: 20,
                               padding: 5
                             }}
-                            iconFilledRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.expert))}
-                            iconHoveredRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.expert))}
-                            iconNormalRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_scores.expert))}
-                            value={Math.round(lo.user_scores.expert)}
+                            iconFilledRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.expert))}
+                            iconHoveredRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.expert))}
+                            iconNormalRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.expert))}
+                            value={Math.round(lo.user_ratings.expert)}
                             max={5}
                             onChange={value => console.log(`Rated with value ${value}`)}
                             tooltipRenderer={({ index }) => <span>{index}{': 5 times'}</span>}
@@ -202,7 +204,22 @@ export class LearningObjectList extends Component {
                       <span style={{ color: grey600 }}>Created:</span> {lo.created}
                       <br />
                       <span style={{ color: grey600 }}>Format:</span> {lo.file_path.split('.').pop()}
+                      <br />
+                      <span style={{ color: grey600 }}>Keywords:</span> {
+                        lo.metadata.general &&
+                        lo.metadata.general.keyword &&
+                        lo.metadata.general.keyword.join(', ')
+                      }
                     </p>
+                    {/*
+                    <br />
+                    <iframe
+                      src={`http://localhost/renderer/${lo.file_path.includes('zip') ? lo._id : lo.file_path}`}
+                      height="500"
+                      width="100%"
+                      title="hola"
+                    />
+                    */}
                   </CardText>
                   <CardActions>
                     <div
@@ -234,7 +251,20 @@ export class LearningObjectList extends Component {
                         }
                         backgroundColor={blueGrey200}
                         style={{ marginLeft: '20px' }}
-                        onClick={() => this.setState({ expanded: id === this.state.expanded ? -1 : id })}
+                        onClick={() => {
+                          this.setState({
+                            expanded: id === this.state.expanded ? -1 : id
+                          });
+                          /*
+                          if (id === this.state.expanded) {
+                            history.push('');
+                          } else {
+                            history.push(
+                              `?lo_id=${lo.file_path.includes('zip') ? lo._id : lo.file_path}`,
+                            );
+                          }
+                          */
+                        }}
                         icon={
                           id === this.state.expanded ? (
                             <HardwareKeyboardArrowUp />

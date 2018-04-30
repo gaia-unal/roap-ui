@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import PrincipalBar from './PrincipalBar';
+
 import * as actions from './redux/actions';
 
 export class LearningObject extends Component {
@@ -20,6 +22,8 @@ export class LearningObject extends Component {
     url: null,
   }
 
+  // TODO: complete this.
+
   componentWillMount() {
     this.setState({
       url: `http://localhost/renderer/${this.props.match.params.fileName}`,
@@ -28,7 +32,8 @@ export class LearningObject extends Component {
 
   render() {
     return (
-      <div className="home-learning-object">
+      <div style={{ paddingTop: '4em', paddingBottom: '5em' }} className="home-learning-object">
+        <PrincipalBar searchField={false} />
         <center>
           <iframe src={this.state.url} height="500" width="800" title="hola" />
         </center>
