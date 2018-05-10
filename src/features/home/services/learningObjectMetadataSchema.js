@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class LearningObjectMetadataSchemaService {
   constructor() {
-    this.url = 'http://localhost/learning-object-metadata-schema';
+    this.url = 'http://localhost:8080/learning-object-metadata-schema';
   }
 
   get(token, response, error) {

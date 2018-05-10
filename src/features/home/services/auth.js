@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class Auth {
   constructor() {
-    this.url = 'http://localhost/auth';
+    this.url = 'http://localhost:8080/auth';
   }
 
   post(token, response, error) {

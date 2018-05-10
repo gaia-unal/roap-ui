@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class userService {
   constructor() {
-    this.url = 'http://localhost/user-collection';
+    this.url = 'http://localhost:8080/user-collection';
   }
 
   post(email, password, name, requestedRole, response, error) {

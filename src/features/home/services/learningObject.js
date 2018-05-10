@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class LearningObjectCollectionService {
   constructor() {
-    this.url = 'http://localhost/learning-object-collection';
+    this.url = 'http://localhost:8080/learning-object-collection';
   }
 
   get(offset, count, search, response, error) {

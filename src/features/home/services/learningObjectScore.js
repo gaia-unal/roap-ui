@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class LearningObjectScoreService {
   constructor() {
-    this.url = 'http://localhost/back/object-rate';
+    this.url = 'http://localhost:8080/back/object-rate';
   }
 
   post(_id, score, then) {
