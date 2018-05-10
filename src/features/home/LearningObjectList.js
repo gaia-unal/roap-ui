@@ -58,12 +58,14 @@ export class LearningObjectList extends Component {
   */
 
   mean(ratingObject) {
-    const summary = _.sum(_.map(Object.keys(ratingObject), (k, id) => ratingObject[k].length * (id + 1)));
-    const count = _.sum(_.map(Object.keys(ratingObject), k => ratingObject[k].length));
-    if (count === 0) {
-      return 0;
+    if (ratingObject) {
+      const summary = _.sum(_.map(Object.keys(ratingObject), (k, id) => ratingObject[k].length * (id + 1)));
+      const count = _.sum(_.map(Object.keys(ratingObject), k => ratingObject[k].length));
+      if (count === 0) {
+        return 0;
+      }
+      return summary / count;
     }
-    return summary / count;
   }
 
   handleRate(id, rating, role) {
@@ -141,7 +143,7 @@ export class LearningObjectList extends Component {
                             moment(moment.utc(lo.created).toDate()).local().format('YYYY-MM-DD HH:mm:ss')
                           }
                           <br />
-                          <span style={{ color: grey600 }}>Format:</span> {lo.file_name.split('.').pop()}
+                          <span style={{ color: grey600 }}>Format:</span> {lo.file_name && lo.file_name.split('.').pop()}
                           <br />
                           <span style={{ color: grey600 }}>Keywords:</span> {
                             lo.metadata.general &&
@@ -179,10 +181,10 @@ export class LearningObjectList extends Component {
                               height: 20,
                               padding: 5
                             }}
-                            value={this.mean(lo.rating.creator)}
+                            value={this.mean(lo.rating && lo.rating.creator)}
                             max={5}
                             onChange={value => this.handleRate(lo._id, value, 'creator')}
-                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating.creator[index.toString()].length)}
+                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating && lo.rating.creator[index.toString()].length)}
                             tooltipPosition="top-center"
                           />
                         </div>
@@ -206,10 +208,10 @@ export class LearningObjectList extends Component {
                               height: 20,
                               padding: 5
                             }}
-                            value={this.mean(lo.rating.expert)}
+                            value={this.mean(lo.rating && lo.rating.expert)}
                             max={5}
                             onChange={value => this.handleRate(lo._id, value, 'expert')}
-                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating.expert[index.toString()].length)}
+                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating && lo.rating.expert[index.toString()].length)}
                             tooltipPosition="bottom-center"
                           />
                         </div>
@@ -220,7 +222,7 @@ export class LearningObjectList extends Component {
                     <Tabs>
                       <Tab label="Content" value="a">
                         <iframe
-                          src={`http://localhost/learning-object-file-renderer/${lo.file_name.includes('zip') ? lo._id : lo.file_name}`}
+                          src={`http://localhost:8080/learning-object-file-renderer/${lo.file_name && lo.file_name.includes('zip') ? lo._id : lo.file_name}`}
                           height="380px"
                           width="100%"
                           title="hola"
