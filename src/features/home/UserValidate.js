@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Dialog from 'material-ui/Dialog';
+
+import { Redirect } from 'react-router';
+
 import * as actions from './redux/actions';
 
 export class UserValidate extends Component {
@@ -24,9 +28,13 @@ export class UserValidate extends Component {
   render() {
     return (
       <div className="home-user-validate">
-        {
-          this.props.home.userValidatePending
-        }
+        {this.props.home.userValidatePending && <Redirect push to="/login" />}
+        <Dialog
+          title="Validating"
+          open={this.props.home.userValidatePending}
+        >
+          <p>Wait for user validation.</p>
+        </Dialog>
       </div>
     );
   }

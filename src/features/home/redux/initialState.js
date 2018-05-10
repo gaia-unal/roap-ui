@@ -24,6 +24,12 @@ const initialState = {
   getLearningObjectFilesPending: false,
   getLearningObjectFilesError: null,
   learningObjectFileMetadata: null,
+  ratingLearningObjectPending: false,
+  ratingLearningObjectError: null,
+  userSendEmailPending: false,
+  userSendEmailError: null,
+  getOneUserPending: false,
+  getOneUserError: null,
 };
 
 export default initialState;

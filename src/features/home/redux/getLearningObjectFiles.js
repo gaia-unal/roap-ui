@@ -35,7 +35,7 @@ export function getLearningObjectFiles(args = {}) {
         (err) => {
           dispatch({
             type: HOME_GET_LEARNING_OBJECT_FILES_FAILURE,
-            getLearningObjectFilesError: err,
+            error: err,
           });
           reject(err);
         }
@@ -78,7 +78,7 @@ export function reducer(state, action) {
       return {
         ...state,
         getLearningObjectFilesPending: false,
-        getLearningObjectFilesError: action.data.error,
+        getLearningObjectFilesError: action.error,
       };
 
     case HOME_GET_LEARNING_OBJECT_FILES_DISMISS_ERROR:

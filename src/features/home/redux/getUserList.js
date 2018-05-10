@@ -36,7 +36,7 @@ export function getUserList(args = {}) {
         (err) => {
           dispatch({
             type: HOME_GET_USER_LIST_FAILURE,
-            getUserListError: err,
+            error: err,
           });
           reject(err);
         }
@@ -79,7 +79,7 @@ export function reducer(state, action) {
       return {
         ...state,
         getUserListPending: false,
-        getUserListError: action.data.error,
+        getUserListError: action.error,
         userList: [],
       };
 

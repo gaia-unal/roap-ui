@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class LearningObjectCollectionService {
   constructor() {
-    this.url = 'http://localhost/back/object';
+    this.url = 'http://localhost/learning-object-collection';
   }
 
   get(offset, count, search, response, error) {
@@ -16,6 +16,20 @@ class LearningObjectCollectionService {
     request
       .get(this.url)
       .query(query)
+      .end((err, res) => {
+        if (!err) {
+          response(res);
+        } else {
+          error(err);
+        }
+      });
+  }
+
+  rating(learningObjectId, rating, token, response, error) {
+    request
+      .patch(`${this.url}/${learningObjectId}`)
+      .set('AUTHORIZATION', token)
+      .query({ rating })
       .end((err, res) => {
         if (!err) {
           response(res);

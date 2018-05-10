@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class userService {
   constructor() {
-    this.url = 'http://localhost/back/user';
+    this.url = 'http://localhost/user-collection';
   }
 
   post(email, password, name, requestedRole, response, error) {
@@ -27,6 +27,18 @@ class userService {
       .get(this.url)
       .query(query)
       .set('AUTHORIZATION', token)
+      .end((err, res) => {
+        if (!err) {
+          response(res);
+        } else {
+          error(err);
+        }
+      });
+  }
+
+  getOne(id, response, error) {
+    request
+      .get(`${this.url}/${id}`)
       .end((err, res) => {
         if (!err) {
           response(res);

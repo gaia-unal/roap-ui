@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class loginUserService {
   constructor() {
-    this.url = 'http://localhost/back/login';
+    this.url = 'http://localhost/user-login';
   }
 
   post(email, password, response, error) {

@@ -10,6 +10,10 @@ import { reducer as userValidateReducer } from './userValidate';
 import { reducer as getLearningObjectMetadataSchemaReducer } from './getLearningObjectMetadataSchema';
 import { reducer as createLearningObjectReducer } from './createLearningObject';
 import { reducer as getLearningObjectFilesReducer } from './getLearningObjectFiles';
+import { reducer as logoutUserReducer } from './logoutUser';
+import { reducer as ratingLearningObjectReducer } from './ratingLearningObject';
+import { reducer as userSendEmailReducer } from './userSendEmail';
+import { reducer as getOneUserReducer } from './getOneUser';
 
 const reducers = [
   getLearningObjectListReducer,
@@ -23,6 +27,10 @@ const reducers = [
   getLearningObjectMetadataSchemaReducer,
   createLearningObjectReducer,
   getLearningObjectFilesReducer,
+  logoutUserReducer,
+  ratingLearningObjectReducer,
+  userSendEmailReducer,
+  getOneUserReducer,
 ];
 
 export default function reducer(state = initialState, action) {

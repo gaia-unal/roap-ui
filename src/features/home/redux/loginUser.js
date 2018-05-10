@@ -41,7 +41,7 @@ export function loginUser(args = {}) {
         (err) => {
           dispatch({
             type: HOME_LOGIN_USER_FAILURE,
-            loginUserError: err,
+            error: err,
           });
           reject(err);
         }
@@ -84,7 +84,7 @@ export function reducer(state, action) {
       return {
         ...state,
         loginUserPending: false,
-        loginUserError: action.loginUserError,
+        loginUserError: action.error,
         user: null,
       };
 

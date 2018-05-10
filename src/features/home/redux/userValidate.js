@@ -23,7 +23,7 @@ export function userValidate(args = {}) {
       // doRequest is a placeholder Promise. You should replace it with your own logic.
       // See the real-word example at:  https://github.com/supnate/rekit/blob/master/src/features/home/redux/fetchRedditReactjsList.js
       // args.error here is only for test coverage purpose.
-      userValidateServ.get(
+      userValidateServ.validate(
         args.token,
         (res) => {
           dispatch({
@@ -34,7 +34,7 @@ export function userValidate(args = {}) {
         (err) => {
           dispatch({
             type: HOME_USER_VALIDATE_FAILURE,
-            signinUserError: err,
+            error: err,
           });
           reject(err);
         }
@@ -76,7 +76,7 @@ export function reducer(state, action) {
       return {
         ...state,
         userValidatePending: false,
-        userValidateError: action.data.error,
+        userValidateError: action.error,
       };
 
     case HOME_USER_VALIDATE_DISMISS_ERROR:

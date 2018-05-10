@@ -3,12 +3,24 @@ import request from 'superagent';
 
 class userValidateService {
   constructor() {
-    this.url = 'http://localhost/back/user-validate';
+    this.url = 'http://localhost/user-account';
   }
 
-  get(token, response, error) {
+  validate(token, response, error) {
     request
-      .get(`${this.url}/${token}`)
+      .get(`${this.url}/validate/${token}`)
+      .end((err, res) => {
+        if (!err) {
+          response(res);
+        } else {
+          error(err);
+        }
+      });
+  }
+
+  sendEmail(email, id, response, error) {
+    request
+      .get(`${this.url}/send-email/${id}/${email}`)
       .end((err, res) => {
         if (!err) {
           response(res);

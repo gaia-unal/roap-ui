@@ -25,11 +25,9 @@ export class UserList extends Component {
     // TODO: change offset and count
     this.props.actions.getUserList({
       query: {
-        role: 'unknown',
-        offset: this.props.home.offset,
-        count: this.props.home.count,
+        aproved_by_admin: false,
       },
-      token: this.props.home.user.token,
+      token: this.props.home.user && this.props.home.user.token,
     });
   }
 

@@ -1,14 +1,14 @@
 import request from 'superagent';
 
 
-class LearningObjectMetadataSchemaService {
+class Auth {
   constructor() {
-    this.url = 'http://localhost/learning-object-metadata-schema';
+    this.url = 'http://localhost/auth';
   }
 
-  get(token, response, error) {
+  post(token, response, error) {
     request
-      .get(this.url)
+      .post(this.url)
       .set('AUTHORIZATION', token)
       .end((err, res) => {
         if (!err) {
@@ -20,4 +20,4 @@ class LearningObjectMetadataSchemaService {
   }
 }
 
-export default LearningObjectMetadataSchemaService;
+export default Auth;

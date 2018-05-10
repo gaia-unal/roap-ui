@@ -53,6 +53,9 @@ export class PrincipalBar extends Component {
             <div>
               <MenuItem
                 primaryText="Log out"
+                onClick={() => {
+                  this.props.actions.logoutUser();
+                }}
               />
               <MenuItem
                 primaryText="Create learning object"

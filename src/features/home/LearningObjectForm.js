@@ -23,15 +23,18 @@ export default class LearningObjectForm extends Component {
     stepIndex: -1,
   };
 
-  getComponentByType(type_, text, onChange, value, required) {
+  getComponentByType(type_, text, onChange, value, required, id) {
     switch (type_) {
       case 'string':
         return (
           <TextField
+            key={id}
             floatingLabelText={text}
             style={{ marginLeft: '5px', marginRigth: '5px' }}
             onChange={(e, t) => { onChange(t); }}
-            underlineStyle={{ borderColor: required ? deepOrange500 : grey300 }}
+            underlineStyle={{
+              borderColor: required ? deepOrange500 : grey300
+            }}
             value={value}
           />
         );
@@ -56,7 +59,7 @@ export default class LearningObjectForm extends Component {
           orientation="vertical"
         >
           {_.map(_.zip(_.map(_.pickBy(this.props.loms, 'fields'), (v, k) => ({ [k]: v })), _.range(Object.keys(_.pickBy(this.props.loms, 'fields')).length)), (v, id) => (
-            <Step key={id} complete={true}>
+            <Step key={id}>
               <StepButton
                 onClick={() => this.setState({
                   stepIndex: this.state.stepIndex === id ? -1 : id
@@ -85,8 +88,9 @@ export default class LearningObjectForm extends Component {
                         );
                       },
                       (this.props.lom.hasOwnProperty(this.getKey(v)) && this.props.lom[this.getKey(v)].hasOwnProperty(this.getKey(vv))) ? this.props.lom[this.getKey(v)][this.getKey(vv)] : '',
-                      this.props.loms[this.getKey(v)].fields[this.getKey(vv)].required
-                    ) || 'nada'
+                      this.props.loms[this.getKey(v)].fields[this.getKey(vv)].required,
+                      id
+                    )
                   ))
                 )}
               </StepContent>
@@ -104,8 +108,9 @@ export default class LearningObjectForm extends Component {
               );
             },
             this.props.lom.hasOwnProperty(this.getKey(v)) ? this.props.lom[this.getKey(v)] : '',
-            this.props.loms[this.getKey(v)].required
-          ) || 'nada'
+            this.props.loms[this.getKey(v)].required,
+            id
+          )
         ))}
       </div>
     );

@@ -9,3 +9,7 @@ export { userValidate, dismissUserValidateError } from './userValidate';
 export { getLearningObjectMetadataSchema, dismissGetLearningObjectMetadataSchemaError } from './getLearningObjectMetadataSchema';
 export { createLearningObject, dismissCreateLearningObjectError } from './createLearningObject';
 export { getLearningObjectFiles, dismissGetLearningObjectFilesError } from './getLearningObjectFiles';
+export { logoutUser } from './logoutUser';
+export { ratingLearningObject, dismissRatingLearningObjectError } from './ratingLearningObject';
+export { userSendEmail, dismissUserSendEmailError } from './userSendEmail';
+export { getOneUser, dismissGetOneUserError } from './getOneUser';

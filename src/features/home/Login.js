@@ -74,7 +74,7 @@ export class Login extends Component {
         <Dialog
           title="Unknown user"
           open={this.state.showUnknownUser}
-          onRequestClose={() => { this.setState({ showUnknownUser: false }); }}
+          onRequestClose={() => this.setState({ showUnknownUser: false })}
         >
           Unknown user, please try again.
         </Dialog>

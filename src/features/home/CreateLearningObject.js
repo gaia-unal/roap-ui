@@ -8,6 +8,8 @@ import FileFileUpload from 'material-ui/svg-icons/file/file-upload';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import Dialog from 'material-ui/Dialog';
 
+import { Redirect } from 'react-router';
+
 import _ from 'lodash';
 
 import LearningObjectForm from './LearningObjectForm';
@@ -36,7 +38,9 @@ export class CreateLearningObject extends Component {
   state = {
     learningObjectMetadata: {},
     showErrorMessage: null,
+    errorType: null,
     file: null,
+    redirectToHome: false,
   };
 
   componentDidMount() {
@@ -46,8 +50,11 @@ export class CreateLearningObject extends Component {
     promise.then(() => {
       this.setState({ });
     });
-    promise.catch(() => {
-      this.setState({ });
+    promise.catch((err) => {
+      this.setState({
+        errorType: 'unauthorized',
+        showErrorMessage: `Permission denied ${err.response.body.title}`
+      });
     });
   }
 
@@ -79,7 +86,10 @@ export class CreateLearningObject extends Component {
     if (_.includes(acceptedFileFormats, file.type)) {
       this.setState({ file });
     } else {
-      this.setState({ showErrorMessage: 'Not accepted file format.' });
+      this.setState({
+        errorType: 'file',
+        showErrorMessage: 'Not accepted file format.'
+      });
     }
   }
 
@@ -99,46 +109,52 @@ export class CreateLearningObject extends Component {
         className="home-create-learning-object"
         style={{ marginLeft: '20%' }}
       >
-        <Dialog
-          title="Description"
-          open={this.state.showErrorMessage !== null}
-          onRequestClose={() => { this.setState({ showErrorMessage: null }); }}
-        >
-          <span style={{ color: darkBlack }}>{this.state.showErrorMessage}</span><br />
-        </Dialog>
-        {this.props.home.learningObjectMetadataSchema &&
-          <Fragment>
-            <LearningObjectForm
-              loms={this.props.home.learningObjectMetadataSchema.lom}
-              onChange={(value, fields) => { this.updateLearningObjectMetadata(value, fields); }}
-              lom={this.state.learningObjectMetadata}
-            />
-            <RaisedButton
-              containerElement="label"
-              labelColor="white"
-              icon={<FileFileUpload />}
-              label={(this.state.file && this.state.file.name) || 'Select one file'}
-              primary
-            >
-              <input
-                onChange={e => this.fileHandler(e.target.files[0])}
-                style={{ display: 'none' }}
-                type="file"
-                accept={acceptedFileFormats.join(',')}
+        {this.state.redirectToHome && <Redirect push to="/" />}
+        {this.state.showErrorMessage ? (
+          <Dialog
+            title="Description"
+            open={this.state.showErrorMessage !== null}
+            onRequestClose={() => this.setState({
+              showErrorMessage: null,
+              redirectToHome: this.state.errorType === 'unauthorized',
+            })}
+          >
+            <span style={{ color: darkBlack }}>{this.state.showErrorMessage}</span><br />
+          </Dialog>
+        ) : (
+          this.props.home.learningObjectMetadataSchema &&
+            <Fragment>
+              <LearningObjectForm
+                loms={this.props.home.learningObjectMetadataSchema.lom}
+                onChange={(value, fields) => { this.updateLearningObjectMetadata(value, fields); }}
+                lom={this.state.learningObjectMetadata}
               />
-            </RaisedButton>
-            <br />
-            <br />
-            <RaisedButton
-              containerElement="label"
-              labelColor="white"
-              icon={<ActionDone />}
-              label="Finish"
-              primary
-              onClick={() => this.handleFinish()}
-            />
-          </Fragment>
-        }
+              <RaisedButton
+                containerElement="label"
+                labelColor="white"
+                icon={<FileFileUpload />}
+                label={(this.state.file && this.state.file.name) || 'Select one file'}
+                primary
+              >
+                <input
+                  onChange={e => this.fileHandler(e.target.files[0])}
+                  style={{ display: 'none' }}
+                  type="file"
+                  accept={acceptedFileFormats.join(',')}
+                />
+              </RaisedButton>
+              <br />
+              <br />
+              <RaisedButton
+                containerElement="label"
+                labelColor="white"
+                icon={<ActionDone />}
+                label="Finish"
+                primary
+                onClick={() => this.handleFinish()}
+              />
+            </Fragment>
+        )}
       </div>
     );
   }

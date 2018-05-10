@@ -29,10 +29,6 @@ export default class App extends Component {
     children: '',
   };
 
-  componentWillMount() {
-    // TODO: authotize user here.
-  }
-
   render() {
     return (
       <MuiThemeProvider muiTheme={getTheme()}>

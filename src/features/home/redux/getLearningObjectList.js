@@ -37,7 +37,7 @@ export function getLearningObjectList(args = {}) {
         (err) => {
           dispatch({
             type: HOME_GET_LEARNING_OBJECT_LIST_FAILURE,
-            getLearningObjectListError: err,
+            error: err,
           });
           reject(err);
         }
@@ -80,7 +80,7 @@ export function reducer(state, action) {
         ...state,
         learningObjectList: [],
         getLearningObjectListPending: false,
-        getLearningObjectListError: action.getLearningObjectListError,
+        getLearningObjectListError: action.error,
       };
 
     case HOME_GET_LEARNING_OBJECT_LIST_DISMISS_ERROR:

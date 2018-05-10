@@ -27,9 +27,9 @@ export class Signin extends Component {
     password: '',
     role: 'creator',
     emailErrorText: '',
-    buttonDisabled: true,
-    showHome: false,
     showMessage: false,
+    dialogMessage: '',
+    redirectLogin: false,
   };
 
   setEmail(event) {
@@ -42,54 +42,94 @@ export class Signin extends Component {
     }
     this.setState({
       emailErrorText,
-      buttonDisabled: (
-        event.target.value === '' ||
-        this.state.password === '' ||
-        this.state.name === '' ||
-        this.state.role === '' ||
-        emailErrorText === 'Invalid field'
-      )
     });
   }
 
   setPassword(event) {
     this.setState({
       password: event.target.value,
-      buttonDisabled: (
-        this.state.email === '' ||
-        event.target.value === '' ||
-        this.state.name === '' ||
-        this.state.role === '' ||
-        this.state.emailErrorText === 'Invalid field'
-      )
     });
   }
 
   setName(event) {
     this.setState({
       name: event.target.value,
-      buttonDisabled: (
-        this.state.email === '' ||
-        this.state.password === '' ||
-        event.target.value === '' ||
-        this.state.role === '' ||
-        this.state.emailErrorText === 'Invalid field'
-      )
     });
   }
 
   handleSubmit() {
-    const promise = this.props.actions.signinUser({
+    const signinPromise = this.props.actions.signinUser({
       email: this.state.email,
       password: this.state.password,
       name: this.state.name,
       requestedRole: this.state.role,
     });
-    promise.then(() => {
-      this.setState({ showMessage: true });
+    signinPromise.then((res) => {
+      this.sendUserEmail(res.body._id, this.state.email);
     });
-    promise.catch(() => {
-      this.setState({ showMessage: true, name: '', email: '', password: '', role: 'creator', });
+    signinPromise.catch((err) => {
+      console.log(err);
+      const getUserPromise = this.props.actions.getOneUser({
+        id: err.response.body.description.user_id,
+      });
+      getUserPromise.then((res) => {
+        const user = res.body;
+        let msg = (
+          <div>
+            <p>User is already registered but no validated.</p>
+            <RaisedButton
+              label="Click to send again validation Email."
+              primary
+              onClick={() => {
+                this.sendUserEmail(user._id, user.email);
+              }}
+            />
+          </div>
+        );
+        if (user.validated) {
+          msg = (
+            <div>
+              <p>User is already registered but.</p>
+              <RaisedButton
+                label="Click to login."
+                primary
+                onClick={() => this.setState({ redirectLogin: true })}
+              />
+            </div>
+          );
+        }
+        this.setState({ dialogMessage: msg });
+      });
+      getUserPromise.catch(() => {
+        // nothing.
+      });
+      this.setState({
+        showMessage: true,
+        dialogMessage: 'User is already register.',
+        name: '',
+        email: '',
+        password: '',
+        role: 'creator'
+      });
+    });
+  }
+
+  sendUserEmail(userId, userEmail) {
+    this.setState({
+      showMessage: true,
+      dialogMessage: 'Sending validation email.'
+    });
+    const sendEmailPromise = this.props.actions.userSendEmail({
+      email: userEmail,
+      id: userId,
+    });
+    sendEmailPromise.then(() => {
+      this.setState({
+        dialogMessage: 'Email sended, check your email.'
+      });
+    });
+    sendEmailPromise.catch(() => {
+      // nothing.
     });
   }
 
@@ -107,15 +147,13 @@ export class Signin extends Component {
         }}
       >
         <Dialog
-          title="Unknown user"
+          title="User Validation"
           open={this.state.showMessage}
-          onRequestClose={() => { this.setState({ showMessage: false }); }}
+          onRequestClose={() => this.setState({ showMessage: false })}
         >
-          {this.props.home.signinUserError === null ? 'Please, check your email and validate your account.' : (
-            JSON.stringify(this.props.home.signinUserError)
-          )}
+          {this.state.dialogMessage}
         </Dialog>
-        {this.state.showHome && <Redirect push to="/" />}
+        {this.state.redirectLogin && <Redirect push to="/login" />}
         <Paper
           className="home-login"
           style={{
@@ -156,7 +194,13 @@ export class Signin extends Component {
             <RaisedButton
               label="Submit"
               primary
-              disabled={this.state.buttonDisabled}
+              disabled={
+                this.state.email === '' ||
+                this.state.password === '' ||
+                this.state.name === '' ||
+                this.state.role === '' ||
+                this.state.emailErrorText === 'Invalid field'
+              }
               onClick={() => { this.handleSubmit(); }}
             />
           </center>

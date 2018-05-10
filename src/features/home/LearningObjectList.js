@@ -7,28 +7,24 @@ import { Redirect } from 'react-router';
 
 import _ from 'lodash';
 
-import SocialVeryDissatisfied from 'material-ui/svg-icons/social/sentiment-very-dissatisfied';
-import SocialDissatisfied from 'material-ui/svg-icons/social/sentiment-dissatisfied';
-import SocialNeutral from 'material-ui/svg-icons/social/sentiment-neutral';
-import SocialSatisfied from 'material-ui/svg-icons/social/sentiment-satisfied';
-import SocialVerySatisfied from 'material-ui/svg-icons/social/sentiment-very-satisfied';
 import HardwareKeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import HardwareKeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 import ActionPageview from 'material-ui/svg-icons/action/pageview';
+import ToggleStar from 'material-ui/svg-icons/toggle/star';
+import ToggleStarBorder from 'material-ui/svg-icons/toggle/star-border';
 import Paper from 'material-ui/Paper';
 import {
   blueGrey200,
+  blueGrey600,
   grey600,
-  red900,
-  orange900,
-  yellow900,
-  lightGreen900,
-  green900,
 } from 'material-ui/styles/colors';
 import { Card, CardActions, CardText, CardTitle } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import { Tabs, Tab } from 'material-ui/Tabs';
 
 import { Rating } from 'material-ui-rating';
+
+import moment from 'moment';
 
 import * as actions from './redux/actions';
 import history from '../../common/history';
@@ -41,7 +37,6 @@ export class LearningObjectList extends Component {
 
   state = {
     showLearningObject: false,
-    learningObjectMetadata: '',
     learningObjectId: '',
     expanded: -1
   };
@@ -58,27 +53,39 @@ export class LearningObjectList extends Component {
     });
   }
 
-  getRankingIcon2(ranking, n) {
-    switch (ranking) {
-      case 1:
-        return <SocialVeryDissatisfied color={ranking === n ? red900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : red900} />;
-      case 2:
-        return <SocialDissatisfied color={ranking === n ? orange900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : orange900} />;
-      case 3:
-        return <SocialNeutral color={ranking === n ? yellow900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : yellow900} />;
-      case 4:
-        return <SocialSatisfied color={ranking === n ? lightGreen900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : lightGreen900} />;
-      case 5:
-        return <SocialVerySatisfied color={ranking === n ? green900 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : green900} />;
-      default:
-        return <SocialNeutral color={ranking === n ? blueGrey200 : blueGrey200} hoverColor={ranking === n ? blueGrey200 : blueGrey200} />;
+  /*
+  TODO: Add search help
+  */
+
+  mean(ratingObject) {
+    const summary = _.sum(_.map(Object.keys(ratingObject), (k, id) => ratingObject[k].length * (id + 1)));
+    const count = _.sum(_.map(Object.keys(ratingObject), k => ratingObject[k].length));
+    if (count === 0) {
+      return 0;
+    }
+    return summary / count;
+  }
+
+  handleRate(id, rating, role) {
+    const user = this.props.home.user;
+    if (user && user.role === role) {
+      this.props.actions.ratingLearningObject({
+        learningObjectId: id,
+        learingObjectRating: rating,
+        token: user.token,
+      });
     }
   }
 
-  /*
-  TODO: Add description, palabras clave, formato, idioma to lo description.
-    Add search help
-  */
+  ratingToolTip(index, value) {
+    return <span>{index}{`: ${value || 0} votes`}</span>;
+  }
+
+  handleChange = (value) => {
+    this.setState({
+      value: value,
+    });
+  };
 
   render() {
     return (
@@ -127,6 +134,20 @@ export class LearningObjectList extends Component {
                           <span style={{ color: grey600 }}>
                             Description:
                           </span> {lo.metadata.general && lo.metadata.general.description}
+                          <br />
+                          <span style={{ color: grey600 }}>Collection:</span> {lo.category}
+                          <br />
+                          <span style={{ color: grey600 }}>Created:</span> {
+                            moment(moment.utc(lo.created).toDate()).local().format('YYYY-MM-DD HH:mm:ss')
+                          }
+                          <br />
+                          <span style={{ color: grey600 }}>Format:</span> {lo.file_name.split('.').pop()}
+                          <br />
+                          <span style={{ color: grey600 }}>Keywords:</span> {
+                            lo.metadata.general &&
+                            lo.metadata.general.keyword &&
+                            lo.metadata.general.keyword.join(', ')
+                          }
                         </p>
                       </div>
                       <div
@@ -147,6 +168,8 @@ export class LearningObjectList extends Component {
                         >
                           <p>Users rating</p>
                           <Rating
+                            iconFilled={<ToggleStar color={blueGrey600} />}
+                            iconHovered={<ToggleStarBorder color={blueGrey600} />}
                             itemIconStyle={{
                               width: 20,
                               height: 20
@@ -156,13 +179,10 @@ export class LearningObjectList extends Component {
                               height: 20,
                               padding: 5
                             }}
-                            iconFilledRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.creator))}
-                            iconHoveredRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.creator))}
-                            iconNormalRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.creator))}
-                            value={Math.round(lo.user_ratings.creator)}
+                            value={this.mean(lo.rating.creator)}
                             max={5}
-                            onChange={value => console.log(`Rated with value ${value}`)}
-                            tooltipRenderer={({ index }) => <span>{index}{': 5 times'}</span>}
+                            onChange={value => this.handleRate(lo._id, value, 'creator')}
+                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating.creator[index.toString()].length)}
                             tooltipPosition="top-center"
                           />
                         </div>
@@ -175,6 +195,8 @@ export class LearningObjectList extends Component {
                         >
                           <p>Expert rating</p>
                           <Rating
+                            iconFilled={<ToggleStar color={blueGrey600} />}
+                            iconHovered={<ToggleStarBorder color={blueGrey600} />}
                             itemIconStyle={{
                               width: 20,
                               height: 20
@@ -184,13 +206,10 @@ export class LearningObjectList extends Component {
                               height: 20,
                               padding: 5
                             }}
-                            iconFilledRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.expert))}
-                            iconHoveredRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.expert))}
-                            iconNormalRenderer={({ index }) => this.getRankingIcon2(index, Math.round(lo.user_ratings.expert))}
-                            value={Math.round(lo.user_ratings.expert)}
+                            value={this.mean(lo.rating.expert)}
                             max={5}
-                            onChange={value => console.log(`Rated with value ${value}`)}
-                            tooltipRenderer={({ index }) => <span>{index}{': 5 times'}</span>}
+                            onChange={value => this.handleRate(lo._id, value, 'expert')}
+                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating.expert[index.toString()].length)}
                             tooltipPosition="bottom-center"
                           />
                         </div>
@@ -198,28 +217,25 @@ export class LearningObjectList extends Component {
                     </div>
                   </CardText>
                   <CardText expandable>
-                    <p>
-                      <span style={{ color: grey600 }}>Collection:</span> {lo.category}
-                      <br />
-                      <span style={{ color: grey600 }}>Created:</span> {lo.created}
-                      <br />
-                      <span style={{ color: grey600 }}>Format:</span> {lo.file_path.split('.').pop()}
-                      <br />
-                      <span style={{ color: grey600 }}>Keywords:</span> {
-                        lo.metadata.general &&
-                        lo.metadata.general.keyword &&
-                        lo.metadata.general.keyword.join(', ')
-                      }
-                    </p>
-                    {/*
-                    <br />
-                    <iframe
-                      src={`http://localhost/renderer/${lo.file_path.includes('zip') ? lo._id : lo.file_path}`}
-                      height="500"
-                      width="100%"
-                      title="hola"
-                    />
-                    */}
+                    <Tabs>
+                      <Tab label="Content" value="a">
+                        <iframe
+                          src={`http://localhost/learning-object-file-renderer/${lo.file_name.includes('zip') ? lo._id : lo.file_name}`}
+                          height="380px"
+                          width="100%"
+                          title="hola"
+                        />
+                      </Tab>
+                      <Tab label="Metadata" value="b">
+                        <div
+                          style={{ overflowY: 'scroll', height: '380px' }}
+                        >
+                          <p>
+                            <pre> {JSON.stringify(lo.metadata, undefined, 4)} </pre>
+                          </p>
+                        </div>
+                      </Tab>
+                    </Tabs>
                   </CardText>
                   <CardActions>
                     <div
@@ -230,17 +246,18 @@ export class LearningObjectList extends Component {
                         alignItems: 'left'
                       }}
                     >
+                      {/*
                       <RaisedButton
                         style={{ marginRight: '20px' }}
                         backgroundColor={blueGrey200}
                         onClick={() => this.setState({
                           showLearningObject: !this.state.showLearningObject,
-                          learningObjectMetadata: <pre> {JSON.stringify(lo.metadata, undefined, 4)} </pre>,
-                          learningObjectId: lo.file_path.includes('zip') ? lo._id : lo.file_path,
+                          learningObjectId: lo.file_name.includes('zip') ? lo._id : lo.file_name,
                         })}
                         label="View"
                         icon={<ActionPageview />}
                       />
+                      */}
                       <RaisedButton
                         label={
                           id === this.state.expanded ? (
@@ -250,21 +267,11 @@ export class LearningObjectList extends Component {
                           )
                         }
                         backgroundColor={blueGrey200}
-                        style={{ marginLeft: '20px' }}
-                        onClick={() => {
-                          this.setState({
+                        style={{ marginLeft: '0px' }}
+                        onClick={() => this.setState({
                             expanded: id === this.state.expanded ? -1 : id
-                          });
-                          /*
-                          if (id === this.state.expanded) {
-                            history.push('');
-                          } else {
-                            history.push(
-                              `?lo_id=${lo.file_path.includes('zip') ? lo._id : lo.file_path}`,
-                            );
-                          }
-                          */
-                        }}
+                          })
+                        }
                         icon={
                           id === this.state.expanded ? (
                             <HardwareKeyboardArrowUp />
