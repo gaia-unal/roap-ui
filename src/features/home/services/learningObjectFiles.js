@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class LearningObjectFilesService {
   constructor() {
-    this.url = 'http://localhost:8080/files';
+    this.url = `${process.env.BACKEND_HOST}/files`;
   }
 
   get(fileName, response, error) {

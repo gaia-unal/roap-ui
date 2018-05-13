@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class Auth {
   constructor() {
-    this.url = 'http://localhost:8080/auth';
+    this.url = `${process.env.BACKEND_HOST}/auth`;
   }
 
   post(token, response, error) {

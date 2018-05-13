@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class userService {
   constructor() {
-    this.url = 'http://localhost:8080/user-collection';
+    this.url = `${process.env.BACKEND_HOST}/user-collection`;
   }
 
   post(email, password, name, requestedRole, response, error) {

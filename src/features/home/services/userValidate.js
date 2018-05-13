@@ -3,7 +3,7 @@ import request from 'superagent';
 
 class userValidateService {
   constructor() {
-    this.url = 'http://localhost:8080/user-account';
+    this.url = `${process.env.BACKEND_HOST}/user-account`;
   }
 
   validate(token, response, error) {
