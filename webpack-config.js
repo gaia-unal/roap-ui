@@ -81,6 +81,9 @@ module.exports = (type) => { // eslint-disable-line
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify(type === 'dist' ? 'production' : type),
+          BACKEND_HOST: JSON.stringify(
+            type === 'dev' ? 'http://localhost:8080' : ''
+          ),
         }
       })
     ]),
