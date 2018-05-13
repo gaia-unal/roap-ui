@@ -79,7 +79,7 @@ export class PaginationButtons extends Component {
             }
           }}
           disabled={
-            this.props.home.learningObjectList.length < this.props.home.count
+            this.props.home.learningObjectList && this.props.home.learningObjectList.length < this.props.home.count
           }
         >
           <HardwareKeyboardArrowRight />

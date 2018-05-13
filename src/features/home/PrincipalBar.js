@@ -19,6 +19,8 @@ import { grey200 } from 'material-ui/styles/colors';
 
 import * as actions from './redux/actions';
 
+import banner from './images/banner.png';
+
 export class PrincipalBar extends Component {
     static propTypes = {
       home: PropTypes.object.isRequired,
@@ -59,9 +61,9 @@ export class PrincipalBar extends Component {
               />
               <MenuItem
                 primaryText="Create learning object"
-                onClick={() => {
-                  this.setState({ showCreateLearningObject: !this.state.showCreateLearningObject });
-                }}
+                onClick={() => this.setState({
+                  showCreateLearningObject: !this.state.showCreateLearningObject
+                })}
               />
               {this.props.home.user.role === 'administrator' && (
                 <MenuItem
@@ -76,15 +78,15 @@ export class PrincipalBar extends Component {
             <div>
               <MenuItem
                 primaryText="Log in"
-                onClick={() => {
-                  this.setState({ showLogin: !this.state.showLogin });
-                }}
+                onClick={() => this.setState({
+                  showLogin: !this.state.showLogin
+                })}
               />
               <MenuItem
                 primaryText="Sign in"
-                onClick={() => {
-                  this.setState({ showSignin: !this.state.showSignin });
-                }}
+                onClick={() => this.setState({
+                  showSignin: !this.state.showSignin
+                })}
               />
             </div>
           )}
@@ -103,7 +105,7 @@ export class PrincipalBar extends Component {
             <ToolbarGroup firstChild float="left">
               <Paper style={{ background: grey200 }}>
                 <img
-                  src="../../images/banner.png"
+                  src={banner}
                   width="200"
                   alt="-"
                 />

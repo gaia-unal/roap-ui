@@ -26,7 +26,7 @@ export class LearningObject extends Component {
 
   componentWillMount() {
     this.setState({
-      url: `http://localhost/learning-object-file-renderer/${this.props.match.params.fileName}`,
+      url: `${process.env.BACKEND_HOST}/learning-object-file-renderer/${this.props.match.params.fileName}`,
     });
   }
 

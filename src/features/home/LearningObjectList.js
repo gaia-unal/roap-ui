@@ -108,7 +108,7 @@ export class LearningObjectList extends Component {
         >
           {this.props.home.getLearningObjectListError ? (
             <p> Connection error </p>
-          ) : this.props.home.learningObjectList.length === 0 && !this.props.home.getLearningObjectListPending ? (
+          ) : this.props.home.learningObjectList !== null && this.props.home.learningObjectList.length === 0 && !this.props.home.getLearningObjectListPending ? (
             <p> No results </p>
           ) : (
             _.map(this.props.home.learningObjectList, (lo, id) => (
@@ -222,7 +222,7 @@ export class LearningObjectList extends Component {
                     <Tabs>
                       <Tab label="Content" value="a">
                         <iframe
-                          src={`http://localhost:8080/learning-object-file-renderer/${lo.file_name && lo.file_name.includes('zip') ? lo._id : lo.file_name}`}
+                          src={`${process.env.BACKEND_HOST}/learning-object-file-renderer/${lo.file_name && lo.file_name.includes('zip') ? `${lo._id}/index.html` : lo.file_name}`}
                           height="380px"
                           width="100%"
                           title="hola"
@@ -232,9 +232,7 @@ export class LearningObjectList extends Component {
                         <div
                           style={{ overflowY: 'scroll', height: '380px' }}
                         >
-                          <p>
-                            <pre> {JSON.stringify(lo.metadata, undefined, 4)} </pre>
-                          </p>
+                          <pre> {JSON.stringify(lo.metadata, undefined, 4)} </pre>
                         </div>
                       </Tab>
                     </Tabs>
