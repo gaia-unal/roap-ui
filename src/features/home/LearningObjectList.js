@@ -184,7 +184,7 @@ export class LearningObjectList extends Component {
                             value={this.mean(lo.rating && lo.rating.creator)}
                             max={5}
                             onChange={value => this.handleRate(lo._id, value, 'creator')}
-                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating && lo.rating.creator[index.toString()].length)}
+                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating && lo.rating.creator && lo.rating.creator[index.toString()].length)}
                             tooltipPosition="top-center"
                           />
                         </div>
@@ -211,7 +211,7 @@ export class LearningObjectList extends Component {
                             value={this.mean(lo.rating && lo.rating.expert)}
                             max={5}
                             onChange={value => this.handleRate(lo._id, value, 'expert')}
-                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating && lo.rating.expert[index.toString()].length)}
+                            tooltipRenderer={({ index }) => this.ratingToolTip(index, lo.rating && lo.rating.expert && lo.rating.expert[index.toString()].length)}
                             tooltipPosition="bottom-center"
                           />
                         </div>
