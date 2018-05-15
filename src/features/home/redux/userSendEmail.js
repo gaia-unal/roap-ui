@@ -25,7 +25,6 @@ export function userSendEmail(args = {}) {
       // args.error here is only for test coverage purpose.
       userValidateServ.sendEmail(
         args.email,
-        args.id,
         (res) => {
           dispatch({
             type: HOME_USER_SEND_EMAIL_SUCCESS,

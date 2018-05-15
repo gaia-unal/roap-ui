@@ -23,9 +23,11 @@ export class Login extends Component {
     email: '',
     password: '',
     emailErrorText: '',
-    buttonDisabled: true,
-    showHome: false,
-    showUnknownUser: false,
+    redirectToHome: false,
+    redirectToSignin: false,
+    showDialog: false,
+    dialogText: '',
+    dialogTitle: '',
   };
 
   setEmail(event) {
@@ -38,15 +40,61 @@ export class Login extends Component {
     }
     this.setState({
       emailErrorText,
-      buttonDisabled: (event.target.value === '' || this.state.password === '' || emailErrorText === 'Invalid field')
     });
   }
 
   setPassword(event) {
     this.setState({
       password: event.target.value,
-      buttonDisabled: (this.state.email === '' || event.target.value === '' || this.state.emailErrorText === 'Invalid field')
     });
+  }
+
+  getActionByError(dialogText) {
+    switch(dialogText){
+      case 'User email is not validated.':
+        return (
+          <RaisedButton
+            fullWidth
+            label="Send validation email again"
+            onClick={() => {
+              this.setState({
+                dialogText: <p>Sending validation email...</p>
+              });
+              this.props.actions.userSendEmail({
+                email: this.state.email
+              }).then(() => {
+                this.setState({
+                  dialogText: <p>{
+                    `Validation email has been sended, 
+                    please check your email.`
+                  }</p>
+                });
+              })
+            }}
+          />
+        );
+      case 'User not found.':
+        this.setState({ email: '', password: '' });
+        return (
+          <RaisedButton
+            fullWidth
+            label="Signin"
+            onClick={() => this.setState({
+              redirectToSignin: true
+            })}
+          />
+        );
+      case 'User is not validated by admin.':
+        this.setState({ email: '', password: '' });
+        return (
+          <p>Please wait to admin activate your account.</p>
+        );
+      case 'Invalid password.':
+        this.setState({ email: '', password: '' });
+        return (
+          <p>Please tray again.</p>
+        );
+    }
   }
 
   handleSubmit() {
@@ -55,10 +103,19 @@ export class Login extends Component {
       password: this.state.password,
     });
     promise.then(() => {
-      this.setState({ showHome: (this.props.home.user !== null) });
+      this.setState({ redirectToHome: (this.props.home.user !== null) });
     });
-    promise.catch(() => {
-      this.setState({ showUnknownUser: true, email: '', password: '', });
+    promise.catch((error) => {
+      const dialogTitle = error.response.body.description[0];
+      this.setState({
+        showDialog: true,
+        dialogTitle: dialogTitle,
+        dialogText: (
+          <div>
+            {this.getActionByError(dialogTitle)}
+          </div>
+        ),
+      });
     });
   }
 
@@ -71,12 +128,14 @@ export class Login extends Component {
           height: '100vh',
         }}
       >
+        {this.state.redirectToHome && <Redirect push to="/" />}
+        {this.state.redirectToSignin && <Redirect push to="/signin" />}
         <Dialog
-          title="Unknown user"
-          open={this.state.showUnknownUser}
-          onRequestClose={() => this.setState({ showUnknownUser: false })}
+          title={this.state.dialogTitle}
+          open={this.state.showDialog}
+          onRequestClose={() => this.setState({ showDialog: false })}
         >
-          Unknown user, please try again.
+          {this.state.dialogText}
         </Dialog>
         <Paper
           className="home-login"
@@ -86,7 +145,6 @@ export class Login extends Component {
           }}
         >
           <center>
-            {this.state.showHome && <Redirect push to="/" />}
             <TextField
               floatingLabelText="E-mail"
               errorText={this.state.emailErrorText}
@@ -104,7 +162,7 @@ export class Login extends Component {
             <RaisedButton
               label="Login"
               primary
-              disabled={this.state.buttonDisabled}
+              disabled={this.state.email === '' || this.state.password === '' || this.state.emailErrorText === 'Invalid field'}
               onClick={() => { this.handleSubmit(); }}
             />
           </center>

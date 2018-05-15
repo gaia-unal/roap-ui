@@ -18,9 +18,9 @@ class userValidateService {
       });
   }
 
-  sendEmail(email, id, response, error) {
+  sendEmail(email, response, error) {
     request
-      .get(`${this.url}/send-email/${id}/${email}`)
+      .get(`${this.url}/send-email/${email}`)
       .end((err, res) => {
         if (!err) {
           response(res);
