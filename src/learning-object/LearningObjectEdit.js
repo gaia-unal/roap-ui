@@ -11,15 +11,35 @@ export class LearningObjectEdit extends React.Component {
     this.service = new SchemaService();
     this.state = {
       fetchingSchema: false,
-      schema: null,
+      fields: [],
       error: null,
+    }
+  }
+
+  generateNestedForm(lom, temp_keys=[], keys=[]) {
+    for(var key in lom){
+        if ('fields' in lom[key]) {
+            temp_keys.push(key);
+            this.generateNestedForm(lom[key].fields, temp_keys, keys)
+            temp_keys.splice(-1,1);
+        } else {
+            keys.push({
+                key: 'metadata.' + temp_keys.join('.') + '.' + key,
+                type: lom[key].type,
+                required: lom[key].required
+            })
+        }
     }
   }
 
   componentWillMount() {
     this.setState({fetchingSchema: true}, () => {
       this.service.getSchema(
-        schema => this.setState({fetchingSchema: false, schema}),
+        schema =>  {
+            let fields = [];
+            this.generateNestedForm(schema.lom, [], fields);
+            this.setState({ fields });
+        },
         error => this.setState({fetchingSchema: false, error}),
       )
     })
@@ -39,7 +59,12 @@ export class LearningObjectEdit extends React.Component {
             <TextInput source="file_name" />
           </FormTab>
           <FormTab label="metadata">
-            {/*<TextInput source="rating" />*/}
+            {
+                this.state.fields.map(
+                    field => <LongTextInput source={field.key} />
+                )
+            }
+            {/*<TextInput source="rating" />
             <LongTextInput source="metadata.general.identifier.catalog" />
             <LongTextInput source="metadata.general.identifier.entry" />
             <LongTextInput source="metadata.general.title" />
@@ -97,7 +122,7 @@ export class LearningObjectEdit extends React.Component {
             <LongTextInput source="metadata.classification.taxonPath.taxon.id" />
             <LongTextInput source="metadata.classification.taxonPath.taxon.entry" />
             <LongTextInput source="metadata.classification.description" />
-            <LongTextInput source="metadata.classification.keyword" />
+            <LongTextInput source="metadata.classification.keyword" />*/}
           </FormTab>
         </TabbedForm>
       </Edit>
