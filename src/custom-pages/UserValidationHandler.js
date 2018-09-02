@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import userService from './custom-services/user';
+import userService from '../custom-services/user';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from 'react-router'
 
