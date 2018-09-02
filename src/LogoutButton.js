@@ -6,10 +6,10 @@ import Button from '@material-ui/core/Button';
 import ExitIcon from '@material-ui/icons/PowerSettingsNew';
 
 const MyLogoutButton = ({ userLogout, ...rest }) => {
-    return localStorage.getItem('role') && <Responsive
+    return localStorage.getItem('role') && localStorage.getItem('role') !== 'external' && <Responsive
         xsmall={
             <MenuItem
-                onClick={() => userLogout()}
+                onClick={() => userLogout('/')}
                 {...rest}
             >
                 <ExitIcon /> Logout
@@ -17,7 +17,7 @@ const MyLogoutButton = ({ userLogout, ...rest }) => {
         }
         medium={
             <Button
-                onClick={() => userLogout()}
+                onClick={() => userLogout('/')}
                 size="small"
                 {...rest}
             >

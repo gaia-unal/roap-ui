@@ -6,6 +6,8 @@ import { LearningObjectShow } from './learning-object/LearningObjectShow';
 import { LearningObjectEdit } from './learning-object/LearningObjectEdit';
 
 import { UserList } from './user/UserList';
+import { UserCreate } from './user/UserCreate';
+import { UserEdit } from './user/UserEdit';
 
 import { Admin, Resource } from 'react-admin';
 
@@ -43,9 +45,11 @@ const App = () => (
         options={{ label: 'Learning Objects' }}
         icon={Book}
       />,
-      permissions === 'administrator' && <Resource
+       permissions === 'administrator' && <Resource
         name="user-collection"
         list={UserList}
+        edit={UserEdit}
+        create={UserCreate}
         options={{ label: 'Users' }}
         icon={Book}
       />

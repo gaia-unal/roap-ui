@@ -6,7 +6,10 @@ import LabelIcon from '@material-ui/icons/Label';
 
 import Divider from '@material-ui/core/Divider';
 
+import decodeJwt from 'jwt-decode';
+
 const Menu = ({ resources, onMenuClick, logout }) => {
+  const user = decodeJwt(localStorage.getItem('token'));
   return <div>
     {resources.map((resource, id) => (
       <MenuItemLink
@@ -18,18 +21,22 @@ const Menu = ({ resources, onMenuClick, logout }) => {
       />
     ))}
     <Divider />
-    <MenuItemLink
-      to={'/login'}
-      primaryText={'Login'}
-      leftIcon={<LabelIcon />}
-      onClick={onMenuClick}
-    />
-    <MenuItemLink
-      to={'/signup'}
-      primaryText={'Signup'}
-      leftIcon={<LabelIcon />}
-      onClick={onMenuClick}
-    />
+    {user.status !== 'accepted' &&
+      <React.Fragment>
+        <MenuItemLink
+          to={'/login'}
+          primaryText={'Login'}
+          leftIcon={<LabelIcon />}
+          onClick={onMenuClick}
+        />
+        <MenuItemLink
+          to={'/signup'}
+          primaryText={'Signup'}
+          leftIcon={<LabelIcon />}
+          onClick={onMenuClick}
+        />
+      </React.Fragment>
+    }
     <Responsive xsmall={logout} medium={null} />
   </div>
 };

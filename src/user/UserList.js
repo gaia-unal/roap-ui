@@ -10,6 +10,7 @@ import {
   TextInput,
   BooleanInput,
   DateInput,
+  EditButton,
 } from 'react-admin';
 
 const UserFilter = (props) => (
@@ -17,7 +18,7 @@ const UserFilter = (props) => (
       <TextInput source="name" />
       <TextInput source="email" />
       <TextInput source="role" />
-      <BooleanInput source="aproved_by_admin" />
+      <TextInput source="status" />
       <DateInput source="created" />
       <DateInput source="modified" />
       <BooleanInput source="deleted" />
@@ -26,18 +27,19 @@ const UserFilter = (props) => (
   </Filter>
 );
 
-export const UserList = (props) => (
+export const UserList = ({permissions, ...props}) => (
   <List title="Users" {...props} filters={<UserFilter />}>
     <Datagrid>
       <TextField source="name" />
       <EmailField source="email" />
       <TextField source="role" />
-      <BooleanField source="aproved_by_admin" />
+      <TextField source="status" />
       <DateField source="created" />
       <DateField source="modified" />
       <BooleanField source="deleted" />
       <BooleanField source="validated" />
       <DateField source="last_activity" />
+      <EditButton />
     </Datagrid>
   </List>
 );

@@ -5,6 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
+import decodeJwt from 'jwt-decode';
+
 const styles = {
   card: {
     width: 400,
@@ -17,7 +19,7 @@ const styles = {
   }
 };
 
-const LearningObjectGird = ({ ids, data, basePath }) => (
+const LearningObjectGird = ({ user, ids, data, basePath }) => (
   <div>
   {ids.map(id =>
     <Card key={id} style={styles.card}>
@@ -33,7 +35,10 @@ const LearningObjectGird = ({ ids, data, basePath }) => (
         </Typography>
       </CardContent>
       <CardActions style={styles.cardActions}>
-        <EditButton resource="learning-object-collection" basePath={basePath} record={data[id]} />
+        {
+          (data[id].creator_id === user._id || user.role === 'administrator') &&
+          <EditButton resource="learning-object-collection" basePath={basePath} record={data[id]} />
+        }
         <ShowButton resource="learning-object-collection" basePath={basePath} record={data[id]} />
       </CardActions>
     </Card>
@@ -52,8 +57,8 @@ const LearningObjectFilter = (props) => (
   </Filter>
 );
 
-export const LearningObjectList = (props) => (
+export const LearningObjectList = ({permissions, ...props}) => (
   <List title="All Learnning Objects" filters={<LearningObjectFilter />} {...props}>
-    <LearningObjectGird />
+    <LearningObjectGird user={decodeJwt(localStorage.getItem('token'))}/>
   </List>
 );

@@ -1,77 +1,80 @@
 import React from 'react';
 import {
-    Create, Edit, SimpleForm, DisabledInput, TextInput, DateInput,
-    LongTextInput, ReferenceManyField, Datagrid, DateField, EditButton
+    TextInput, LongTextInput, TabbedForm, FormTab, Edit
 } from 'react-admin';
 
 export const LearningObjectEdit = (props) => (
-    <Edit {...props}>
-        <SimpleForm>
-            <TextInput source="category" />
-            <TextInput source="created" />
-            <TextInput source="modified" />
-            <TextInput source="deleted" />
-            <TextInput source="evaluated" />
-            <TextInput source="file_name" />
-            {/*<TextInput source="rating" />*/}
-            <TextInput source="metadata.general.identifier.catalog" />
-            <TextInput source="metadata.general.identifier.entry" />
-            <TextInput source="metadata.general.title" />
-            <TextInput source="metadata.general.language" />
-            <TextInput source="metadata.general.description" />
-            <TextInput source="metadata.general.keyword" />
-            <TextInput source="metadata.general.coverage" />
-            <TextInput source="metadata.general.structure" />
-            <TextInput source="metadata.general.aggregationlevel" />
-            <TextInput source="metadata.lifecycle.version" />
-            <TextInput source="metadata.lifecycle.status" />
-            <TextInput source="metadata.lifecycle.contribute.role" />
-            <TextInput source="metadata.lifecycle.contribute.date" />
-            <TextInput source="metadata.lifecycle.contribute.entity" />
-            <TextInput source="metadata.metametadata.identifier.catalog" />
-            <TextInput source="metadata.metametadata.identifier.entry" />
-            <TextInput source="metadata.metametadata.contribute.role" />
-            <TextInput source="metadata.metametadata.contribute.date" />
-            <TextInput source="metadata.metametadata.contribute.entity" />
-            <TextInput source="metadata.metametadata.metadataschema" />
-            <TextInput source="metadata.metametadata.language" />
-            <TextInput source="metadata.technical.format" />
-            <TextInput source="metadata.technical.size" />
-            <TextInput source="metadata.technical.location" />
-            <TextInput source="metadata.technical.requirements.orcomposite.type" />
-            <TextInput source="metadata.technical.requirements.orcomposite.name" />
-            <TextInput source="metadata.technical.requirements.orcomposite.minimumversion" />
-            <TextInput source="metadata.technical.requirements.orcomposite.maximumversion" />
-            <TextInput source="metadata.technical.installationremarks" />
-            <TextInput source="metadata.technical.otherplatformrequirements" />
-            <TextInput source="metadata.technical.duration" />
-            <TextInput source="metadata.educational.interactivitytype" />
-            <TextInput source="metadata.educational.learningresourcetype" />
-            <TextInput source="metadata.educational.interactivitylevel" />
-            <TextInput source="metadata.educational.semanticdensity" />
-            <TextInput source="metadata.educational.intendedenduserrole" />
-            <TextInput source="metadata.educational.context" />
-            <TextInput source="metadata.educational.typicalagerange" />
-            <TextInput source="metadata.educational.difficulty" />
-            <TextInput source="metadata.educational.typicallearningtime" />
-            <TextInput source="metadata.educational.description" />
-            <TextInput source="metadata.educational.language" />
-            <TextInput source="metadata.rights.cost" />
-            <TextInput source="metadata.rights.copyrightandotherrestrictions" />
-            <TextInput source="metadata.rights.description" />
-            <TextInput source="metadata.relation.kind" />
-            <TextInput source="metadata.relation.resource.identifier.catalog" />
-            <TextInput source="metadata.relation.resource.identifier.entry" />
-            <TextInput source="metadata.relation.resource.description" />
-            <TextInput source="metadata.annotation.entity" />
-            <TextInput source="metadata.annotation.date" />
-            <TextInput source="metadata.annotation.description" />
-            <TextInput source="metadata.classification.purpose" />
-            <TextInput source="metadata.classification.taxonPath.source=" />
-            <TextInput source="metadata.classification.taxonPath.taxon.id" />
-            <TextInput source="metadata.classification.taxonPath.taxon.entry" />
-            <TextInput source="metadata.classification.description" />
-            <TextInput source="metadata.classification.keyword" />
-        </SimpleForm>
-    </Edit>
+  <Edit {...props}>
+    <TabbedForm>
+      <FormTab label="summary">
+        <TextInput source="category" />
+        <TextInput source="created" />
+        <TextInput source="modified" />
+        <TextInput source="deleted" />
+        <TextInput source="evaluated" />
+        <TextInput source="file_name" />
+      </FormTab>
+      <FormTab label="metadata">
+        {/*<TextInput source="rating" />*/}
+        <LongTextInput source="metadata.general.identifier.catalog" />
+        <LongTextInput source="metadata.general.identifier.entry" />
+        <LongTextInput source="metadata.general.title" />
+        <LongTextInput source="metadata.general.language" />
+        <LongTextInput source="metadata.general.description" />
+        <LongTextInput source="metadata.general.keyword" />
+        <LongTextInput source="metadata.general.coverage" />
+        <LongTextInput source="metadata.general.structure" />
+        <LongTextInput source="metadata.general.aggregationlevel" />
+        <LongTextInput source="metadata.lifecycle.version" />
+        <LongTextInput source="metadata.lifecycle.status" />
+        <LongTextInput source="metadata.lifecycle.contribute.role" />
+        <LongTextInput source="metadata.lifecycle.contribute.date" />
+        <LongTextInput source="metadata.lifecycle.contribute.entity" />
+        <LongTextInput source="metadata.metametadata.identifier.catalog" />
+        <LongTextInput source="metadata.metametadata.identifier.entry" />
+        <LongTextInput source="metadata.metametadata.contribute.role" />
+        <LongTextInput source="metadata.metametadata.contribute.date" />
+        <LongTextInput source="metadata.metametadata.contribute.entity" />
+        <LongTextInput source="metadata.metametadata.metadataschema" />
+        <LongTextInput source="metadata.metametadata.language" />
+        <LongTextInput source="metadata.technical.format" />
+        <LongTextInput source="metadata.technical.size" />
+        <LongTextInput source="metadata.technical.location" />
+        <LongTextInput source="metadata.technical.requirements.orcomposite.type" />
+        <LongTextInput source="metadata.technical.requirements.orcomposite.name" />
+        <LongTextInput source="metadata.technical.requirements.orcomposite.minimumversion" />
+        <LongTextInput source="metadata.technical.requirements.orcomposite.maximumversion" />
+        <LongTextInput source="metadata.technical.installationremarks" />
+        <LongTextInput source="metadata.technical.otherplatformrequirements" />
+        <LongTextInput source="metadata.technical.duration" />
+        <LongTextInput source="metadata.educational.interactivitytype" />
+        <LongTextInput source="metadata.educational.learningresourcetype" />
+        <LongTextInput source="metadata.educational.interactivitylevel" />
+        <LongTextInput source="metadata.educational.semanticdensity" />
+        <LongTextInput source="metadata.educational.intendedenduserrole" />
+        <LongTextInput source="metadata.educational.context" />
+        <LongTextInput source="metadata.educational.typicalagerange" />
+        <LongTextInput source="metadata.educational.difficulty" />
+        <LongTextInput source="metadata.educational.typicallearningtime" />
+        <LongTextInput source="metadata.educational.description" />
+        <LongTextInput source="metadata.educational.language" />
+        <LongTextInput source="metadata.rights.cost" />
+        <LongTextInput source="metadata.rights.copyrightandotherrestrictions" />
+        <LongTextInput source="metadata.rights.description" />
+        <LongTextInput source="metadata.relation.kind" />
+        <LongTextInput source="metadata.relation.resource.identifier.catalog" />
+        <LongTextInput source="metadata.relation.resource.identifier.entry" />
+        <LongTextInput source="metadata.relation.resource.description" />
+        <LongTextInput source="metadata.annotation.entity" />
+        <LongTextInput source="metadata.annotation.date" />
+        <LongTextInput source="metadata.annotation.description" />
+        <LongTextInput source="metadata.classification.purpose" />
+        <LongTextInput source="metadata.classification.taxonPath.source=" />
+        <LongTextInput source="metadata.classification.taxonPath.taxon.id" />
+        <LongTextInput source="metadata.classification.taxonPath.taxon.entry" />
+        <LongTextInput source="metadata.classification.description" />
+        <LongTextInput source="metadata.classification.keyword" />
+      </FormTab>
+    </TabbedForm>
+  </Edit>
 );
