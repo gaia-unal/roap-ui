@@ -7,9 +7,7 @@ import {
   GET_MANY_REFERENCE,
   CREATE,
   UPDATE,
-  UPDATE_MANY,
   DELETE,
-  DELETE_MANY,
 } from 'react-admin';
 
 /**

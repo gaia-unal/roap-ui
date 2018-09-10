@@ -4,7 +4,7 @@
   "globals": {
     "document": true,
     "window": true
-    "BACKEND_HOST": false,
+    "BACKEND_HOST": false
   },
   "settings": {
     "import/resolver": {

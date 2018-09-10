@@ -1,5 +1,7 @@
 import React from 'react';
-import { List, EditButton, ShowButton, TextField, DateField, TextInput, Filter } from 'react-admin';
+import {
+  List, EditButton, ShowButton, TextField, DateField, TextInput, Filter
+} from 'react-admin';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -37,9 +39,17 @@ const LearningObjectGird = ({ user, ids, data, basePath }) => (
       <CardActions style={styles.cardActions}>
         {
           (data[id].creator_id === user._id || user.role === 'administrator') &&
-          <EditButton resource="learning-object-collection" basePath={basePath} record={data[id]} />
+          <EditButton
+            resource="learning-object-collection"
+            basePath={basePath}
+            record={data[id]}
+          />
         }
-        <ShowButton resource="learning-object-collection" basePath={basePath} record={data[id]} />
+        <ShowButton
+          resource="learning-object-collection"
+          basePath={basePath}
+          record={data[id]}
+        />
       </CardActions>
     </Card>
   )}
