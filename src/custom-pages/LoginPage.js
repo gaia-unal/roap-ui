@@ -3,14 +3,20 @@ import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import { userLogin } from 'react-admin';
 
+import { push } from 'react-router-redux';
+
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+
+import { showNotification } from 'react-admin';
 
 class LoginPage extends Component {
   state = { password: null, email: null};
 
   submit = (credentials) => {
-    this.props.userLogin(credentials);
+    this.props.userLogin({
+      ...credentials
+    });
   }
 
   render() {
@@ -55,9 +61,18 @@ class LoginPage extends Component {
             Login
           </Button>
         </Paper>
+        <br />
+        <br />
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => this.props.push("/")}
+        >
+          Go to learning objects
+        </Button>
       </div>
     );
   }
 };
 
-export default connect(undefined, { userLogin })(LoginPage);
+export default connect(null, { userLogin, push, showNotification })(LoginPage);

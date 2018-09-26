@@ -7,8 +7,8 @@ import ReactJson from 'react-json-view'
 const LearningObjectFrame = ({ record }) => {
   const backendHost = `${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080'}`;
   const url = `${backendHost}/learning-object-file-renderer/${
-    record.file_name && record.file_name.includes('zip') ?
-    `${record._id}/index.html` : record.file_name
+    record.file_metadata && record.file_metadata.extension === '.zip' ?
+    `${record.file_metadata._id}/index.html` : record.file_metadata._id + record.file_metadata.extension
   }`
   return <iframe
     src={`${url}`}
@@ -24,7 +24,11 @@ const LearningObjectTitle = ({ record }) => (
 const KeyWordsListField = ({ record }) => (
   <div>
     <Typography style={{ marginTop: 9, marginBottom: 9 }} variant="caption">Keywords</Typography>
-    {record.metadata.general.keyword.map(keyword =>
+    {
+      record.metadata &&
+      record.metadata.general &&
+      record.metadata.general.keyword &&
+      record.metadata.general.keyword.map(keyword =>
       <Chip key={keyword} label={keyword} />
     )}
   </div>
@@ -34,21 +38,25 @@ const LearningObjectMetadata = ({ record }) => (
   <ReactJson src={record.metadata} />
 )
 
-export const LearningObjectShow = (props) => (
-  <Show {...props} title={<LearningObjectTitle />} style={{ padding: 0 }}>
-    <TabbedShowLayout>
-      <Tab label="content">
-        <LearningObjectFrame />
-      </Tab>
-      <Tab label="summary" path="summary">
-        <TextField label="Title" source="metadata.general.title" />
-        <TextField label="Description" source="metadata.general.description"/>
-        <DateField label="Creation date" source="created" showTime/>
-        <KeyWordsListField />
-      </Tab>
-      <Tab label="metadata" path="metadata">
-        <LearningObjectMetadata />
-      </Tab>
-    </TabbedShowLayout>
-  </Show>
-);
+export class LearningObjectShow extends React.Component {
+  render() {
+    return (
+      <Show {...this.props} title={<LearningObjectTitle />} style={{ padding: 0 }}>
+        <TabbedShowLayout>
+          <Tab label="content">
+            <LearningObjectFrame />
+          </Tab>
+          <Tab label="summary" path="summary">
+            <TextField label="Title" source="metadata.general.title" />
+            <TextField label="Description" source="metadata.general.description"/>
+            <DateField label="Creation date" source="created" showTime/>
+            <KeyWordsListField />
+          </Tab>
+          <Tab label="metadata" path="metadata">
+            <LearningObjectMetadata />
+          </Tab>
+        </TabbedShowLayout>
+      </Show>
+    )
+  };
+};

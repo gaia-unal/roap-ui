@@ -4,9 +4,10 @@
   "private": true,
   "dependencies": {
     "jwt-decode": "^2.2.0",
-    "jwt-simple": "^0.5.1",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "jwt-simple": "^0.5.3",
+    "material-ui-chip-input": "^1.0.0-beta.7",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "react-scripts": "1.1.5",
     "superagent": "^3.8.3"
   },
@@ -17,7 +18,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "react-admin": "^2.1.1",
-    "react-json-view": "^1.19.0"
+    "react-admin": "^2.3.2",
+    "react-json-view": "^1.19.1"
   }
 }

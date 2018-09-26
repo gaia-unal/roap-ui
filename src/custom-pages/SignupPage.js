@@ -7,6 +7,8 @@ import Paper from '@material-ui/core/Paper';
 
 import userService from '../custom-services/user';
 
+import { push } from 'react-router-redux';
+
 import Dialog from '@material-ui/core/Dialog';
 // import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -30,8 +32,12 @@ class SignupPage extends Component {
       credentials.password,
       credentials.name,
       credentials.requestedRole,
-      (res) => console.log(res), // TODO: make here a request to user-email
-      (err) => this.setState({showErrorMessage: JSON.parse(err.response.text)})
+      res => user.sendUserEmail(
+        credentials.email,
+        res => this.props.push('/learning-object-collection'),
+        err => console.log(err)
+      ),
+      err => this.setState({showErrorMessage: JSON.parse(err.response.text)})
     );
   }
 
@@ -111,4 +117,4 @@ class SignupPage extends Component {
   }
 };
 
-export default connect(undefined, { })(SignupPage);
+export default connect(undefined, { push })(SignupPage);

@@ -23,8 +23,8 @@ const styles = {
 
 const LearningObjectGird = ({ user, ids, data, basePath }) => (
   <div>
-  {ids.map(id =>
-    <Card key={id} style={styles.card}>
+  {ids.map((id, i) =>
+    <Card key={i} style={styles.card}>
       <CardContent>
         <Typography noWrap variant="title" gutterBottom>
           <TextField record={data[id]} source="metadata.general.title" />

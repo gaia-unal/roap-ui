@@ -21,7 +21,7 @@ const Menu = ({ resources, onMenuClick, logout }) => {
       />
     ))}
     <Divider />
-    {user.status !== 'accepted' &&
+    {/*user.status !== 'accepted' &&
       <React.Fragment>
         <MenuItemLink
           to={'/login'}
@@ -29,15 +29,9 @@ const Menu = ({ resources, onMenuClick, logout }) => {
           leftIcon={<LabelIcon />}
           onClick={onMenuClick}
         />
-        <MenuItemLink
-          to={'/signup'}
-          primaryText={'Signup'}
-          leftIcon={<LabelIcon />}
-          onClick={onMenuClick}
-        />
       </React.Fragment>
-    }
-    <Responsive xsmall={logout} medium={null} />
+    */}
+    <Responsive xsmall={logout} />
   </div>
 };
 

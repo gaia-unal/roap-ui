@@ -23,8 +23,21 @@ class userService {
   }
 
   validateAccount(token, response, error){
+    console.log('request');
     request
       .get(`${this.url}/user-account/validate/${token}`)
+      .end((err, res) => {
+        if (!err) {
+          response(res);
+        } else {
+          error(err);
+        }
+      });
+  }
+
+  sendUserEmail(email, response, error){
+    request
+      .get(`${this.url}/user-account/send-email/${email}`)
       .end((err, res) => {
         if (!err) {
           response(res);

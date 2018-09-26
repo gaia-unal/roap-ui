@@ -14,6 +14,7 @@ export default (type, params) => {
     return fetch(request)
       .then(response => {
         if (response.status < 200 || response.status >= 300) {
+          response.json().then((json) => alert(JSON.stringify(json)));
           throw new Error(response.statusText);
         }
         return response.json();

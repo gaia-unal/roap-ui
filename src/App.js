@@ -46,8 +46,7 @@ const App = () => (
         name="learning-object-collection"
         list={LearningObjectList}
         show={LearningObjectShow}
-        edit={LearningObjectEdit}
-        create={LearningObjectCreate}
+        {...(localStorage.getItem('role') !== 'external' ? {create: LearningObjectCreate, edit: LearningObjectEdit} : {})}
         options={{ label: 'Learning Objects' }}
         icon={Book}
       />,

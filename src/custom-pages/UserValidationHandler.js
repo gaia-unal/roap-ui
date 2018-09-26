@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import userService from '../custom-services/user';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
 
 import Dialog from '@material-ui/core/Dialog';
 // import DialogContent from '@material-ui/core/DialogContent';
