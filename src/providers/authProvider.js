@@ -6,7 +6,7 @@ import jwt from 'jwt-simple';
 export default (type, params) => {
   if (type === AUTH_LOGIN) {
     const { email, password } = params;
-    const request = new Request(`${process.env.NODE_ENV === 'production' ? '/user-login' : 'http://localhost:8080/user-login'}`, {
+    const request = new Request(`${process.env.NODE_ENV === 'production' ? '/v1/user-login' : 'http://localhost:8081/v1/user-login'}`, {
       method: 'POST',
       body: JSON.stringify({ email, password }),
       headers: new Headers({ 'Content-Type': 'application/json' }),

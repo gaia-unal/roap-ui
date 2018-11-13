@@ -1,11 +1,12 @@
 import React from 'react';
 import {
     TextInput, LongTextInput, TabbedForm, FormTab, Edit, DateInput, TextField,
-    DateField, FunctionField, SelectInput
+    DateField, FunctionField, SelectInput, ReferenceArrayInput,
+    SelectArrayInput
 } from 'react-admin';
 import SchemaService from '../custom-services/schema';
 
-import { Field } from 'redux-form'
+import { Field } from 'redux-form';
 
 import ChipInput from 'material-ui-chip-input'
 
@@ -98,13 +99,16 @@ export class LearningObjectEdit extends React.Component {
             <br />
           </React.Fragment>;
         } else {
-          return <LongTextInput
-            label={title}
-            source={key}
-            key={title}
-            defaultValue={''}
-            style={{ background: required ? '#3992F0' : 'white' }}
-          />;
+          return <React.Fragment key={key}>
+            <LongTextInput
+              label={title}
+              source={key}
+              key={title}
+              defaultValue={''}
+              style={{ background: required ? '#3992F0' : 'white' }}
+            />
+            <br />
+          </React.Fragment>;
         }
       case 'list':
         return <Field
@@ -140,16 +144,43 @@ export class LearningObjectEdit extends React.Component {
 
   render() {
     return (
-      <Edit {...this.props}>
+      <Edit undoable={false} title="Learning object edition" {...this.props}>
         <TabbedForm>
           <FormTab label="summary">
+            {this.props.permissions === 'administrator' ? (
+                <ReferenceArrayInput
+                  label="Expert"
+                  source="expert_ids"
+                  reference="user-collection"
+                  filter={{ role: 'expert' }}
+                  sort={{ field: 'email', order: 'ASC' }}
+                  perPage={200}
+                  allowEmpty
+                >
+                    <SelectArrayInput optionText="email" />
+                </ReferenceArrayInput>
+              ) : (
+                <TextField source="expert_ids" label="Evaluator"/>
+              )
+            }
+            {this.props.permissions === 'administrator' && (
+              <SelectInput
+                alwaysOn
+                source="status"
+                choices={[
+                  { id: 'pending', name: 'Pending' },
+                  { id: 'evaluated', name: 'Evaluated' },
+                  { id: 'accepted', name: 'Accepted' },
+                  { id: 'rejected', name: 'Rejected' },
+                ]}
+              />
+            )}
             <TextInput source="category" label="Category"/>
             <DateField showTime source="created" label="Created"/>
             <DateField showTime source="modified" label="Modified"/>
             <FunctionField label="Deleted" render={record => record.deleted ? 'Yes' : 'No'} />
             <FunctionField label="Evaluated" render={record => record.evaluated ? 'Yes' : 'No'} />
-            <TextField source="file_name" label="File name"/>
-            {/*<TextInput source="rating" />*/}
+            <TextField source="file_metadata.name" label="File name"/>
           </FormTab>
           <FormTab label="metadata">
             {this.state.form}

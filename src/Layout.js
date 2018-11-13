@@ -4,8 +4,8 @@ import Menu from './Menu';
 
 const MyLayout = (props) => {
   return <Layout
-    {...props}
     menu={Menu}
+    {...props}
   />;
 };
 

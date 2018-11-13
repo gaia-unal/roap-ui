@@ -1,41 +1,33 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Responsive, userLogout } from 'react-admin';
+import { userLogout } from 'react-admin';
 import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import ExitIcon from '@material-ui/icons/PowerSettingsNew';
+import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
 import { push } from 'react-router-redux';
-import LabelIcon from '@material-ui/icons/Label';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import PersonAdd from '@material-ui/icons/PersonAdd';
 
 
 const MyLogoutButton = ({ userLogout, push, ...rest }) => {
-    return localStorage.getItem('role') !== 'external' ? <Responsive
-        xsmall={
+    return localStorage.getItem('role') !== 'external' ? (
+        <MenuItem
+            onClick={() => userLogout('/login')}
+        >
+            <PowerSettingsNew /> Logout
+        </MenuItem>
+    ) : (
+        <React.Fragment>
             <MenuItem
-                onClick={() => userLogout('/login')}
+                onClick={() => push('/login')}
             >
-                <ExitIcon /> Logout
+              <ExitToApp /> Login
             </MenuItem>
-        }
-        medium={
-            <Button
-                onClick={() => userLogout('/login')}
-                size="small"
+            <MenuItem
+                onClick={() => push('/signup')}
             >
-                <ExitIcon /> Logout
-            </Button>
-        }
-    /> : <React.Fragment>
-        <MenuItem
-            onClick={() => push('/login')}
-        >
-          <LabelIcon /> Login
-        </MenuItem>
-        <MenuItem
-            onClick={() => push('/signup')}
-        >
-          <LabelIcon /> Signup
-        </MenuItem>
-    </React.Fragment>
+              <PersonAdd /> Signup
+            </MenuItem>
+        </React.Fragment>
+    )
 };
 export default connect(null, { userLogout: userLogout, push: push })(MyLogoutButton);

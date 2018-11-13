@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { LearningObjectList } from './learning-object/LearningObjectList';
-import { LearningObjectShow } from './learning-object/LearningObjectShow';
+import LearningObjectShow from './learning-object/LearningObjectShow';
 import { LearningObjectEdit } from './learning-object/LearningObjectEdit';
 import { LearningObjectCreate } from './learning-object/LearningObjectCreate';
 
@@ -27,7 +27,7 @@ import Book from '@material-ui/icons/Book';
 
 import LogoutButton from './LogoutButton';
 
-const BACKEND_HOST = `${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080'}`
+const BACKEND_HOST = `${process.env.NODE_ENV === 'production' ? '/v1' : 'http://localhost:8081/v1'}`
 
 const uploadCapableDataProvider = addUploadFeature(dataProvider(BACKEND_HOST));
 
@@ -50,7 +50,7 @@ const App = () => (
         options={{ label: 'Learning Objects' }}
         icon={Book}
       />,
-       permissions === 'administrator' && <Resource
+      permissions === 'administrator' && <Resource
         name="user-collection"
         list={UserList}
         edit={UserEdit}

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  List, EditButton, ShowButton, TextField, DateField, TextInput, Filter
+  List, EditButton, ShowButton, TextInput, Filter, SelectInput
 } from 'react-admin';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -21,19 +21,29 @@ const styles = {
   }
 };
 
-const LearningObjectGird = ({ user, ids, data, basePath }) => (
+const LearningObjectGird = ({ permissions, user, ids, data, basePath }) => (
   <div>
   {ids.map((id, i) =>
     <Card key={i} style={styles.card}>
       <CardContent>
         <Typography noWrap variant="title" gutterBottom>
-          <TextField record={data[id]} source="metadata.general.title" />
+          {
+            data[id].metadata &&
+            data[id].metadata.general &&
+            data[id].metadata.general.title
+          }
         </Typography>
         <Typography noWrap variant="caption" gutterBottom>
-          <DateField record={data[id]} source="created" showTime/>
+          {
+            data[id].created
+          }
         </Typography>
-        <Typography noWrap variant="caption" gutterBottom>
-          <TextField record={data[id]} source="metadata.general.description" />
+        <Typography noWrap variant="subheading" color="textSecondary" gutterBottom>
+          {
+            data[id].metadata &&
+            data[id].metadata.general &&
+            data[id].metadata.general.description
+          }
         </Typography>
       </CardContent>
       <CardActions style={styles.cardActions}>
@@ -43,6 +53,7 @@ const LearningObjectGird = ({ user, ids, data, basePath }) => (
             resource="learning-object-collection"
             basePath={basePath}
             record={data[id]}
+            permissions={permissions}
           />
         }
         <ShowButton
@@ -61,14 +72,57 @@ LearningObjectGird.defaultProps = {
   ids: [],
 };
 
-const LearningObjectFilter = (props) => (
+const LearningObjectFilter = ({ permissions, user, ...props }) => (
   <Filter {...props}>
     <TextInput label="Search" source="q" alwaysOn />
+    {permissions === 'administrator' && <SelectInput
+      alwaysOn
+      source="advanced_filters"
+      optionValue="filter"
+      choices={[
+        { id: 0, filter: {status: 'pending'}, name: 'Pending' },
+        { id: 1, filter: {status: 'evaluated'}, name: 'Evaluated' },
+        { id: 2, filter: {status: 'accepted'}, name: 'Accepted' },
+        { id: 3, filter: {status: 'rejected'}, name: 'Rejected' },
+        { id: 4, filter: {creator_id: user._id}, name: 'Created for me'}
+      ]}
+    />}
+    {permissions === 'expert' && <SelectInput
+      alwaysOn
+      source="advanced_filters"
+      optionValue="filter"
+      choices={[
+        { id: 0, filter: {}, name: 'All' },
+        { id: 1, filter: {expert_ids: user._id}, name: 'Assigned to me' },
+        { id: 2, filter: {creator_id: user._id}, name: 'Created for me'}
+      ]}
+    />}
+    {permissions === 'creator' && <SelectInput
+      alwaysOn
+      source="advanced_filters"
+      optionValue="filter"
+      choices={[
+        { id: 0, filter: {}, name: 'All' },
+        { id: 1, filter: {creator_id: user._id}, name: 'Created for me'}
+      ]}
+    />}
   </Filter>
 );
 
 export const LearningObjectList = ({permissions, ...props}) => (
-  <List title="All Learnning Objects" filters={<LearningObjectFilter />} {...props}>
-    <LearningObjectGird user={decodeJwt(localStorage.getItem('token'))}/>
+  <List
+    {...props}
+    title="All Learnning Objects"
+    filters={
+      <LearningObjectFilter
+        permissions={permissions}
+        user={decodeJwt(localStorage.getItem('token'))}
+      />
+    }
+  >
+    <LearningObjectGird
+      user={decodeJwt(localStorage.getItem('token'))}
+      permissions={permissions}
+    />
   </List>
 );

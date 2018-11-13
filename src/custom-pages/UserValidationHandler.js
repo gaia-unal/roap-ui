@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import userService from '../custom-services/user';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { Redirect } from 'react-router';
 
 import Dialog from '@material-ui/core/Dialog';
 // import DialogContent from '@material-ui/core/DialogContent';
@@ -12,18 +10,20 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import ReactJson from 'react-json-view'
 
+import { push } from 'react-router-redux';
+
 const user = new userService();
 
 class UserValidationHandler extends Component {
   constructor(props){
     super(props);
-    this.state = {redirectToRoot: null, error: null};
+    this.state = {error: null};
   }
 
   componentWillMount(){
     user.validateAccount(
       this.props.match.params.token,
-      res => this.setState({redirectToRoot: true}),
+      res => this.props.push('/login'),
       err => this.setState({error: JSON.parse(err.response.text)}),
     )
   }
@@ -32,7 +32,6 @@ class UserValidationHandler extends Component {
     // TODO: fix error handle
     return (
       <div>
-        {this.state.redirectToRoot ? <Redirect to="/" /> : !this.state.error && <CircularProgress />}
         <Dialog open={this.state.error} onClose={() => this.setState({redirectToRoot: true, error: null})}>
           <DialogTitle>Error</DialogTitle>
           <DialogContentText><ReactJson src={this.state.error}/></DialogContentText>
@@ -42,4 +41,4 @@ class UserValidationHandler extends Component {
   }
 };
 
-export default connect(undefined, { })(UserValidationHandler);
+export default connect(undefined, { push })(UserValidationHandler);

@@ -4,11 +4,14 @@
   "private": true,
   "dependencies": {
     "jwt-decode": "^2.2.0",
-    "jwt-simple": "^0.5.3",
-    "material-ui-chip-input": "^1.0.0-beta.7",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-scripts": "1.1.5",
+    "jwt-simple": "^0.5.5",
+    "lodash": "^4.17.11",
+    "material-ui-chip-input": "^1.0.0-beta.8",
+    "query-string": "^6.2.0",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
+    "react-rating": "^1.5.0",
+    "react-scripts": "^2.1.1",
     "superagent": "^3.8.3"
   },
   "scripts": {
@@ -18,7 +21,13 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "react-admin": "^2.3.2",
+    "react-admin": "^2.4.2",
     "react-json-view": "^1.19.1"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

@@ -9,7 +9,7 @@ import {
 } from 'react-admin';
 
 export const UserEdit = (props) => (
-    <Edit {...props}>
+    <Edit title="User edition" {...props}>
         <SimpleForm>
             <TextInput label="Name" source="name" />
             <DisabledInput label="E-mail" source="email" />

@@ -37,6 +37,10 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
       case GET_LIST: {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
+        if (params.filter.advanced_filters){
+          params.filter = {...params.filter.advanced_filters, ...params.filter};
+          delete params.filter['advanced_filters'];
+        }
         const query = {
           sort: JSON.stringify([field, order]),
           range: JSON.stringify([
@@ -125,7 +129,11 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
       case CREATE:
         return { data: { ...params.data, id: json.id } };
       default:
-        return { data: json };
+        if(json.data){
+          return json;
+        } else {
+          return { data: json };
+        }
     }
   };
 
