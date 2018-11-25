@@ -15,8 +15,8 @@ import LearningObjectService from '../custom-services/learningObject';
 var learningObjectService =  new LearningObjectService();
 
 const LearningObjectFrame = ({ record }) => {
-  const backendHost = `${process.env.NODE_ENV === 'production' ? '/v1' : 'http://localhost:8081'}`;
-  const url = `${backendHost}/v1/learning-object-file-renderer/${
+  const backendHost = `${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8081'}`;
+  const url = `${backendHost}/learning-object-file-renderer/${
     record.file_metadata && record.file_metadata.extension === '.zip' ?
     `${record.file_metadata._id}/index.html` : record.file_metadata._id + record.file_metadata.extension
   }`
