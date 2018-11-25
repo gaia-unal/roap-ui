@@ -56,7 +56,7 @@ class LoginPage extends Component {
             variant="outlined"
             color="primary"
             disabled={!email || !password}
-            onClick={() => {this.submit(this.state); this.props.showNotification('holi')}}
+            onClick={() => this.submit(this.state)}
           >
             Login
           </Button>

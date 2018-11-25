@@ -37,7 +37,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
       case GET_LIST: {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
-        if (params.filter.advanced_filters){
+        if (params.filter && params.filter.advanced_filters){
           params.filter = {...params.filter.advanced_filters, ...params.filter};
           delete params.filter['advanced_filters'];
         }
