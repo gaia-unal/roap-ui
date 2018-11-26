@@ -94,6 +94,7 @@ export class LearningObjectEdit extends React.Component {
             <SelectInput
               source={key}
               label={title}
+              defaultValue={[{}]}
               choices={choices.map(e => {return {id: e, name: e}})}
             />
             <br />
@@ -105,7 +106,7 @@ export class LearningObjectEdit extends React.Component {
               source={key}
               key={title}
               defaultValue={''}
-              style={{ background: required ? '#3992F0' : 'white' }}
+              style={{ background: required ? '#97CAFF' : 'white' }}
             />
             <br />
           </React.Fragment>;
@@ -165,7 +166,6 @@ export class LearningObjectEdit extends React.Component {
             }
             {this.props.permissions === 'administrator' && (
               <SelectInput
-                alwaysOn
                 source="status"
                 choices={[
                   { id: 'pending', name: 'Pending' },

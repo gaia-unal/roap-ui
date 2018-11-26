@@ -3,7 +3,6 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import { Show, TabbedShowLayout, TextField, DateField, Tab } from 'react-admin';
 import ReactJson from 'react-json-view';
-import { Field } from 'redux-form';
 import _ from 'lodash';
 import Rating from 'react-rating';
 import decodeJwt from 'jwt-decode';
@@ -52,47 +51,6 @@ const KeyWordsListField = ({ record }) => (
 
 const LearningObjectMetadata = ({ record }) => (
   <ReactJson src={record.metadata} />
-)
-
-const recordRatings = ({
-  input,
-  label,
-  meta: { touched, error },
-  userRole,
-  userId,
-  ...custom
-}) => (
-  <React.Fragment>
-    <Rating onChange={(rate) => {
-      let rating = input.value;
-      let i, j;
-      // Find and delete already existent rating for te actual user.
-      for(i in rating['expert']){
-        for(j = 0; j < rating['expert'][i].length; j++){
-          if(userId === rating['expert'][i][j]){
-            rating['expert'][i].splice(j, 1);
-            break;
-          }
-        }
-      }
-      for(i in rating['creator']){
-        for(j = 0; j < rating['creator'][i].length; j++){
-          if(userId === rating['creator'][i][j]){
-            rating['creator'][i].splice(j, 1);
-            break;
-          }
-        }
-      }
-      rating[userRole][rate] = [...rating[userRole][rate], userId]
-      input.onChange(rating);
-    }}
-    initialRating={
-      (_.sum(_.map(Object.keys(input.value[userRole]), (k, id) => input.value[userRole][k].length * (id + 1))) /
-      _.sum(_.map(Object.keys(input.value[userRole]), k => input.value[userRole][k].length))) || 0
-    }
-    />
-    <br />
-  </React.Fragment>
 )
 
 const RecordRating = ({ record, userRole, userId, showNotification }) => {
