@@ -15,17 +15,22 @@ const renderChipList = ({
   label,
   meta: { touched, error },
   ...custom
-}) => (
-  <React.Fragment>
+}) => {
+  input.value = input.value instanceof Array ? input.value : [input.value];
+  return <React.Fragment>
     <ChipInput
-      value={input.value || []}
+      value={input.value}
       label={label}
-      onAdd={(chip) => input.onChange([...(input.value || []), chip])}
-      onDelete={(chip, index) => input.onChange(input.value.filter(v => v !== chip))}
+      onAdd={(chip) => {
+        return input.onChange([...input.value, chip]);
+      }}
+      onDelete={(chip, index) => {
+        return input.onChange(input.value.filter(v => v !== chip));
+      }}
     />
     <br />
-  </React.Fragment>
-)
+  </React.Fragment>;
+}
 
 export class LearningObjectEdit extends React.Component {
   constructor(props) {
