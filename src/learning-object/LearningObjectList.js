@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  List, EditButton, ShowButton, TextInput, Filter, SelectInput
+  List, EditButton, ShowButton, TextInput, Filter, SelectInput, translate
 } from 'react-admin';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -72,49 +72,53 @@ LearningObjectGird.defaultProps = {
   ids: [],
 };
 
-const LearningObjectFilter = ({ permissions, user, ...props }) => (
+const LearningObjectFilter = ({ translate, permissions, user, ...props }) => (
   <Filter {...props}>
-    <TextInput label="Search" source="q" alwaysOn />
+    <TextInput label={ translate('lo.search') } style={{ width: 225 }} source="q" alwaysOn />
     {permissions === 'administrator' && <SelectInput
       alwaysOn
+      label={ translate('lo.advanced_filters') }
       source="advanced_filters"
       optionValue="filter"
       choices={[
-        { id: 0, filter: {status: 'pending'}, name: 'Pending' },
-        { id: 1, filter: {status: 'evaluated'}, name: 'Evaluated' },
-        { id: 2, filter: {status: 'accepted'}, name: 'Accepted' },
-        { id: 3, filter: {status: 'rejected'}, name: 'Rejected' },
-        { id: 4, filter: {creator_id: user._id}, name: 'Created for me'}
+        { id: 0, filter: {status: 'pending'}, name: 'lo.filters.pending' },
+        { id: 1, filter: {status: 'evaluated'}, name: 'lo.filters.evaluated' },
+        { id: 2, filter: {status: 'accepted'}, name: 'lo.filters.accepted' },
+        { id: 3, filter: {status: 'rejected'}, name: 'lo.filters.rejected' },
+        { id: 4, filter: {creator_id: user._id}, name: 'lo.filters.created_for_me'}
       ]}
     />}
     {permissions === 'expert' && <SelectInput
       alwaysOn
+      label={ translate('lo.advanced_filters') }
       source="advanced_filters"
       optionValue="filter"
       choices={[
-        { id: 0, filter: {}, name: 'All' },
-        { id: 1, filter: {expert_ids: user._id}, name: 'Assigned to me' },
-        { id: 2, filter: {creator_id: user._id}, name: 'Created for me'}
+        { id: 0, filter: {}, name: 'lo.filters.all' },
+        { id: 1, filter: {expert_ids: user._id}, name: 'lo.filters.assigned_to_me' },
+        { id: 2, filter: {creator_id: user._id}, name: 'lo.filters.created_for_me'}
       ]}
     />}
     {permissions === 'creator' && <SelectInput
       alwaysOn
+      label={ translate('lo.advanced_filters') }
       source="advanced_filters"
       optionValue="filter"
       choices={[
-        { id: 0, filter: {}, name: 'All' },
-        { id: 1, filter: {creator_id: user._id}, name: 'Created for me'}
+        { id: 0, filter: {}, name: 'lo.filters.all' },
+        { id: 1, filter: {creator_id: user._id}, name: 'lo.filters.created_for_me'}
       ]}
     />}
   </Filter>
 );
 
-export const LearningObjectList = ({permissions, ...props}) => (
+const LearningObjectList = ({translate, permissions, ...props}) => (
   <List
     {...props}
-    title="All Learnning Objects"
+    title={ translate('lo.all') }
     filters={
       <LearningObjectFilter
+        translate={translate}
         permissions={permissions}
         user={decodeJwt(localStorage.getItem('token'))}
       />
@@ -126,3 +130,5 @@ export const LearningObjectList = ({permissions, ...props}) => (
     />
   </List>
 );
+
+export default translate(LearningObjectList);
