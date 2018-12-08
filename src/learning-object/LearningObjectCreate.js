@@ -127,8 +127,8 @@ export class LearningObjectCreate extends React.Component {
     return (
       <Create {...this.props}>
         <SimpleForm>
-          <TextInput source="category" label="Category" multiple={false}/>
-          <FileInput source="files" label="Related files">
+          <TextInput source="category" label="fields_name.category" multiple={false}/>
+          <FileInput source="files" label="fields_name.related_filed">
               <FileField source="src" title="title" />
           </FileInput>
           {this.state.form}

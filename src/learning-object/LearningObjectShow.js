@@ -1,7 +1,7 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
-import { Show, TabbedShowLayout, TextField, DateField, Tab } from 'react-admin';
+import { Show, TabbedShowLayout, TextField, DateField, Tab, translate } from 'react-admin';
 import ReactJson from 'react-json-view';
 import _ from 'lodash';
 import Rating from 'react-rating';
@@ -36,9 +36,9 @@ const LearningObjectTitle = ({ record }) => (
   </p>
 );
 
-const KeyWordsListField = ({ record }) => (
+const KeyWordsListField = ({ translate, record }) => (
   <div>
-    <Typography style={{ marginTop: 9, marginBottom: 9 }} variant="caption">Keywords</Typography>
+    <Typography style={{ marginTop: 9, marginBottom: 9 }} variant="caption">{translate('fields_name.keywords')}</Typography>
     {
       record.metadata &&
       record.metadata.general &&
@@ -99,16 +99,16 @@ class LearningObjectShow extends React.Component {
     return (
       <Show {...this.props} title={<LearningObjectTitle />} style={{ padding: 0 }}>
         <TabbedShowLayout>
-          <Tab label="content">
+          <Tab label="tabs_name.content">
             <LearningObjectFrame />
             <RecordRating userRole={'creator'} userId={user._id} showNotification={this.props.showNotification}/>
             <RecordRating userRole={'expert'} userId={user._id} showNotification={this.props.showNotification}/>
           </Tab>
-          <Tab label="summary" path="summary">
-            <TextField label="Title" source="metadata.general.title" />
-            <TextField label="Description" source="metadata.general.description"/>
-            <DateField label="Creation date" source="created" showTime/>
-            <KeyWordsListField />
+          <Tab label="tabs_name.summary" path="summary">
+            <TextField label="fields_name.title" source="metadata.general.title" />
+            <TextField label="fields_name.description" source="metadata.general.description"/>
+            <DateField label="fields_name.creation_date" source="created" showTime/>
+            <KeyWordsListField translate={this.props.translate}/>
           </Tab>
           <Tab label="metadata" path="metadata">
             <LearningObjectMetadata />
@@ -121,4 +121,4 @@ class LearningObjectShow extends React.Component {
 
 export default connect(null, {
     showNotification,
-})(LearningObjectShow);
+})(translate(LearningObjectShow));

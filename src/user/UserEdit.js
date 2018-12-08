@@ -11,22 +11,22 @@ import {
 export const UserEdit = (props) => (
     <Edit title="User edition" {...props}>
         <SimpleForm>
-            <TextInput label="Name" source="name" />
+            <TextInput label="user.name" source="name" />
             <DisabledInput label="E-mail" source="email" />
-            <SelectInput label="Role" source="role" choices={[
-                { id: 'creator', name: 'Creator' },
-                { id: 'expert', name: 'Expert' },
+            <SelectInput label="user.role" source="role" choices={[
+                { id: 'creator', name: 'user.roles.creator' },
+                { id: 'expert', name: 'user.roles.expert' },
             ]}/>
             <SelectInput label="Status" source="status" choices={[
-                { id: 'pending', name: 'Pending' },
-                { id: 'accepted', name: 'Accepted' },
-                { id: 'rejected', name: 'Rejected' },
+                { id: 'pending', name: 'lo.filters.pending' },
+                { id: 'accepted', name: 'lo.filters.accepted' },
+                { id: 'rejected', name: 'lo.filters.rejected' },
             ]}/>
-            <DisabledInput label="Create date" source="created" />
-            <DisabledInput label="Modifie date" source="modified" />
-            <BooleanInput label="Deleted" source="deleted" />
-            <DisabledInput label="E-mail validated" source="validated" />
-            <DisabledInput label="Last activity" source="last_activity" />
+            <DisabledInput label="fields_name.creation_date" source="created" />
+            <DisabledInput label="fields_name.modified_date" source="modified" />
+            <BooleanInput label="fields_name.deleted" source="deleted" />
+            <DisabledInput label="fields_name.email_validated" source="validated" />
+            <DisabledInput label="fields_name.last_activity" source="last_activity" />
         </SimpleForm>
     </Edit>
 );

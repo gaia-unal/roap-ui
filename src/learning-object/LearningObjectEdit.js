@@ -152,7 +152,7 @@ export class LearningObjectEdit extends React.Component {
     return (
       <Edit undoable={false} title="Learning object edition" {...this.props}>
         <TabbedForm>
-          <FormTab label="summary">
+          <FormTab label="tabs_name.summary">
             {this.props.permissions === 'administrator' ? (
                 <ReferenceArrayInput
                   label="Expert"
@@ -171,21 +171,22 @@ export class LearningObjectEdit extends React.Component {
             }
             {this.props.permissions === 'administrator' && (
               <SelectInput
+                label="fields_name.status"
                 source="status"
                 choices={[
-                  { id: 'pending', name: 'Pending' },
-                  { id: 'evaluated', name: 'Evaluated' },
-                  { id: 'accepted', name: 'Accepted' },
-                  { id: 'rejected', name: 'Rejected' },
+                  { id: 'pending', name: 'lo.filters.pending' },
+                  { id: 'evaluated', name: 'lo.filters.evaluated' },
+                  { id: 'accepted', name: 'lo.filters.accepted' },
+                  { id: 'rejected', name: 'lo.filters.rejected' },
                 ]}
               />
             )}
-            <TextInput source="category" label="Category"/>
-            <DateField showTime source="created" label="Created"/>
-            <DateField showTime source="modified" label="Modified"/>
-            <FunctionField label="Deleted" render={record => record.deleted ? 'Yes' : 'No'} />
-            <FunctionField label="Evaluated" render={record => record.evaluated ? 'Yes' : 'No'} />
-            <TextField source="file_metadata.name" label="File name"/>
+            <TextInput source="category" label="fields_name.category"/>
+            <DateField showTime source="created" label="fields_name.creation_date"/>
+            <DateField showTime source="modified" label="fields_name.modified_date"/>
+            <FunctionField label="fields_name.deleted" render={record => record.deleted ? 'Yes' : 'No'} />
+            <FunctionField label="fields_name.evaluated" render={record => record.evaluated ? 'Yes' : 'No'} />
+            <TextField source="file_metadata.name" label="fields_name.file_name"/>
           </FormTab>
           <FormTab label="metadata">
             {this.state.form}

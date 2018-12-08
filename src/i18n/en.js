@@ -12,6 +12,7 @@ export default {
     all: 'Learning objects',
     advanced_filters: 'Advanced filters',
     go_to: 'Go to learning objects',
+    
     filters: {
       pending: 'Pending',
       evaluated: 'Evaluated',
@@ -22,8 +23,35 @@ export default {
       assigned_to_me: 'Assigned to me'
     }
   },
+  
+  fields_name: {
+    title: 'Title',
+    description: 'Description',
+    creation_date: 'Creation date',
+    modified_date: 'Modified date',
+    category: 'Category',
+    keywords: 'Keywords',
+    related_files: 'Arquivos Relacionados',
+    deleted: 'Deleted',
+    evaluated: 'Evaluated',
+    file_name: 'File name',
+    status: 'status',
+    email_validated: 'E-mail validated',
+    last_activity: 'Last activity',
+    validated: 'Validated'
+  },
+
+  tabs_name: {
+    content: 'Content',
+    summary: 'Summary'
+  },
 
   user: {
-    name: 'Name'
+    name: 'Name',
+    role: 'Role',
+    roles: {
+      expert: 'Expert',
+      creator: 'Creator'
+    }
   }
 };

@@ -23,7 +23,33 @@ export default {
     }
   },
 
+  fields_name: {
+    title: 'Título',
+    description: 'Descrição',
+    creation_date: 'Data de criação',
+    modified_date: 'Data da modificação',
+    category: 'Categoria',
+    keywords: 'Palavras-chave',
+    deleted: 'Eliminado',
+    evaluated: 'Avaliado',
+    file_name: 'Nome do arquivo',
+    status: 'Estado',
+    email_validated: 'E-mail validado',
+    last_activity: 'Última atividade',
+    validated:'Validado'
+  },
+
+  tabs_name: {
+    content: 'Conteúdo',
+    summary: 'Sumário'
+  },
+
   user: {
-    name: 'Nome próprio'
+    name: 'Nome próprio',
+    role: 'Função',
+    roles: {
+      expert: 'Especialista',
+      creator: 'Criador'
+    }
   }
 };

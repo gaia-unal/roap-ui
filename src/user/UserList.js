@@ -15,30 +15,30 @@ import {
 
 const UserFilter = (props) => (
   <Filter {...props}>
-      <TextInput source="name" />
-      <TextInput source="email" />
-      <TextInput source="role" />
-      <TextInput source="status" />
-      <DateInput source="created" />
-      <DateInput source="modified" />
-      <BooleanInput source="deleted" />
-      <BooleanInput source="validated" />
-      <DateInput source="last_activity" />
+      <TextInput label="user.name" source="name" />
+      <TextInput label="Email" source="email" />
+      <TextInput label="user.role" source="role" />
+      <TextInput label="fields_name.status" source="status" />
+      <DateInput label="fields_name.creation_date" source="created" />
+      <DateInput label="fields_name.modified_date"source="modified" />
+      <BooleanInput label="fields_name.deleted" source="deleted" />
+      <BooleanInput label="fields_name.validated" source="validated" />
+      <DateInput label="fields_name.last_activity" source="last_activity" />
   </Filter>
 );
 
 export const UserList = ({permissions, ...props}) => (
   <List title="Users" {...props} filters={<UserFilter />}>
     <Datagrid>
-      <TextField source="name" />
+      <TextField label="user.name"  source="name" />
       <EmailField source="email" />
-      <TextField source="role" />
-      <TextField source="status" />
-      <DateField source="created" />
-      <DateField source="modified" />
-      <BooleanField source="deleted" />
-      <BooleanField source="validated" />
-      <DateField source="last_activity" />
+      <TextField label="user.role" source="role" />
+      <TextField label="fields_name.status"  source="status" />
+      <DateField label="fields_name.creation_date" source="created" />
+      <DateField label="fields_name.modified_date" source="modified" />
+      <BooleanField label="fields_name.deleted" source="deleted" />
+      <BooleanField label="fields_name.validated" source="validated" />
+      <DateField label="fields_name.last_activity" source="last_activity" />
       <EditButton />
     </Datagrid>
   </List>
