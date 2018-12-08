@@ -11,10 +11,9 @@ import { UserCreate } from './user/UserCreate';
 import { UserEdit } from './user/UserEdit';
 
 import { Admin, Resource } from 'react-admin';
-import englishMessages from 'ra-language-english';
-import spanishMessages from 'ra-language-spanish';
-import portugueseMessages from 'ra-language-portuguese';
-import * as domainMessages from './i18n';
+import englishMessages from './i18n/en';
+import spanishMessages from './i18n/es';
+import portugueseMessages from './i18n/pt';
 
 import customRoutes from './customRoutes';
 
@@ -36,10 +35,11 @@ const BACKEND_HOST = `${process.env.NODE_ENV === 'production' ? '/v1' : 'http://
 const uploadCapableDataProvider = addUploadFeature(dataProvider(BACKEND_HOST));
 
 const messages = {
-  es: { ...spanishMessages, ...domainMessages.es },
-  en: { ...englishMessages, ...domainMessages.en },
-  pt: { ...portugueseMessages, ...domainMessages.pt }
+  es: spanishMessages,
+  en: englishMessages,
+  pt: portugueseMessages
 };
+
 const i18nProvider = locale => messages[locale];
 
 
@@ -52,7 +52,7 @@ const App = () => (
     customRoutes={customRoutes}
     appLayout={Layout}
     title='Roap'
-    locale='pt'
+    locale='es'
     i18nProvider={i18nProvider}
   >
     {permissions => [
