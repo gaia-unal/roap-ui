@@ -14,6 +14,7 @@ import { Admin, Resource } from 'react-admin';
 import englishMessages from './i18n/en';
 import spanishMessages from './i18n/es';
 import portugueseMessages from './i18n/pt';
+import Cookies from 'universal-cookie';
 
 import customRoutes from './customRoutes';
 
@@ -40,8 +41,14 @@ const messages = {
   pt: portugueseMessages
 };
 
-const i18nProvider = locale => messages[locale];
+const validLocale = {
+  pt_BR: 'pt',
+  es_CO: 'es',
+  en_US: 'en'
+}
 
+const i18nProvider = locale => messages[locale];
+const cookies = new Cookies();
 
 const App = () => (
   <Admin
@@ -52,7 +59,7 @@ const App = () => (
     customRoutes={customRoutes}
     appLayout={Layout}
     title='Roap'
-    locale='es'
+    locale={validLocale[cookies.get('user_lang')] || 'es'}
     i18nProvider={i18nProvider}
   >
     {permissions => [
