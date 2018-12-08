@@ -15,6 +15,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ReactJson from 'react-json-view'
 
+import { translate } from 'react-admin';
+
+
 const user = new userService();
 
 class SignupPage extends Component {
@@ -43,6 +46,8 @@ class SignupPage extends Component {
 
   render() {
     const { email, password } = this.state;
+    const { translate } = this.props;
+
     return (
       <div style={{
         display: 'flex',
@@ -73,7 +78,7 @@ class SignupPage extends Component {
           />
           <br />
           <TextField
-            label="Name"
+            label={ translate('user.name') }
             type="text"
             autoComplete="current-text"
             onChange={e =>
@@ -83,7 +88,7 @@ class SignupPage extends Component {
           />
           <br />
           <TextField
-            label="Password"
+            label={ translate('ra.auth.password') }
             type="password"
             autoComplete="current-password"
             onChange={e =>
@@ -93,7 +98,7 @@ class SignupPage extends Component {
           />
           <br />
           <TextField
-            label="Password"
+            label={ translate('ra.auth.password') }
             type="password"
             autoComplete="current-password"
             onChange={e =>
@@ -109,7 +114,7 @@ class SignupPage extends Component {
             disabled={!email || !password}
             onClick={() => this.submit(this.state)}
           >
-            Login
+            { translate('auth.sign_up') }
           </Button>
         </Paper>
       </div>
@@ -117,4 +122,5 @@ class SignupPage extends Component {
   }
 };
 
-export default connect(undefined, { push })(SignupPage);
+
+export default connect(undefined, { push })(translate(SignupPage));

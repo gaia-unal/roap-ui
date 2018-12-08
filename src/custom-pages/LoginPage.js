@@ -10,6 +10,8 @@ import Paper from '@material-ui/core/Paper';
 
 import { showNotification } from 'react-admin';
 
+import { translate } from 'react-admin';
+
 class LoginPage extends Component {
   state = { password: null, email: null};
 
@@ -21,6 +23,8 @@ class LoginPage extends Component {
 
   render() {
     const { email, password } = this.state;
+    const { translate } = this.props;
+
     return (
       <div style={{
         display: 'flex',
@@ -42,7 +46,7 @@ class LoginPage extends Component {
           />
           <br />
           <TextField
-            label="Password"
+            label={ translate('ra.auth.password') }
             type="password"
             autoComplete="current-password"
             onChange={e =>
@@ -58,7 +62,7 @@ class LoginPage extends Component {
             disabled={!email || !password}
             onClick={() => this.submit(this.state)}
           >
-            Login
+            { translate('ra.auth.sign_in') }
           </Button>
         </Paper>
         <br />
@@ -68,11 +72,11 @@ class LoginPage extends Component {
           color="primary"
           onClick={() => this.props.push("/")}
         >
-          Go to learning objects
+          { translate('lo.go_to') }
         </Button>
       </div>
     );
   }
 };
 
-export default connect(null, { userLogin, push, showNotification })(LoginPage);
+export default connect(null, { userLogin, push, showNotification })(translate(LoginPage));
