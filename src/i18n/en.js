@@ -43,7 +43,9 @@ export default {
 
   tabs_name: {
     content: 'Content',
-    summary: 'Summary'
+    summary: 'Summary',
+    configuration: '  Configuration',
+    language: 'Language'
   },
 
   user: {
