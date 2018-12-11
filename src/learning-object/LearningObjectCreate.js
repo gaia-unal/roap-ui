@@ -72,7 +72,7 @@ export class LearningObjectCreate extends React.Component {
     let keys = key.split(".");
     let title = keys[keys.length - 1];
     switch(type){
-      case 'string': 
+      case 'string':
         if (choices instanceof Array){
           return <React.Fragment key={key}>
             <SelectInput
@@ -128,7 +128,7 @@ export class LearningObjectCreate extends React.Component {
       <Create {...this.props}>
         <SimpleForm>
           <TextInput source="category" label="fields_name.category" multiple={false}/>
-          <FileInput source="files" label="fields_name.related_filed">
+          <FileInput source="files" label="fields_name.related_files">
               <FileField source="src" title="title" />
           </FileInput>
           {this.state.form}

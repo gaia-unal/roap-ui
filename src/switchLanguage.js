@@ -26,11 +26,30 @@ class SwitchLanguage extends Component {
     }
 
     render() {
+        const {locale, classes} = this.props
         return (
             <div>
-                <Button onClick={ this.switchToEnglish }>EN</Button>
-                <Button onClick={ this.switchToSpanish }>ES</Button>
-                <Button onClick={ this.switchToPortuguese }>PT</Button>
+                <Button 
+                  variant="raised"
+                  className={classes.button}
+                  color={locale === 'en' ? 'primary' : 'default'}
+                  onClick={ this.switchToEnglish }
+                >
+                EN</Button>
+                <Button 
+                  variant="raised"
+                  className={classes.button}
+                  color={locale === 'es' ? 'primary' : 'default'}
+                  onClick={ this.switchToSpanish }
+                >
+                ES</Button>
+                <Button 
+                  variant="raised"
+                  className={classes.button}
+                  color={locale === 'pt' ? 'primary' : 'default'}
+                  onClick={ this.switchToPortuguese }
+                >
+                PT</Button>
             </div>
         );
     }
