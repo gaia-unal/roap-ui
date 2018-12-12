@@ -4,7 +4,9 @@ export default {
   ...portugueseMessages,
   auth: {
     users: 'Usuários',
-    sign_up: 'Registrar'
+    sign_up: 'Registrar',
+    confirm_password: 'Confirme a Senha',
+    change_password: 'Mudar senha'
   },
   
   lo: {

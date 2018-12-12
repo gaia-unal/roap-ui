@@ -4,7 +4,9 @@ export default {
   ...spanishMessages,
   auth: {
     users: 'Usuarios',
-    sign_up: 'Regístrate'
+    sign_up: 'Regístrate',
+    confirm_password: 'Confirmar contraseña',
+    change_password: 'Cambiar contraseña'
   },
   
   lo: {

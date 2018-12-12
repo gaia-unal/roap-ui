@@ -3,8 +3,10 @@ import englishMessages from 'ra-language-english';
 export default {
   ...englishMessages,
   auth: {
-    users: 'users',
-    sign_up: 'Sign up'
+    users: 'Users',
+    sign_up: 'Sign up',
+    confirm_password: 'Confirm password',
+    change_password: 'Change password'
   },
   
   lo: {
