@@ -56,5 +56,14 @@ export default {
       expert: 'Experto',
       creator: 'Creador'
     }
+  },
+
+  recover_password: {
+    title_modal: 'Recuperar su contraseña',
+    message_modal: 'Escriba la dirección del correo electrónico asociado a su cuenta, envíaremos un correo para que pueda cambiar su contraseña.'
+  },
+
+  action: {
+    send: 'Enviar'
   }
 };

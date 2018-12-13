@@ -55,5 +55,14 @@ export default {
       expert: 'Especialista',
       creator: 'Criador'
     }
+  },
+
+  recover_password: {
+    title_modal: 'Recupere sua senha',
+    message_modal: 'Digite o endereço de e-mail associado à sua conta, nós enviaremos um e-mail para que você possa alterar sua senha.'
+  },
+
+  action: {
+    send: 'Enviar'
   }
 };

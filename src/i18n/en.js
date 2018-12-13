@@ -57,5 +57,14 @@ export default {
       expert: 'Expert',
       creator: 'Creator'
     }
+  },
+
+  recover_password: {
+    title_modal: 'Recover password',
+    message_modal: 'Enter the email address associated with your account, we will send an email so you can change your password.'
+  },
+
+  action: {
+    send: 'Send'
   }
 };

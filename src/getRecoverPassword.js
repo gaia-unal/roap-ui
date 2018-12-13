@@ -9,13 +9,14 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import userService from './custom-services/user';
-
+import { translate } from 'react-admin';
 const user = new userService();
 
 class GetRecoverPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {email: null};
+    this.translate = props.translate;
   }
 
   handleRequestToken() {
@@ -31,15 +32,15 @@ class GetRecoverPassword extends Component {
   }
 
   render() {
+    
     return(
       <Dialog
           open={ this.props.open }
           aria-labelledby="get-recover-password-title">
-          <DialogTitle id="get-recover-password-title">Recuperar contraseña</DialogTitle>
+          <DialogTitle id="get-recover-password-title">{ this.translate('recover_password.title_modal') }</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Escriba la dirección de correo electrónico asoaciada a su cuenta, 
-              enviaremos un email con un enlace para el cambio de la contraseña.
+              { this.translate('recover_password.message_modal') }
             </DialogContentText>
             <TextField
               autoFocus
@@ -48,7 +49,7 @@ class GetRecoverPassword extends Component {
               onChange={e =>
                 this.setState({ email: e.target.value})
               }
-              label="Email Address"
+              label="Email"
               type="email"
               fullWidth
             />
@@ -57,12 +58,12 @@ class GetRecoverPassword extends Component {
             <Button 
               onClick={ this.props.close() }
               color="primary">
-              Cancelar
+              { this.translate('ra.action.cancel') }
             </Button>
             <Button
               onClick={() => this.handleRequestToken()}
               color="primary">
-              Enviar
+              { this.translate('action.send') }
             </Button>
           </DialogActions>
         </Dialog>
@@ -70,4 +71,4 @@ class GetRecoverPassword extends Component {
   };
 }
 
-export default connect(null, { push })(GetRecoverPassword);
+export default connect(null, { push })(translate(GetRecoverPassword));
