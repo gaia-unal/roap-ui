@@ -61,7 +61,8 @@ export default {
 
   recover_password: {
     title_modal: 'Recover password',
-    message_modal: 'Enter the email address associated with your account, we will send an email so you can change your password.'
+    message_modal: 'Enter the email address associated with your account, we will send an email so you can change your password.',
+    forgot_your_password: '¿Forgot your password?'
   },
 
   action: {

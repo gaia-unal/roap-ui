@@ -51,7 +51,8 @@ class LoginPage extends Component {
       }}>
         <GetRecoverPassword
           open={ this.state.openRecoverPasswordModal }
-          close={ () => this.handleClickClose.bind(this) }></GetRecoverPassword>
+          close={ () => this.handleClickClose.bind(this) }>
+        </GetRecoverPassword>
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
           <TextField
             label="Email"
@@ -77,7 +78,7 @@ class LoginPage extends Component {
             variant="outlined"
             color="primary" 
             style={{ marginTop:10 }}>
-            ¿Olvido su contraseña?
+            { translate("recover_password.forgot_your_password") }
           </Button>
           <Button
             variant="outlined"
