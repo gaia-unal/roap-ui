@@ -8,7 +8,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
 import decodeJwt from 'jwt-decode';
-
+import Notification from '../notification'
 const styles = {
   card: {
     width: 400,
@@ -23,6 +23,7 @@ const styles = {
 
 const LearningObjectGird = ({ permissions, user, ids, data, basePath }) => (
   <div>
+  <Notification/>
   {ids.map((id, i) =>
     <Card key={i} style={styles.card}>
       <CardContent>

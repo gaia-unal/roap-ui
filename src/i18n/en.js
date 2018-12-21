@@ -66,6 +66,11 @@ export default {
   },
 
   action: {
-    send: 'Send'
+    send: 'Send',
+    resend: 'Resend'
+  },
+
+  signUp: {
+    welcome: 'Your account has been created, please check your email.'
   }
 };

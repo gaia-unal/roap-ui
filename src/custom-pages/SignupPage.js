@@ -10,15 +10,24 @@ import userService from '../custom-services/user';
 import { push } from 'react-router-redux';
 
 import Dialog from '@material-ui/core/Dialog';
-// import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import ReactJson from 'react-json-view'
+import ReactJson from 'react-json-view';
 
 import { translate } from 'react-admin';
+import Notification, { openNotification } from '../notification';
 
 
 const user = new userService();
+const resendEmailvalidation =  (message, sendEmail, email) => (
+  <Button
+    key="resend"
+    variant="outlined"
+    size="small"
+    onClick={ () =>  sendEmail(email)}>
+    { message }
+  </Button>
+);
 
 class SignupPage extends Component {
   state = {
@@ -30,6 +39,9 @@ class SignupPage extends Component {
   };
 
   submit = (credentials) => {
+    const { translate } = this.props;
+    const resend = translate('action.resend');
+
     user.post(
       credentials.email,
       credentials.password,
@@ -37,10 +49,18 @@ class SignupPage extends Component {
       credentials.requestedRole,
       res => user.sendUserEmail(
         credentials.email,
-        res => this.props.push('/learning-object-collection'),
+        res => {
+          this.props.push('/learning-object-collection')
+          openNotification({
+            message: translate('signUp.welcome'),
+            variant: 'success',
+            duration: null,
+            action: resendEmailvalidation(resend, (email) => { user.sendUserEmail(email, () => {}, () => {}) }, credentials.email)
+          });
+        },
         err => console.log(err)
       ),
-      err => this.setState({showErrorMessage: JSON.parse(err.response.text)})
+      err => this.setState({ showErrorMessage: JSON.parse(err.response.text) })
     );
   }
 
@@ -56,12 +76,12 @@ class SignupPage extends Component {
         height: '100vh',
         flexDirection: 'column'
       }}>
+        <Notification/>
         <Dialog
           open={this.state.showErrorMessage !== ''}
           onClose={() => this.setState({showErrorMessage: ''})}
           aria-labelledby="responsive-dialog-title"
-        >
-          <DialogTitle id="responsive-dialog-title">Error</DialogTitle>
+        >          <DialogTitle id="responsive-dialog-title">Error</DialogTitle>
           <DialogContentText><ReactJson src={this.state.showErrorMessage} /></DialogContentText>
           {/*"TODO: add forgot password in case of account is validated by admin, or add resend activation Email"*/}
         </Dialog>
@@ -110,6 +130,7 @@ class SignupPage extends Component {
           <br />
           <Button
             variant="outlined"
+            style={{marginTop: '10px'}}
             color="primary"
             disabled={!email || !password}
             onClick={() => this.submit(this.state)}

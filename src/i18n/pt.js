@@ -64,6 +64,11 @@ export default {
   },
 
   action: {
-    send: 'Enviar'
+    send: 'Enviar',
+    resend: 'Reenviar'
+  },
+
+  signUp: {
+    welcome: 'A sua conta foi criada, por favor verifique o seu e-mail.'
   }
 };
