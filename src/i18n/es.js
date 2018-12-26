@@ -70,6 +70,7 @@ export default {
   },
 
   signUp: {
-    welcome: 'Su cuenta se ha creado, por favor revise su correo.' 
+    welcome: 'Su cuenta se ha creado, por favor revise su correo.',
+    userExists: 'El correo electrónico ya ha sido registrado.'
   }
 };

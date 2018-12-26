@@ -69,6 +69,7 @@ export default {
   },
 
   signUp: {
-    welcome: 'A sua conta foi criada, por favor verifique o seu e-mail.'
+    welcome: 'A sua conta foi criada, por favor verifique o seu e-mail.',
+    userExists: 'O e-mail já foi registrado.'
   }
 };

@@ -71,6 +71,7 @@ export default {
   },
 
   signUp: {
-    welcome: 'Your account has been created, please check your email.'
+    welcome: 'Your account has been created, please check your email.',
+    userExists: 'The email has already been registered.'
   }
 };
