@@ -21,11 +21,15 @@ const styles = {
   }
 };
 
+const styleDeleted = {
+  border: 'solid red'
+}
+
 const LearningObjectGird = ({ permissions, user, ids, data, basePath }) => (
   <div>
   <Notification/>
   {ids.map((id, i) =>
-    <Card key={i} style={styles.card}>
+    <Card key={i} style={data[id].deleted ? {...styles.card, ...styleDeleted} : styles.card}>
       <CardContent>
         <Typography noWrap variant="title" gutterBottom>
           {
@@ -86,7 +90,8 @@ const LearningObjectFilter = ({ translate, permissions, user, ...props }) => (
         { id: 1, filter: {status: 'evaluated'}, name: 'lo.filters.evaluated' },
         { id: 2, filter: {status: 'accepted'}, name: 'lo.filters.accepted' },
         { id: 3, filter: {status: 'rejected'}, name: 'lo.filters.rejected' },
-        { id: 4, filter: {creator_id: user._id}, name: 'lo.filters.created_for_me'}
+        { id: 4, filter: {deleted: true}, name: 'lo.filters.deleted' },
+        { id: 5, filter: {creator_id: user._id}, name: 'lo.filters.created_for_me'}
       ]}
     />}
     {permissions === 'expert' && <SelectInput

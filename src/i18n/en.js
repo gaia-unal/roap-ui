@@ -20,6 +20,7 @@ export default {
       evaluated: 'Evaluated',
       accepted: 'Accepted',
       rejected: 'Rejected',
+      deleted: 'Deleted',
       created_for_me: 'Created for me',
       all: 'All',
       assigned_to_me: 'Assigned to me'

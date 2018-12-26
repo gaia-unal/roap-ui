@@ -19,6 +19,7 @@ export default {
       evaluated: 'Avaliado',
       accepted: 'Aceite',
       rejected: 'Rejeitado',
+      deleted: 'Eliminado',
       created_for_me: 'Criado por mim',
       all: 'Todos',
       assigned_to_me: 'Atribuído a mim'
