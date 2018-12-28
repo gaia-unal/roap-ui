@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import TextField from '@material-ui/core/TextField';
 import { userLogin } from 'react-admin';
 import { push } from 'react-router-redux';
 
@@ -11,13 +10,15 @@ import { showNotification } from 'react-admin';
 
 import { translate } from 'react-admin';
 import GetRecoverPassword from '../getRecoverPassword';
+import { Formik } from "formik";
+import { LoginForm } from '../loginForm';
+import * as Yup from 'yup';
 
 class LoginPage extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      password: null,
-      email: null,
       openRecoverPasswordModal: false
     };
   }
@@ -32,14 +33,20 @@ class LoginPage extends Component {
 
 
   submit = (credentials) => {
+    console.log("HAHA")
     this.props.userLogin({
       ...credentials
     });
   }
 
   render() {
-    const { email, password } = this.state;
-    const { translate } = this.props;
+    const { translate, push } = this.props;
+    const validationSchema = Yup.object({
+      email: Yup.string('')
+      .email(translate('errorMessages.email'))
+      .required(translate('errorMessages.required')),
+      password: Yup.string('')
+      .required(translate('errorMessages.required'))});
 
     return (
       <div style={{
@@ -51,51 +58,27 @@ class LoginPage extends Component {
       }}>
         <GetRecoverPassword
           open={ this.state.openRecoverPasswordModal }
+          translate={translate}
           close={ () => this.handleClickClose.bind(this) }>
         </GetRecoverPassword>
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
-          <TextField
-            label="Email"
-            type="email"
-            autoComplete="current-email"
-            onChange={e =>
-              this.setState({ email: e.target.value})
-            }
-            autoFocus
-            required
-          />
-          <TextField
-            label={ translate('ra.auth.password') }
-            type="password"
-            autoComplete="current-password"
-            onChange={e =>
-              this.setState({ password: e.target.value})
-            }
-            required
-          />
-          <Button
-            onClick={() => this.handleClickOpen()}
-            variant="outlined"
-            color="primary" 
-            style={{ marginTop:10 }}>
-            { translate("recover_password.forgot_your_password") }
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ marginTop:10 }}
-            disabled={!email || !password}
-            onClick={() => this.submit(this.state)}
-          >
-            { translate('ra.auth.sign_in') }
-          </Button>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            render={props => <LoginForm {...props} submitHandler={ this.submit } translate={ translate }/>}
+            validationSchema={ validationSchema }/>
+            <Button
+              onClick={() => this.handleClickOpen()}
+              variant="outlined"
+              color="primary" 
+              style={{ marginTop: 10 }}>
+              { translate("recover_password.forgot_your_password") }
+            </Button>
         </Paper>
         <Button
           variant="outlined"
           color="primary"
-          style={{ marginTop:10 }}
-          onClick={() => this.props.push("/")}
-        >
+          style={{ marginTop: 10 }}
+          onClick={ () => push('/learning-object-collection') }>
           { translate('lo.go_to') }
         </Button>
       </div>

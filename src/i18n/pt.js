@@ -72,5 +72,11 @@ export default {
   signUp: {
     welcome: 'A sua conta foi criada, por favor verifique o seu e-mail.',
     userExists: 'O e-mail já foi registrado.'
+  },
+
+  errorMessages: {
+    email: 'Email inválido.',
+    passwordLen: 'La contraseña debe contener al menos 8 carácteres.',
+    required: 'Este campo é obrigatório'
   }
 };
