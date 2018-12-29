@@ -16,7 +16,8 @@ import ReactJson from 'react-json-view';
 
 import { translate } from 'react-admin';
 import Notification, { openNotification } from '../notification';
-
+import { withFormik } from 'formik';
+import { object, string, ref } from 'yup';
 
 const user = new userService();
 const resendEmailValidation =  (message, sendEmail, email) => (
@@ -41,11 +42,6 @@ const userExists = (message, push) => (
 
 class SignupPage extends Component {
   state = {
-    confirmPassword: null,
-    password: null,
-    email: null,
-    name: null,
-    requestedRole: 'creator',
     showErrorMessage: ''
   };
 
@@ -89,9 +85,20 @@ class SignupPage extends Component {
     );
   }
 
+  change = (name, e) => {
+    e.persist();
+    this.props.handleChange(e);
+    this.props.setFieldTouched(name, true, false)
+  }
+
   render() {
-    const { email, password, confirmPassword } = this.state;
-    const { translate } = this.props;
+    const {
+      values: { email, password, passwordConfirm, name },
+      errors,
+      touched,
+      isValid,
+      translate
+    } = this.props;
 
     return (
       <div style={{
@@ -113,52 +120,55 @@ class SignupPage extends Component {
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
           <TextField
             label="Email"
+            name="email"
             type="email"
             autoComplete="current-email"
-            onChange={e =>
-              this.setState({ email: e.target.value})
-            }
+            value={email}
+            onChange={this.change.bind(null, 'email')}
+            helperText={touched.email ? translate(errors.email) : ''}
+            error={touched.email && Boolean(errors.email)}
             autoFocus
             required
           />
-          <br />
           <TextField
             label={ translate('user.name') }
+            name="name"
             type="text"
+            value={name}
             autoComplete="current-text"
-            onChange={e =>
-              this.setState({ name: e.target.value})
-            }
+            onChange={this.change.bind(null, 'name')}
+            helperText={touched.name ? translate(errors.name) : ''}
+            error={touched.name && Boolean(errors.name)}
             required
           />
-          <br />
           <TextField
             label={ translate('ra.auth.password') }
+            name="password"
             type="password"
+            value={password}
             autoComplete="current-password"
-            onChange={e =>
-              this.setState({ password: e.target.value})
-            }
+            onChange={this.change.bind(null, 'password')}
+            helperText={touched.password ? translate(errors.password) : ''}
+            error={touched.password && Boolean(errors.password)}
             required
           />
-          <br />
           <TextField
             label={ translate('ra.auth.password') }
+            name="passwordConfirm"
             type="password"
+            value={passwordConfirm}
             autoComplete="current-password"
-            onChange={e =>
-              this.setState({ confirmPassword: e.target.value})
-            }
+            onChange={this.change.bind(null, 'passwordConfirm')}
+            helperText={touched.passwordConfirm ? translate(errors.passwordConfirm) : ''}
+            error={touched.passwordConfirm && Boolean(errors.passwordConfirm)}
             required
           />
-          <br />
-          <br />
           <Button
             variant="outlined"
             style={{marginTop: '10px'}}
             color="primary"
-            disabled={!email || !password || (password !== confirmPassword)}
-            onClick={() => this.submit(this.state)}
+            disabled={!isValid}
+            onClick={() => this.submit({...this.props.values, role: 'creator'})}
           >
             { translate('auth.sign_up') }
           </Button>
@@ -169,4 +179,24 @@ class SignupPage extends Component {
 };
 
 
-export default connect(undefined, { push })(translate(SignupPage));
+export default connect(null, { push })(translate(withFormik({ 
+  mapPropsToValues: () => ({
+    email: '',
+    name: '',
+    password: '',
+    passwordConfirm: ''
+  }), 
+  validationSchema: object({
+    email: string('')
+    .email('errorMessages.email')
+    .required('errorMessages.required'),
+    name: string('')
+    .required('errorMessages.required'),
+    password: string('')
+    .min(8, 'errorMessages.passwordLen')
+    .required('errorMessages.required'),
+    passwordConfirm: string('')
+    .oneOf([ref('password'), null], 'errorMessages.passwordConfirm')
+    .required('errorMessages.required')
+  }
+  )})(SignupPage)));
