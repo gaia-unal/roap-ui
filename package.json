@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "aor-language-spanish": "^2.0.4",
     "formik": "^1.4.1",
     "jwt-decode": "^2.2.0",
     "jwt-simple": "^0.5.5",
@@ -15,7 +14,6 @@
     "ra-language-spanish": "^1.0.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-material-ui-form-validator": "^2.0.3",
     "react-rating": "^1.5.0",
     "react-scripts": "^2.1.1",
     "superagent": "^3.8.3",

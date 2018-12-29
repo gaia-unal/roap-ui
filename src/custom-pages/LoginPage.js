@@ -10,9 +10,9 @@ import { showNotification } from 'react-admin';
 
 import { translate } from 'react-admin';
 import GetRecoverPassword from '../getRecoverPassword';
-import { Formik } from "formik";
+import { Formik } from 'formik';
 import { LoginForm } from '../loginForm';
-import * as Yup from 'yup';
+import { string, object }  from 'yup';
 
 class LoginPage extends Component {
   constructor(props) {
@@ -33,7 +33,6 @@ class LoginPage extends Component {
 
 
   submit = (credentials) => {
-    console.log("HAHA")
     this.props.userLogin({
       ...credentials
     });
@@ -41,11 +40,11 @@ class LoginPage extends Component {
 
   render() {
     const { translate, push } = this.props;
-    const validationSchema = Yup.object({
-      email: Yup.string('')
+    const validationSchema = object({
+      email: string('')
       .email(translate('errorMessages.email'))
       .required(translate('errorMessages.required')),
-      password: Yup.string('')
+      password: string('')
       .required(translate('errorMessages.required'))});
 
     return (

@@ -10,18 +10,15 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import userService from './custom-services/user';
 import { translate } from 'react-admin';
+import { withFormik } from 'formik';
+import { string, object } from 'yup';
+
 const user = new userService();
 
 class GetRecoverPassword extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {email: null};
-    this.translate = props.translate;
-  }
-
   handleRequestToken() {
     user.sendEmailRecoverPassword(
-      this.state.email,
+      this.props.values.email,
       res => this.props.push('/learning-object-collection'),
       err => console.error(err)
     )
@@ -32,25 +29,30 @@ class GetRecoverPassword extends Component {
   }
 
   render() {
-    
+    const { translate } = this.props;
+
     return(
       <Dialog
           open={ this.props.open }
           aria-labelledby="get-recover-password-title">
-          <DialogTitle id="get-recover-password-title">{ this.translate('recover_password.title_modal') }</DialogTitle>
+          <DialogTitle id="get-recover-password-title">{ translate('recover_password.title_modal') }</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              { this.translate('recover_password.message_modal') }
+              { translate('recover_password.message_modal') }
             </DialogContentText>
             <TextField
               autoFocus
-              margin="dense"
-              id="name"
-              onChange={e =>
-                this.setState({ email: e.target.value})
-              }
+              id="emailRecoverPassword"
+              name="email"
               label="Email"
+              onChange={e =>{
+                e.persist();
+                this.props.handleChange(e);
+                this.props.setFieldTouched('email', true, false)
+              }}
               type="email"
+              helperText={this.props.touched.email ? translate(this.props.errors.email) : ''}
+              error={this.props.touched.email && Boolean(this.props.errors.email)}
               fullWidth
             />
           </DialogContent>
@@ -58,12 +60,13 @@ class GetRecoverPassword extends Component {
             <Button 
               onClick={ this.props.close() }
               color="primary">
-              { this.translate('ra.action.cancel') }
+              { translate('ra.action.cancel') }
             </Button>
             <Button
               onClick={() => this.handleRequestToken()}
-              color="primary">
-              { this.translate('action.send') }
+              color="primary"
+              disabled={ !this.props.isValid }>
+              { translate('action.send') }
             </Button>
           </DialogActions>
         </Dialog>
@@ -71,4 +74,10 @@ class GetRecoverPassword extends Component {
   };
 }
 
-export default connect(null, { push })(translate(GetRecoverPassword));
+export default connect(null, { push })(translate(withFormik({ 
+  mapPropsToValues: () => ({ email: '' }), 
+  validationSchema: object({
+    email: string('')
+    .email('errorMessages.email')
+    .required('errorMessages.required')}
+  )})(GetRecoverPassword)));
