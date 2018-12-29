@@ -78,6 +78,7 @@ export default {
   errorMessages: {
     email: 'Email inválido.',
     passwordLen: 'La contraseña debe contener al menos 8 carácteres.',
-    required: 'Campo requerido.'
+    required: 'Campo requerido.',
+    passwordConfirm: 'Las contraseñas no coinciden'
   }
 };

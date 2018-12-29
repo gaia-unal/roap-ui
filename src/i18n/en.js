@@ -79,6 +79,7 @@ export default {
   errorMessages: {
     email: 'Email is not valid.',
     passwordLen: 'La contraseña debe contener al menos 8 carácteres.',
-    required: 'This field is required'
+    required: 'This field is required',
+    passwordConfirm: 'Passwords do not match'
   }
 };

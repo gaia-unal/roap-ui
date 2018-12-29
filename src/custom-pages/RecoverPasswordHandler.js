@@ -9,6 +9,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import ReactJson from 'react-json-view';
+import { withFormik } from 'formik';
+import { object, string, ref } from 'yup';
+import { translate } from 'react-admin';
 
 const user = new userService();
 
@@ -28,6 +31,12 @@ class RecoverPasswordHandler extends Component {
       err => this.setState({ showErrorMessage: JSON.parse(err.response.text) })
     );
   };
+
+  change = (name, e) => {
+    e.persist();
+    this.props.handleChange(e);
+    this.props.setFieldTouched(name, true, false);
+  }
 
   render() {
     const { translate } = this.props;
@@ -52,25 +61,32 @@ class RecoverPasswordHandler extends Component {
         </Dialog>
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
           <TextField
-            label={translate('ra.auth.password')}
+            label={ translate('ra.auth.password') }
+            name="password"
             type="password"
-            autoComplete="current-password"
-            onChange={e => this.setState({ password: e.target.value })}
+            value={this.props.values.password}
+            helperText={this.props.touched.password ? translate(this.props.errors.password) : ''}
+				    error={this.props.touched.password && Boolean(this.props.errors.password)}
+            onChange={this.change.bind(null, 'password')}
             required
           />
           <TextField
-            label={translate('auth.confirm_password')}
+            name="passwordConfirm"
+            value={this.props.values.passwordConfirm}
+            helperText={this.props.touched.passwordConfirm ? translate(this.props.errors.passwordConfirm) : ''}
+			      error={this.props.touched.passwordConfirm && Boolean(this.props.errors.passwordConfirm)}
+            label={ translate('auth.confirm_password') }
             type="password"
             autoComplete="current-password"
-            onChange={e => this.setState({ confirm_password: e.target.value })}
+            onChange={this.change.bind(null, 'passwordConfirm')}
             required
           />
           <Button
             variant="outlined"
             color="primary"
             style={{ marginTop: 10 }}
-            disabled={!this.state.password || this.state.password !== this.state.confirm_password}
-            onClick={() => this.submit(this.state)}
+            disabled={!this.props.isValid}
+            onClick={() => this.submit(this.props.values)}
           >
             {translate('auth.change_password')}
           </Button>
@@ -85,4 +101,17 @@ class RecoverPasswordHandler extends Component {
 export default connect(
   undefined,
   { push }
-)(RecoverPasswordHandler);
+)(translate(withFormik({
+  mapPropsToValues: () => ({
+    password: '',
+    confirmPassword: ''
+  }),
+  validationSchema: object({
+    password: string('')
+    .min(8, 'errorMessages.passwordLen')
+    .required('errorMessages.required'),
+    passwordConfirm: string('')
+    .oneOf([ref('password'), null], 'errorMessages.passwordConfirm')
+    .required('errorMessages.required')
+  })
+})(RecoverPasswordHandler)));
