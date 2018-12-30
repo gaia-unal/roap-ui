@@ -9,11 +9,6 @@ import userService from '../custom-services/user';
 
 import { push } from 'react-router-redux';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import ReactJson from 'react-json-view';
-
 import { translate } from 'react-admin';
 import Notification, { openNotification } from '../notification';
 import { withFormik } from 'formik';
@@ -33,10 +28,6 @@ const userExists = (message, push) => (
 );
 
 class SignupPage extends Component {
-  state = {
-    showErrorMessage: '',
-  };
-
   submit = credentials => {
     const { translate } = this.props;
     const resend = translate('action.resend');
@@ -104,17 +95,6 @@ class SignupPage extends Component {
         }}
       >
         <Notification />
-        <Dialog
-          open={this.state.showErrorMessage !== ''}
-          onClose={() => this.setState({ showErrorMessage: '' })}
-          aria-labelledby="responsive-dialog-title"
-        >
-          <DialogTitle id="responsive-dialog-title">Error</DialogTitle>
-          <DialogContentText>
-            <ReactJson src={this.state.showErrorMessage} />
-          </DialogContentText>
-          {/*"TODO: add forgot password in case of account is validated by admin, or add resend activation Email"*/}
-        </Dialog>
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
           <TextField
             label="Email"

@@ -67,6 +67,10 @@ export default {
     forgot_your_password: '¿Forgot your password?',
   },
 
+  get_account_validation: {
+    title_modal: 'Activate your account',
+    message_modal: "Enter the email address associated with your account, we'll send an email so you can activate it.",
+  },
   action: {
     send: 'Send',
     resend: 'Resend',

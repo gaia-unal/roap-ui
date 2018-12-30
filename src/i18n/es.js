@@ -66,6 +66,11 @@ export default {
     forgot_your_password: '¿Olvido su contraseña?',
   },
 
+  get_account_validation: {
+    title_modal: 'Activar su cuenta',
+    message_modal:
+      'Escriba la dirección del correo electrónico asociado a su cuenta, envíaremos un correo para que pueda activarla.',
+  },
   action: {
     send: 'Enviar',
     resend: 'Reenviar',

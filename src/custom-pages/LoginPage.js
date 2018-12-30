@@ -11,8 +11,10 @@ import { showNotification } from 'react-admin';
 
 import { translate } from 'react-admin';
 import GetRecoverPassword from '../getRecoverPassword';
+import GetValidateAccountToken from '../getValidateAccountToken';
 import { withFormik } from 'formik';
 import { string, object } from 'yup';
+import Notification from '../notification';
 
 class LoginPage extends Component {
   constructor(props) {
@@ -32,9 +34,10 @@ class LoginPage extends Component {
   }
 
   submit = credentials => {
-    this.props.userLogin({
+    let s = this.props.userLogin({
       ...credentials,
     });
+    console.log(s)
   };
 
   change = (name, e) => {
@@ -56,11 +59,13 @@ class LoginPage extends Component {
           flexDirection: 'column',
         }}
       >
+        <Notification/>
         <GetRecoverPassword
           open={this.state.openRecoverPasswordModal}
           translate={translate}
           close={() => this.handleClickClose.bind(this)}
         />
+        <GetValidateAccountToken/>
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
           <TextField
             id="email"

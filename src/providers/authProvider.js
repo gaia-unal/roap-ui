@@ -1,6 +1,39 @@
 import { AUTH_LOGIN, AUTH_CHECK, AUTH_LOGOUT, AUTH_ERROR, AUTH_GET_PERMISSIONS } from 'react-admin';
 import decodeJwt from 'jwt-decode';
 import jwt from 'jwt-simple';
+import { openNotification } from '../notification';
+import { openGetValidateAccountToken } from '../getValidateAccountToken';
+import { push } from 'react-router-redux';
+import React from 'react';
+import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import { translate } from 'react-admin';
+
+const _SignUpButton = ({ message, push, translate }) => (
+  <Button key="signup" onClick={() => push('/signup')}>
+    {translate(message)}
+  </Button>
+);
+
+const SignUpButton = connect(
+  null,
+  {
+    push,
+  }
+)(translate(_SignUpButton));
+
+const _GetValidateAccountButton = ({ message, translate }) => (
+  <Button key="signup" onClick={() => openGetValidateAccountToken()}>
+    {translate(message)}
+  </Button>
+);
+
+const GetValidateAccountButton = connect(
+  null,
+  {
+    push,
+  }
+)(translate(_GetValidateAccountButton));
 
 export default (type, params) => {
   if (type === AUTH_LOGIN) {
@@ -15,10 +48,49 @@ export default (type, params) => {
     );
     return fetch(request)
       .then(response => {
-        if (response.status < 200 || response.status >= 300) {
-          response.json().then(json => alert(JSON.stringify(json)));
-          throw new Error(response.statusText);
+        switch (response.status) {
+          case 404:
+            response.json().then(json =>
+              openNotification({
+                message: json.message,
+                variant: 'error',
+                duration: null,
+                action: <SignUpButton message="auth.sign_up" />,
+              })
+            );
+            return Promise.reject();
+          case 401:
+            response.json().then(json =>
+              openNotification({
+                message: json.message,
+                variant: 'error',
+                duration: null,
+                action: <GetValidateAccountButton message="action.resend" />,
+              })
+            );
+            return Promise.reject();
+          case 403:
+            response.json().then(json =>
+              openNotification({
+                message: json.message,
+                variant: 'error',
+                duration: null,
+              })
+            );
+            return Promise.reject();
+          case 500:
+            response.json().then(json =>
+              openNotification({
+                message: json.message,
+                variant: 'error',
+                duration: null,
+              })
+            );
+            return Promise.reject();
+          default:
+            break;
         }
+
         return response.json();
       })
       .then(({ token }) => {
