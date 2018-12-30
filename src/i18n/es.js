@@ -6,9 +6,9 @@ export default {
     users: 'Usuarios',
     sign_up: 'Regístrate',
     confirm_password: 'Confirmar contraseña',
-    change_password: 'Cambiar contraseña'
+    change_password: 'Cambiar contraseña',
   },
-  
+
   lo: {
     search: 'Buscar objeto de aprendizaje',
     all: 'Objetos de aprendizaje',
@@ -22,8 +22,8 @@ export default {
       deleted: 'Eliminado',
       created_for_me: 'Creados por mi',
       all: 'Todos',
-      assigned_to_me: 'Asignados a mi'
-    }
+      assigned_to_me: 'Asignados a mi',
+    },
   },
 
   fields_name: {
@@ -40,14 +40,14 @@ export default {
     status: 'Estado',
     email_validated: 'E-mail validado',
     last_activity: 'Última actividad',
-    validated:'Validado'
+    validated: 'Validado',
   },
 
   tabs_name: {
     content: 'Contenido',
     summary: 'Resumen',
     configuration: 'Configuración',
-    language: 'Lenguaje'
+    language: 'Lenguaje',
   },
 
   user: {
@@ -55,30 +55,31 @@ export default {
     role: 'Rol',
     roles: {
       expert: 'Experto',
-      creator: 'Creador'
-    }
+      creator: 'Creador',
+    },
   },
 
   recover_password: {
     title_modal: 'Recuperar su contraseña',
-    message_modal: 'Escriba la dirección del correo electrónico asociado a su cuenta, envíaremos un correo para que pueda cambiar su contraseña.',
-    forgot_your_password: '¿Olvido su contraseña?'
+    message_modal:
+      'Escriba la dirección del correo electrónico asociado a su cuenta, envíaremos un correo para que pueda cambiar su contraseña.',
+    forgot_your_password: '¿Olvido su contraseña?',
   },
 
   action: {
     send: 'Enviar',
-    resend: 'Reenviar'
+    resend: 'Reenviar',
   },
 
   signUp: {
     welcome: 'Su cuenta se ha creado, por favor revise su correo.',
-    userExists: 'El correo electrónico ya ha sido registrado.'
+    userExists: 'El correo electrónico ya ha sido registrado.',
   },
 
   errorMessages: {
     email: 'Email inválido.',
     passwordLen: 'La contraseña debe contener al menos 8 carácteres.',
     required: 'Campo requerido.',
-    passwordConfirm: 'Las contraseñas no coinciden'
-  }
+    passwordConfirm: 'Las contraseñas no coinciden',
+  },
 };

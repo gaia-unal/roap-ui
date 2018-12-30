@@ -1,36 +1,42 @@
 import React from 'react';
 import {
-    TextInput, LongTextInput, TabbedForm, FormTab, Edit, DateInput, TextField,
-    DateField, FunctionField, SelectInput, ReferenceArrayInput,
-    SelectArrayInput
+  TextInput,
+  LongTextInput,
+  TabbedForm,
+  FormTab,
+  Edit,
+  DateInput,
+  TextField,
+  DateField,
+  FunctionField,
+  SelectInput,
+  ReferenceArrayInput,
+  SelectArrayInput,
 } from 'react-admin';
 import SchemaService from '../custom-services/schema';
 
 import { Field } from 'redux-form';
 
-import ChipInput from 'material-ui-chip-input'
+import ChipInput from 'material-ui-chip-input';
 
-const renderChipList = ({
-  input,
-  label,
-  meta: { touched, error },
-  ...custom
-}) => {
+const renderChipList = ({ input, label, meta: { touched, error }, ...custom }) => {
   input.value = input.value instanceof Array ? input.value : [input.value];
-  return <React.Fragment>
-    <ChipInput
-      value={input.value}
-      label={label}
-      onAdd={(chip) => {
-        return input.onChange([...input.value, chip]);
-      }}
-      onDelete={(chip, index) => {
-        return input.onChange(input.value.filter(v => v !== chip));
-      }}
-    />
-    <br />
-  </React.Fragment>;
-}
+  return (
+    <React.Fragment>
+      <ChipInput
+        value={input.value}
+        label={label}
+        onAdd={chip => {
+          return input.onChange([...input.value, chip]);
+        }}
+        onDelete={(chip, index) => {
+          return input.onChange(input.value.filter(v => v !== chip));
+        }}
+      />
+      <br />
+    </React.Fragment>
+  );
+};
 
 export class LearningObjectEdit extends React.Component {
   constructor(props) {
@@ -41,111 +47,107 @@ export class LearningObjectEdit extends React.Component {
       form: null,
       error: null,
       value: 0,
+    };
+  }
+
+  generateNestedFormTemp(lom, temp_keys = [], keys = [], form = null) {
+    for (var key in lom) {
+      if ('fields' in lom[key]) {
+        temp_keys.push(key);
+        this.generateNestedForm(lom[key].fields, temp_keys, keys);
+        temp_keys.splice(-1, 1);
+      } else {
+        keys.push({
+          key: 'metadata.' + temp_keys.join('.') + '.' + key,
+          type: lom[key].type,
+          required: lom[key].required,
+        });
+      }
     }
   }
 
-  generateNestedFormTemp(lom, temp_keys=[], keys=[], form=null) {
-    for(var key in lom){
-        if ('fields' in lom[key]) {
-            temp_keys.push(key);
-            this.generateNestedForm(lom[key].fields, temp_keys, keys)
-            temp_keys.splice(-1, 1);
-        } else {
-            keys.push({
-                key: 'metadata.' + temp_keys.join('.') + '.' + key,
-                type: lom[key].type,
-                required: lom[key].required
-            })
-        }
-    }
-  }
-
-  generateNestedForm(lom, strKeys=[]) {
+  generateNestedForm(lom, strKeys = []) {
     let formContent = [];
-    for(var key in lom){
+    for (var key in lom) {
       if ('fields' in lom[key]) {
         strKeys.push(key);
         let strKey = 'metadata.' + strKeys.join('.');
         formContent.push(
           <React.Fragment key={strKey}>
             <p>{key}</p>
-            <div style={{marginLeft: 20}}>
-              {this.generateNestedForm(lom[key].fields, strKeys)}
-            </div>
+            <div style={{ marginLeft: 20 }}>{this.generateNestedForm(lom[key].fields, strKeys)}</div>
           </React.Fragment>
         );
         strKeys.splice(-1, 1);
       } else {
         let strKey = 'metadata.' + strKeys.join('.') + '.' + key;
         let choices = null;
-        if(lom[key].validate && lom[key].validate.params && lom[key].validate.params.choices){
+        if (lom[key].validate && lom[key].validate.params && lom[key].validate.params.choices) {
           choices = lom[key].validate.params.choices;
         }
-        formContent.push(this.getFieldType(
-          lom[key].type, strKey, choices, lom[key].required
-        ));
+        formContent.push(this.getFieldType(lom[key].type, strKey, choices, lom[key].required));
       }
     }
     return <React.Fragment>{formContent}</React.Fragment>;
   }
 
-  getFieldType(type, key, choices, required){
-    let keys = key.split(".");
+  getFieldType(type, key, choices, required) {
+    let keys = key.split('.');
     let title = keys[keys.length - 1];
-    switch(type){
-      case 'string': 
-        if (choices instanceof Array){
-          return <React.Fragment key={key}>
-            <SelectInput
-              source={key}
-              label={title}
-              defaultValue={[{}]}
-              choices={choices.map(e => {return {id: e, name: e}})}
-            />
-            <br />
-          </React.Fragment>;
+    switch (type) {
+      case 'string':
+        if (choices instanceof Array) {
+          return (
+            <React.Fragment key={key}>
+              <SelectInput
+                source={key}
+                label={title}
+                defaultValue={[{}]}
+                choices={choices.map(e => {
+                  return { id: e, name: e };
+                })}
+              />
+              <br />
+            </React.Fragment>
+          );
         } else {
-          return <React.Fragment key={key}>
-            <LongTextInput
-              label={title}
-              source={key}
-              key={title}
-              defaultValue={''}
-              style={{ background: required ? '#97CAFF' : 'white' }}
-            />
-            <br />
-          </React.Fragment>;
+          return (
+            <React.Fragment key={key}>
+              <LongTextInput
+                label={title}
+                source={key}
+                key={title}
+                defaultValue={''}
+                style={{ background: required ? '#97CAFF' : 'white' }}
+              />
+              <br />
+            </React.Fragment>
+          );
         }
       case 'list':
-        return <Field
-          key={key}
-          name={key}
-          component={renderChipList}
-          label={title}
-        />
+        return <Field key={key} name={key} component={renderChipList} label={title} />;
       case 'date':
-        return <React.Fragment key={key}>
-          <DateInput
-            label={title}
-            source={key}
-            defaultValue={new Date().toISOString().slice(0,10)}
-          />
-          <br />
-        </React.Fragment>;
-      default: return <p>FieldError</p>
+        return (
+          <React.Fragment key={key}>
+            <DateInput label={title} source={key} defaultValue={new Date().toISOString().slice(0, 10)} />
+            <br />
+          </React.Fragment>
+        );
+      default:
+        return <p>FieldError</p>;
     }
   }
 
   componentWillMount() {
-    this.setState({fetchingSchema: true}, () => {
+    this.setState({ fetchingSchema: true }, () => {
       this.service.getSchema(
-        schema =>  {
+        schema => {
           let form = this.generateNestedForm(schema.lom, []);
           this.setState({ form });
         },
-        error => this.setState({fetchingSchema: false, error}),
-      )
-    })
+        error => this.setState({ fetchingSchema: false, error })
+      );
+    });
   }
 
   render() {
@@ -154,21 +156,20 @@ export class LearningObjectEdit extends React.Component {
         <TabbedForm>
           <FormTab label="tabs_name.summary">
             {this.props.permissions === 'administrator' ? (
-                <ReferenceArrayInput
-                  label="Expert"
-                  source="expert_ids"
-                  reference="user-collection"
-                  filter={{ role: 'expert' }}
-                  sort={{ field: 'email', order: 'ASC' }}
-                  perPage={200}
-                  allowEmpty
-                >
-                    <SelectArrayInput optionText="email" />
-                </ReferenceArrayInput>
-              ) : (
-                <TextField source="expert_ids" label="Evaluator"/>
-              )
-            }
+              <ReferenceArrayInput
+                label="Expert"
+                source="expert_ids"
+                reference="user-collection"
+                filter={{ role: 'expert' }}
+                sort={{ field: 'email', order: 'ASC' }}
+                perPage={200}
+                allowEmpty
+              >
+                <SelectArrayInput optionText="email" />
+              </ReferenceArrayInput>
+            ) : (
+              <TextField source="expert_ids" label="Evaluator" />
+            )}
             {this.props.permissions === 'administrator' && (
               <SelectInput
                 label="fields_name.status"
@@ -181,18 +182,16 @@ export class LearningObjectEdit extends React.Component {
                 ]}
               />
             )}
-            <TextInput source="category" label="fields_name.category"/>
-            <DateField showTime source="created" label="fields_name.creation_date"/>
-            <DateField showTime source="modified" label="fields_name.modified_date"/>
-            <FunctionField label="fields_name.deleted" render={record => record.deleted ? 'Yes' : 'No'} />
-            <FunctionField label="fields_name.evaluated" render={record => record.evaluated ? 'Yes' : 'No'} />
-            <TextField source="file_metadata.name" label="fields_name.file_name"/>
+            <TextInput source="category" label="fields_name.category" />
+            <DateField showTime source="created" label="fields_name.creation_date" />
+            <DateField showTime source="modified" label="fields_name.modified_date" />
+            <FunctionField label="fields_name.deleted" render={record => (record.deleted ? 'Yes' : 'No')} />
+            <FunctionField label="fields_name.evaluated" render={record => (record.evaluated ? 'Yes' : 'No')} />
+            <TextField source="file_metadata.name" label="fields_name.file_name" />
           </FormTab>
-          <FormTab label="metadata">
-            {this.state.form}
-          </FormTab>
+          <FormTab label="metadata">{this.state.form}</FormTab>
         </TabbedForm>
       </Edit>
-    )
+    );
   }
 }

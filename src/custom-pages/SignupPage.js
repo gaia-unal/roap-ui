@@ -20,36 +20,28 @@ import { withFormik } from 'formik';
 import { object, string, ref } from 'yup';
 
 const user = new userService();
-const resendEmailValidation =  (message, sendEmail, email) => (
-  <Button
-    key="resend"
-    variant="outlined"
-    size="small"
-    onClick={ () =>  sendEmail(email)}>
-    { message }
+const resendEmailValidation = (message, sendEmail, email) => (
+  <Button key="resend" variant="outlined" size="small" onClick={() => sendEmail(email)}>
+    {message}
   </Button>
 );
 
 const userExists = (message, push) => (
-  <Button
-    key="goToLogin"
-    variant="outlined"
-    size="small"
-    onClick={ () => push('/login')}>
-    { message }  
+  <Button key="goToLogin" variant="outlined" size="small" onClick={() => push('/login')}>
+    {message}
   </Button>
-)
+);
 
 class SignupPage extends Component {
   state = {
-    showErrorMessage: ''
+    showErrorMessage: '',
   };
 
-  submit = (credentials) => {
+  submit = credentials => {
     const { translate } = this.props;
     const resend = translate('action.resend');
     const messageWelcome = translate('signUp.welcome');
-    const messageUserExists = translate('signUp.userExists')
+    const messageUserExists = translate('signUp.userExists');
     const login = translate('ra.auth.sign_in');
 
     user.post(
@@ -57,64 +49,70 @@ class SignupPage extends Component {
       credentials.password,
       credentials.name,
       credentials.requestedRole,
-      res => user.sendUserEmail(
-        credentials.email,
-        res => {
-          this.props.push('/learning-object-collection')
-          openNotification({
-            message: messageWelcome,
-            variant: 'success',
-            duration: null,
-            action: resendEmailValidation(resend, (email) => { user.sendUserEmail(email, () => {}, () => {}) }, credentials.email)
-          });
-        },
-        err => console.log(err)
-      ),
+      res =>
+        user.sendUserEmail(
+          credentials.email,
+          res => {
+            this.props.push('/learning-object-collection');
+            openNotification({
+              message: messageWelcome,
+              variant: 'success',
+              duration: null,
+              action: resendEmailValidation(
+                resend,
+                email => {
+                  user.sendUserEmail(email, () => {}, () => {});
+                },
+                credentials.email
+              ),
+            });
+          },
+          err => console.log(err)
+        ),
       err => {
-        if(err.status === 409) {
+        if (err.status === 409) {
           openNotification({
             message: messageUserExists,
             variant: 'error',
             duration: null,
-            action: userExists(login, this.props.push)
+            action: userExists(login, this.props.push),
           });
         } else {
-          this.setState({ showErrorMessage: JSON.parse(err.response.text) })
+          this.setState({ showErrorMessage: JSON.parse(err.response.text) });
         }
       }
     );
-  }
+  };
 
   change = (name, e) => {
     e.persist();
     this.props.handleChange(e);
-    this.props.setFieldTouched(name, true, false)
-  }
+    this.props.setFieldTouched(name, true, false);
+  };
 
   render() {
-    const {
-      values: { email, password, passwordConfirm, name },
-      errors,
-      touched,
-      isValid,
-      translate
-    } = this.props;
+    const { values, errors, touched, isValid, translate } = this.props;
 
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        flexDirection: 'column'
-      }}>
-        <Notification/>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          flexDirection: 'column',
+        }}
+      >
+        <Notification />
         <Dialog
           open={this.state.showErrorMessage !== ''}
-          onClose={() => this.setState({showErrorMessage: ''})}
-          aria-labelledby="responsive-dialog-title"> 
+          onClose={() => this.setState({ showErrorMessage: '' })}
+          aria-labelledby="responsive-dialog-title"
+        >
           <DialogTitle id="responsive-dialog-title">Error</DialogTitle>
-          <DialogContentText><ReactJson src={this.state.showErrorMessage} /></DialogContentText>
+          <DialogContentText>
+            <ReactJson src={this.state.showErrorMessage} />
+          </DialogContentText>
           {/*"TODO: add forgot password in case of account is validated by admin, or add resend activation Email"*/}
         </Dialog>
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
@@ -123,7 +121,7 @@ class SignupPage extends Component {
             name="email"
             type="email"
             autoComplete="current-email"
-            value={email}
+            value={values.email}
             onChange={this.change.bind(null, 'email')}
             helperText={touched.email ? translate(errors.email) : ''}
             error={touched.email && Boolean(errors.email)}
@@ -131,10 +129,10 @@ class SignupPage extends Component {
             required
           />
           <TextField
-            label={ translate('user.name') }
+            label={translate('user.name')}
             name="name"
             type="text"
-            value={name}
+            value={values.name}
             autoComplete="current-text"
             onChange={this.change.bind(null, 'name')}
             helperText={touched.name ? translate(errors.name) : ''}
@@ -142,10 +140,10 @@ class SignupPage extends Component {
             required
           />
           <TextField
-            label={ translate('ra.auth.password') }
+            label={translate('ra.auth.password')}
             name="password"
             type="password"
-            value={password}
+            value={values.password}
             autoComplete="current-password"
             onChange={this.change.bind(null, 'password')}
             helperText={touched.password ? translate(errors.password) : ''}
@@ -153,10 +151,10 @@ class SignupPage extends Component {
             required
           />
           <TextField
-            label={ translate('ra.auth.password') }
+            label={translate('ra.auth.password')}
             name="passwordConfirm"
             type="password"
-            value={passwordConfirm}
+            value={values.passwordConfirm}
             autoComplete="current-password"
             onChange={this.change.bind(null, 'passwordConfirm')}
             helperText={touched.passwordConfirm ? translate(errors.passwordConfirm) : ''}
@@ -165,38 +163,43 @@ class SignupPage extends Component {
           />
           <Button
             variant="outlined"
-            style={{marginTop: '10px'}}
+            style={{ marginTop: '10px' }}
             color="primary"
             disabled={!isValid}
-            onClick={() => this.submit({...this.props.values, role: 'creator'})}
+            onClick={() => this.submit({ ...values, role: 'creator' })}
           >
-            { translate('auth.sign_up') }
+            {translate('auth.sign_up')}
           </Button>
         </Paper>
       </div>
     );
   }
-};
+}
 
-
-export default connect(null, { push })(translate(withFormik({ 
-  mapPropsToValues: () => ({
-    email: '',
-    name: '',
-    password: '',
-    passwordConfirm: ''
-  }), 
-  validationSchema: object({
-    email: string('')
-    .email('errorMessages.email')
-    .required('errorMessages.required'),
-    name: string('')
-    .required('errorMessages.required'),
-    password: string('')
-    .min(8, 'errorMessages.passwordLen')
-    .required('errorMessages.required'),
-    passwordConfirm: string('')
-    .oneOf([ref('password'), null], 'errorMessages.passwordConfirm')
-    .required('errorMessages.required')
-  }
-  )})(SignupPage)));
+export default connect(
+  null,
+  { push }
+)(
+  translate(
+    withFormik({
+      mapPropsToValues: () => ({
+        email: '',
+        name: '',
+        password: '',
+        passwordConfirm: '',
+      }),
+      validationSchema: object({
+        email: string('')
+          .email('errorMessages.email')
+          .required('errorMessages.required'),
+        name: string('').required('errorMessages.required'),
+        password: string('')
+          .min(8, 'errorMessages.passwordLen')
+          .required('errorMessages.required'),
+        passwordConfirm: string('')
+          .oneOf([ref('password'), null], 'errorMessages.passwordConfirm')
+          .required('errorMessages.required'),
+      }),
+    })(SignupPage)
+  )
+);

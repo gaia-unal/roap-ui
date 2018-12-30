@@ -10,18 +10,19 @@ import Divider from '@material-ui/core/Divider';
 
 const Menu = ({ resources, onMenuClick, logout }) => {
   // const user = decodeJwt(localStorage.getItem('token'));
-  return <div>
-    {resources.map((resource, id) => (
-      <MenuItemLink
-        key={id}
-        to={`/${resource.name}`}
-        primaryText={resource.options.label}
-        leftIcon={createElement(resource.icon)}
-        onClick={onMenuClick}
-      />
-    ))}
-    <Divider />
-    {/*user.status !== 'accepted' &&
+  return (
+    <div>
+      {resources.map((resource, id) => (
+        <MenuItemLink
+          key={id}
+          to={`/${resource.name}`}
+          primaryText={resource.options.label}
+          leftIcon={createElement(resource.icon)}
+          onClick={onMenuClick}
+        />
+      ))}
+      <Divider />
+      {/*user.status !== 'accepted' &&
       <React.Fragment>
         <MenuItemLink
           to={'/login'}
@@ -31,8 +32,9 @@ const Menu = ({ resources, onMenuClick, logout }) => {
         />
       </React.Fragment>
     */}
-    <Responsive xsmall={logout} />
-  </div>
+      <Responsive xsmall={logout} />
+    </div>
+  );
 };
 
 const mapStateToProps = state => ({

@@ -1,14 +1,5 @@
 import { stringify } from 'query-string';
-import {
-  fetchUtils,
-  GET_LIST,
-  GET_ONE,
-  GET_MANY,
-  GET_MANY_REFERENCE,
-  CREATE,
-  UPDATE,
-  DELETE,
-} from 'react-admin';
+import { fetchUtils, GET_LIST, GET_ONE, GET_MANY, GET_MANY_REFERENCE, CREATE, UPDATE, DELETE } from 'react-admin';
 
 /**
  * Maps react-admin queries to a simple REST API
@@ -37,16 +28,13 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
       case GET_LIST: {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
-        if (params.filter && params.filter.advanced_filters){
-          params.filter = {...params.filter.advanced_filters, ...params.filter};
+        if (params.filter && params.filter.advanced_filters) {
+          params.filter = { ...params.filter.advanced_filters, ...params.filter };
           delete params.filter['advanced_filters'];
         }
         const query = {
           sort: JSON.stringify([field, order]),
-          range: JSON.stringify([
-            (page - 1) * perPage,
-            page * perPage - 1,
-          ]),
+          range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
           filter: JSON.stringify(params.filter),
         };
         url = `${apiUrl}/${resource}?${stringify(query)}`;
@@ -67,10 +55,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
         const { field, order } = params.sort;
         const query = {
           sort: JSON.stringify([field, order]),
-          range: JSON.stringify([
-            (page - 1) * perPage,
-            page * perPage - 1,
-          ]),
+          range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
           filter: JSON.stringify({
             ...params.filter,
             [params.target]: params.id,
@@ -129,7 +114,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
       case CREATE:
         return { data: { ...params.data, id: json.id } };
       default:
-        if(json.data){
+        if (json.data) {
           return json;
         } else {
           return { data: json };
@@ -144,20 +129,14 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => {
    * @returns {Promise} the Promise for a data response
    */
   return (type, resource, params) => {
-    const { url, options } = convertDataRequestToHTTP(
-      type,
-      resource,
-      params
-    );
+    const { url, options } = convertDataRequestToHTTP(type, resource, params);
 
     if (!options.headers) {
-        options.headers = new Headers({ Accept: 'application/json' });
+      options.headers = new Headers({ Accept: 'application/json' });
     }
     const token = localStorage.getItem('token');
     options.headers.set('Authorization', token);
 
-    return httpClient(url, options).then(response =>
-      convertHTTPResponse(response, type, resource, params)
-    );
+    return httpClient(url, options).then(response => convertHTTPResponse(response, type, resource, params));
   };
 };

@@ -22,7 +22,7 @@ const notificationStyles = theme => ({
   },
   warning: {
     backgroundColor: amber[700],
-  }
+  },
 });
 
 class Notification extends React.Component {
@@ -30,9 +30,9 @@ class Notification extends React.Component {
     open: false,
     anchorOrigin: {
       vertical: 'bottom',
-      horizontal: 'center'
+      horizontal: 'center',
     },
-    action: []
+    action: [],
   };
 
   handleOpenClick = ({ variant, message, anchorOrigin, action }) => {
@@ -41,7 +41,7 @@ class Notification extends React.Component {
       variant: variant,
       message: message,
       anchorOrigin: anchorOrigin,
-      action: action
+      action: action,
     });
   };
 
@@ -58,28 +58,22 @@ class Notification extends React.Component {
     return (
       <div>
         <Snackbar
-          open={ this.state.open }
+          open={this.state.open}
           style={{ whiteSpace: 'nowrap' }}
-          autoHideDuration={ this.state.autoHideDuration }
-          anchorOrigin={ this.state.anchorOrigin }>
+          autoHideDuration={this.state.autoHideDuration}
+          anchorOrigin={this.state.anchorOrigin}
+        >
           <SnackbarContent
             className={classNames(classes[this.state.variant])}
             aria-describedby="client-snackbar"
-            message={
-              <span id="client-snackbar">
-                {this.state.message}
-              </span>
-            }
+            message={<span id="client-snackbar">{this.state.message}</span>}
             action={[
-              this.state.action,      
-              <IconButton
-                key="close"
-                aria-label="Close"
-                color="inherit"
-                onClick={this.handleCloseClick}>
-                <CloseIcon/>
-              </IconButton>
-            ]}/>
+              this.state.action,
+              <IconButton key="close" aria-label="Close" color="inherit" onClick={this.handleCloseClick}>
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
         </Snackbar>
       </div>
     );
@@ -87,7 +81,7 @@ class Notification extends React.Component {
 }
 
 export function openNotification(preferences) {
-  openNotificationFn(preferences)
-} 
+  openNotificationFn(preferences);
+}
 
 export default withStyles(notificationStyles)(Notification);

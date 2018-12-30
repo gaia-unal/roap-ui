@@ -1,7 +1,7 @@
 // in src/App.js
 import React from 'react';
 
-import LearningObjectList  from './learning-object/LearningObjectList';
+import LearningObjectList from './learning-object/LearningObjectList';
 import LearningObjectShow from './learning-object/LearningObjectShow';
 import { LearningObjectEdit } from './learning-object/LearningObjectEdit';
 import { LearningObjectCreate } from './learning-object/LearningObjectCreate';
@@ -31,21 +31,21 @@ import Book from '@material-ui/icons/Book';
 
 import LogoutButton from './LogoutButton';
 
-const BACKEND_HOST = `${process.env.NODE_ENV === 'production' ? '/v1' : 'http://localhost:8081/v1'}`
+const BACKEND_HOST = `${process.env.NODE_ENV === 'production' ? '/v1' : 'http://localhost:8081/v1'}`;
 
 const uploadCapableDataProvider = addUploadFeature(dataProvider(BACKEND_HOST));
 
 const messages = {
   es: spanishMessages,
   en: englishMessages,
-  pt: portugueseMessages
+  pt: portugueseMessages,
 };
 
 const validLocale = {
   pt_BR: 'pt',
   es_CO: 'es',
-  en_US: 'en'
-}
+  en_US: 'en',
+};
 
 const i18nProvider = locale => messages[locale];
 const cookies = new Cookies();
@@ -58,7 +58,7 @@ const App = () => (
     logoutButton={LogoutButton}
     customRoutes={customRoutes}
     appLayout={Layout}
-    title='Roap'
+    title="Roap"
     locale={validLocale[cookies.get('user_lang')] || 'es'}
     i18nProvider={i18nProvider}
   >
@@ -67,18 +67,22 @@ const App = () => (
         name="learning-object-collection"
         list={LearningObjectList}
         show={LearningObjectShow}
-        {...(localStorage.getItem('role') !== 'external' ? {create: LearningObjectCreate, edit: LearningObjectEdit} : {})}
+        {...(localStorage.getItem('role') !== 'external'
+          ? { create: LearningObjectCreate, edit: LearningObjectEdit }
+          : {})}
         options={{ label: 'lo.all' }}
         icon={Book}
       />,
-      permissions === 'administrator' && <Resource
-        name="user-collection"
-        list={UserList}
-        edit={UserEdit}
-        create={UserCreate}
-        options={{ label: 'auth.users' }}
-        icon={Book}
-      />
+      permissions === 'administrator' && (
+        <Resource
+          name="user-collection"
+          list={UserList}
+          edit={UserEdit}
+          create={UserCreate}
+          options={{ label: 'auth.users' }}
+          icon={Book}
+        />
+      ),
     ]}
   </Admin>
 );

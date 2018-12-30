@@ -12,5 +12,5 @@ export default [
   <Route exact path="/signup" component={SignupPage} />,
   <Route exact path="/login" component={LoginPage} />,
   <Route exact path="/user-validate/:token" component={UserValidationHandler} />,
-  <Route exact path="/recover-password/:token" component={RecoverPasswordHandler} />
+  <Route exact path="/recover-password/:token" component={RecoverPasswordHandler} />,
 ];

@@ -4,41 +4,45 @@ import { connect } from 'react-redux';
 import userService from '../custom-services/user';
 
 import Dialog from '@material-ui/core/Dialog';
-// import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import ReactJson from 'react-json-view'
+import ReactJson from 'react-json-view';
 
 import { push } from 'react-router-redux';
 
 const user = new userService();
 
 class UserValidationHandler extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {error: null};
+    this.state = { error: null };
   }
 
-  componentWillMount(){
+  componentWillMount() {
     user.validateAccount(
       this.props.match.params.token,
       res => this.props.push('/login'),
-      err => this.setState({error: JSON.parse(err.response.text)}),
-    )
+      err => this.setState({ error: JSON.parse(err.response.text) })
+    );
   }
 
   render() {
     // TODO: fix error handle
     return (
       <div>
-        <Dialog open={this.state.error} onClose={() => this.setState({redirectToRoot: true, error: null})}>
+        <Dialog open={this.state.error} onClose={() => this.setState({ redirectToRoot: true, error: null })}>
           <DialogTitle>Error</DialogTitle>
-          <DialogContentText><ReactJson src={this.state.error}/></DialogContentText>
+          <DialogContentText>
+            <ReactJson src={this.state.error} />
+          </DialogContentText>
         </Dialog>
       </div>
     );
   }
-};
+}
 
-export default connect(undefined, { push })(UserValidationHandler);
+export default connect(
+  undefined,
+  { push }
+)(UserValidationHandler);
