@@ -1,7 +1,10 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
-import { Show, TabbedShowLayout, TextField, DateField, Tab, translate } from 'react-admin';
+import {
+  Show, TabbedShowLayout, TextField, DateField, Tab, translate,
+  CardActions, EditButton
+} from 'react-admin';
 import ReactJson from 'react-json-view';
 import _ from 'lodash';
 import Rating from 'react-rating';
@@ -84,11 +87,26 @@ const RecordRating = ({ record, userRole, userId, showNotification }) => {
   );
 };
 
+const LearningObjectShowActions = ({ basePath, data, resource, userRole, userId }) => (
+    <CardActions>
+        {
+          (userRole === 'administrator' || userId === (data || {}).creator_id) && (
+            <EditButton basePath={basePath} record={data} />
+          )
+        }
+    </CardActions>
+);
+
 class LearningObjectShow extends React.Component {
   render() {
     let user = decodeJwt(localStorage.getItem('token'));
     return (
-      <Show {...this.props} title={<LearningObjectTitle />} style={{ padding: 0 }}>
+      <Show
+        {...this.props}
+        title={<LearningObjectTitle />}
+        style={{ padding: 0 }}
+        actions={<LearningObjectShowActions {...this.props} userRole={user.role} userId={user._id}/>}
+      >
         <TabbedShowLayout>
           <Tab label="tabs_name.content">
             <LearningObjectFrame />
