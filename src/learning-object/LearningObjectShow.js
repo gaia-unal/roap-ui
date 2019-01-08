@@ -11,10 +11,64 @@ import Rating from 'react-rating';
 import decodeJwt from 'jwt-decode';
 import { connect } from 'react-redux';
 import { showNotification } from 'react-admin';
+import Button from '@material-ui/core/Button';
+import CloudDownload from '@material-ui/icons/CloudDownload';
 
 import LearningObjectService from '../custom-services/learningObject';
 
 var learningObjectService = new LearningObjectService();
+
+const supportedMicrosoftMimetypes = [
+  "application/msword",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+  "application/vnd.ms-word.document.macroEnabled.12",
+  "application/vnd.ms-word.template.macroEnabled.12",
+  "application/vnd.ms-excel",
+  "application/vnd.ms-excel",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+  "application/vnd.ms-excel.sheet.macroEnabled.12",
+  "application/vnd.ms-excel.template.macroEnabled.12",
+  "application/vnd.ms-excel.addin.macroEnabled.12",
+  "application/vnd.ms-excel.sheet.binary.macroEnabled.12",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.openxmlformats-officedocument.presentationml.template",
+  "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+  "application/vnd.ms-powerpoint.addin.macroEnabled.12",
+  "application/vnd.ms-powerpoint.presentation.macroEnabled.12",
+  "application/vnd.ms-powerpoint.template.macroEnabled.12",
+  "application/vnd.ms-powerpoint.slideshow.macroEnabled.12",
+];
+
+const supportedMediaMimetypes = [
+  "video/webm",
+  "video/mp4",
+  "video/ogg",
+  "audio/webm",
+  "audio/ogg",
+  "audio/mpeg",
+  "audio/wave",
+  "audio/wav",
+  "audio/x-wav",
+  "audio/x-pn-wav",
+  "audio/flac",
+  "audio/x-flac",
+  "image/gif",
+  "image/png",
+  "image/jpeg",
+  "image/bmp",
+  "image/webp",
+  "image/vnd.microsoft.icon",
+  "application/zip", //Special mimetype for support html content
+  "application/pdf",
+]
 
 const LearningObjectFrame = ({ record }) => {
   const backendHost = `${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8081'}`;
@@ -23,7 +77,60 @@ const LearningObjectFrame = ({ record }) => {
       ? `${record.file_metadata._id}/index.html`
       : record.file_metadata._id + record.file_metadata.extension
   }`;
-  return <iframe src={`${url}`} style={{ width: '100%', height: '80vh' }} title={record.metadata.general.title} />;
+  const mime_type = record.file_metadata.mime_type;
+  if (supportedMediaMimetypes.indexOf(record.file_metadata.mime_type) !== -1){
+    switch(mime_type.split('/')[0]) {
+      case 'video':
+        return (
+          <video
+            controls
+            src={url}
+            style={{ width: '100%', height: '80vh' }}
+          />
+        );
+      case 'audio':
+        return (
+          <audio
+            controls
+            src={url}
+            style={{ width: '100%', height: '80vh' }}
+          />
+        );
+      case 'image':
+        return (
+          <img
+            src={url}
+            style={{ width: '100%', height: '80vh' }}
+            alt={record.metadata.general.title}
+          />
+        );
+      default:
+        return (
+          <iframe
+            src={url}
+            style={{ width: '100%', height: '80vh' }}
+            title={record.metadata.general.title}
+          />
+        );
+      }
+  } else if (supportedMicrosoftMimetypes.indexOf(mime_type) !== -1){
+    const microsoftApplicationUrl = `https://view.officeapps.live.com/op/view.aspx?src=${url}`;
+    return (
+      <iframe
+        src={microsoftApplicationUrl}
+        style={{ width: '100%', height: '80vh' }}
+        title={record.metadata.general.title}
+      />
+    );
+  } else {
+    return (
+      <img
+        src={url}
+        style={{ width: '100%', height: '80vh' }}
+        alt={"Not supported file mime type, please report it to the page Admin"}
+      />
+    );
+  }
 };
 
 const LearningObjectTitle = ({ record }) => (
@@ -94,6 +201,32 @@ const LearningObjectShowActions = ({ basePath, data, resource, userRole, userId 
             <EditButton basePath={basePath} record={data} />
           )
         }
+        {
+          data && data.file_metadata && data.file_metadata.extension === '.zip' && (
+            <Button
+              style={{ color: '#5300B7' }}
+              onClick={
+                (e) => {
+                  e.preventDefault();
+                  const backendHost = `${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8081'}`;
+                  const url = `${backendHost}/learning-object-file-renderer/${
+                    data && data.file_metadata && (data.file_metadata._id + data.file_metadata.extension)
+                  }`;
+                  const fakeLink = document.createElement('a');
+                  document.body.appendChild(fakeLink);
+                  fakeLink.setAttribute('href', url);
+                  fakeLink.setAttribute(
+                    'download',
+                    data && data.file_metadata && data.file_metadata.name
+                  );
+                  fakeLink.click();
+                }
+              }
+            >
+              <CloudDownload />
+            </Button>
+          )
+        }
     </CardActions>
 );
 
@@ -105,7 +238,7 @@ class LearningObjectShow extends React.Component {
         {...this.props}
         title={<LearningObjectTitle />}
         style={{ padding: 0 }}
-        actions={<LearningObjectShowActions {...this.props} userRole={user.role} userId={user._id}/>}
+        actions={<LearningObjectShowActions userRole={user.role} userId={user._id}/>}
       >
         <TabbedShowLayout>
           <Tab label="tabs_name.content">
