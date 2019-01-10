@@ -62,7 +62,7 @@ LearningObjectGird.defaultProps = {
 
 const LearningObjectFilter = ({ translate, permissions, user, ...props }) => (
   <Filter {...props}>
-    <TextInput label={translate('lo.search')} style={{ width: 225 }} source="q" alwaysOn />
+    <TextInput label={translate('lo.search')} id="inputSearchLo" style={{ width: 225 }} source="q" alwaysOn />
     {permissions === 'administrator' && (
       <SelectInput
         alwaysOn

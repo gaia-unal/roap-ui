@@ -205,6 +205,7 @@ const LearningObjectShowActions = ({ basePath, data, resource, userRole, userId 
           data && data.file_metadata && data.file_metadata.extension === '.zip' && (
             <Button
               style={{ color: '#5300B7' }}
+              aria-label="Download learning object"
               onClick={
                 (e) => {
                   e.preventDefault();
@@ -224,7 +225,9 @@ const LearningObjectShowActions = ({ basePath, data, resource, userRole, userId 
               }
             >
               <CloudDownload />
+              
             </Button>
+            
           )
         }
     </CardActions>
