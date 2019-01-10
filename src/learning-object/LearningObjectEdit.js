@@ -128,11 +128,11 @@ export class LearningObjectEdit extends React.Component {
           );
         }
       case 'list':
-        return <Field key={key} name={key} component={renderChipList} label={title} id={key}/>;
+        return <Field key={key} name={key} component={renderChipList} label={title} id={key} />;
       case 'date':
         return (
           <React.Fragment key={key}>
-            <DateInput label={title} source={key} defaultValue={new Date().toISOString().slice(0, 10)} id={key}/>
+            <DateInput label={title} source={key} defaultValue={new Date().toISOString().slice(0, 10)} id={key} />
             <br />
           </React.Fragment>
         );
