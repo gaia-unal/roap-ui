@@ -26,6 +26,7 @@ const renderChipList = ({ input, label, meta: { touched, error }, ...custom }) =
       <ChipInput
         value={input.value}
         label={label}
+        id={label}
         onAdd={chip => {
           return input.onChange([...input.value, chip]);
         }}
@@ -102,6 +103,7 @@ export class LearningObjectEdit extends React.Component {
               <SelectInput
                 source={key}
                 label={title}
+                id={key}
                 defaultValue={[{}]}
                 choices={choices.map(e => {
                   return { id: e, name: e };
@@ -117,6 +119,7 @@ export class LearningObjectEdit extends React.Component {
                 label={title}
                 source={key}
                 key={title}
+                id={key}
                 defaultValue={''}
                 style={{ background: required ? '#97CAFF' : 'white' }}
               />
@@ -125,11 +128,11 @@ export class LearningObjectEdit extends React.Component {
           );
         }
       case 'list':
-        return <Field key={key} name={key} component={renderChipList} label={title} />;
+        return <Field key={key} name={key} component={renderChipList} label={title} id={key} />;
       case 'date':
         return (
           <React.Fragment key={key}>
-            <DateInput label={title} source={key} defaultValue={new Date().toISOString().slice(0, 10)} />
+            <DateInput label={title} source={key} defaultValue={new Date().toISOString().slice(0, 10)} id={key} />
             <br />
           </React.Fragment>
         );
