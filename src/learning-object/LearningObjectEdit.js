@@ -189,7 +189,7 @@ export class LearningObjectEdit extends React.Component {
             <TextInput source="category" label="fields_name.category" />
             <DateField showTime source="created" label="fields_name.creation_date" />
             <DateField showTime source="modified" label="fields_name.modified_date" />
-            <BooleanInput label="fields_name.deleted" source="deleted" />
+            {this.props.permissions === 'administrator' && <BooleanInput label="fields_name.deleted" source="deleted" />}
             <FunctionField label="fields_name.evaluated" render={record => (record.evaluated ? 'Yes' : 'No')} />
             <TextField source="file_metadata.name" label="fields_name.file_name" />
           </FormTab>
