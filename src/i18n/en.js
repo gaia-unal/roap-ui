@@ -32,7 +32,7 @@ export default {
     description: 'Description',
     creation_date: 'Creation date',
     modified_date: 'Modified date',
-    category: 'Category',
+    collection: 'Collection',
     keywords: 'Keywords',
     related_files: 'Arquivos Relacionados',
     deleted: 'Deleted',

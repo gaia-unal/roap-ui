@@ -31,7 +31,7 @@ export default {
     description: 'Descripción',
     creation_date: 'Fecha de creación',
     modified_date: 'Fecha de modificación',
-    category: 'Categoría',
+    collection: 'Colección',
     keywords: 'Palabras clave',
     related_files: 'Archivos relacionados',
     deleted: 'Eliminado',

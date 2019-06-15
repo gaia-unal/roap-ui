@@ -31,7 +31,7 @@ export default {
     description: 'Descrição',
     creation_date: 'Data de criação',
     modified_date: 'Data da modificação',
-    category: 'Categoria',
+    collection: 'Coleta',
     keywords: 'Palavras-chave',
     deleted: 'Eliminado',
     evaluated: 'Avaliado',

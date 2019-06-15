@@ -15,6 +15,7 @@ import {
   BooleanInput
 } from 'react-admin';
 import SchemaService from '../custom-services/schema';
+import CollectionService from '../custom-services/collection';
 
 import { Field } from 'redux-form';
 
@@ -44,11 +45,13 @@ export class LearningObjectEdit extends React.Component {
   constructor(props) {
     super(props);
     this.service = new SchemaService();
+    this.collection_service = new CollectionService();
     this.state = {
       fetchingSchema: false,
       form: null,
       error: null,
       value: 0,
+      collections: []
     };
   }
 
@@ -152,6 +155,15 @@ export class LearningObjectEdit extends React.Component {
         error => this.setState({ fetchingSchema: false, error })
       );
     });
+
+    this.setState({ fetchingCollections: true }, () => {
+      this.collection_service.getCollections(
+        collections => {
+          this.setState({ collections })
+        },
+        error => this.setState({ fetchingCollections: false, error })
+      )
+    })
   }
 
   render() {
@@ -172,8 +184,8 @@ export class LearningObjectEdit extends React.Component {
                 <SelectArrayInput optionText="email" />
               </ReferenceArrayInput>
             ) : (
-              <TextField source="expert_ids" label="Evaluator" />
-            )}
+                <TextField source="expert_ids" label="Evaluator" />
+              )}
             {this.props.permissions === 'administrator' && (
               <SelectInput
                 label="fields_name.status"
@@ -186,7 +198,10 @@ export class LearningObjectEdit extends React.Component {
                 ]}
               />
             )}
-            <TextInput source="category" label="fields_name.category" />
+            <SelectInput
+              label="fields_name.collection"
+              source="collections"
+              choices={this.state.collections} />
             <DateField showTime source="created" label="fields_name.creation_date" />
             <DateField showTime source="modified" label="fields_name.modified_date" />
             {this.props.permissions === 'administrator' && <BooleanInput label="fields_name.deleted" source="deleted" />}
