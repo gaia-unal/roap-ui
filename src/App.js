@@ -10,6 +10,8 @@ import { UserList } from './user/UserList';
 import { UserCreate } from './user/UserCreate';
 import { UserEdit } from './user/UserEdit';
 
+import { CollectionList } from './collection/CollectionList';
+
 import { Admin, Resource } from 'react-admin';
 import englishMessages from './i18n/en';
 import spanishMessages from './i18n/es';
@@ -83,6 +85,12 @@ const App = () => (
           icon={Book}
         />
       ),
+      <Resource
+        name="collection"
+        list={CollectionList}
+        options={{ label: 'Colecciones' }}
+        icon={Book}
+      />
     ]}
   </Admin>
 );

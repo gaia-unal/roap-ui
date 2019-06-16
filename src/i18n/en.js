@@ -87,4 +87,10 @@ export default {
     required: 'This field is required',
     passwordConfirm: 'Passwords do not match',
   },
+  collections: {
+    name: 'Name',
+    collections: 'Collections',
+    lo_quantity: 'LOs quantity',
+    sc_quantity: 'Sub collections quantity'
+  }
 };

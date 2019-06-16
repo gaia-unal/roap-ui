@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  TextInput,
   LongTextInput,
   TabbedForm,
   FormTab,
@@ -48,10 +47,13 @@ export class LearningObjectEdit extends React.Component {
     this.collection_service = new CollectionService();
     this.state = {
       fetchingSchema: false,
+      fetchingCollections: false,
+      fetchingSubCollections: false,
       form: null,
       error: null,
       value: 0,
-      collections: []
+      collections: [],
+      subCollections: []
     };
   }
 
@@ -145,6 +147,16 @@ export class LearningObjectEdit extends React.Component {
     }
   }
 
+  getSubCollections(collectionId) {
+    console.log(collectionId)
+    /*this.collection_service.getSubCollections(collectionId,
+      subCollections => {
+        this.setState({ subCollections })
+      },
+      error => this.setState({ fetchingSubCollections: false, error })
+    )*/
+  }
+
   componentWillMount() {
     this.setState({ fetchingSchema: true }, () => {
       this.service.getSchema(
@@ -198,10 +210,13 @@ export class LearningObjectEdit extends React.Component {
                 ]}
               />
             )}
-            <SelectInput
-              label="fields_name.collection"
-              source="collections"
-              choices={this.state.collections} />
+            <ReferenceArrayInput
+                label="fields_name.collection"
+                source=""
+                reference="collection"
+                sort={{ field: 'lo_quantity', order: 'DSC' }}
+                perPage={200}
+            />
             <DateField showTime source="created" label="fields_name.creation_date" />
             <DateField showTime source="modified" label="fields_name.modified_date" />
             {this.props.permissions === 'administrator' && <BooleanInput label="fields_name.deleted" source="deleted" />}
