@@ -72,6 +72,17 @@ class CollectionCreate extends Component {
             name: evt.target.value
         });
     }
+    
+    updateNameSubCollection(id, evt) {
+        const subCollectionsFields = this.state.sub_collections;
+        for(var i = 0; i <= subCollectionsFields.length; i++) {
+            if (subCollectionsFields[i].id === id) {
+                subCollectionsFields[i].name = evt.target.value;
+                break;
+            }
+        }
+        this.setState({ sub_collections: subCollectionsFields })
+    }
     render() {
         const { values, errors, touched, isValid, translate } = this.props;
 
@@ -91,10 +102,11 @@ class CollectionCreate extends Component {
                     {this.state.sub_collections.map(({ name, id }) => {
                         return (<div key={`div${id}`}>
                             <TextField
-                                label={translate('collections.name')}
+                                label={translate('collections.name_sub_collection')}
                                 name="name"
                                 type="text"
                                 value={name}
+                                onChange={evt => this.updateNameSubCollection(id, evt)}
                                 autoFocus
                                 required
                                 key={`textField${id}`}
@@ -107,7 +119,7 @@ class CollectionCreate extends Component {
                                     key={`deleteButton${id}`}
                                     onClick={() => this.removeSubCollection(id)}
                                 >
-                                    Eliminar subcolección
+                                    { translate('collections.delete_sub_collection') }
                                 </Button>
                             }
                         </div>)
@@ -118,7 +130,7 @@ class CollectionCreate extends Component {
                         color="primary"
                         onClick={() => this.addSubCollection()}
                     >
-                        Agregar subcolección
+                        { translate('collections.add_sub_collection') }
                     </Button>
                     <Button
                         variant="outlined"
@@ -126,7 +138,7 @@ class CollectionCreate extends Component {
                         color="primary"
                         onClick={() => this.submit()}
                     >
-                        Crear colección
+                        { translate('collections.create_collection') }
                     </Button>
                 </Paper>
             </div>

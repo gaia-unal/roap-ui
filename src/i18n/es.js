@@ -87,4 +87,14 @@ export default {
     required: 'Campo requerido.',
     passwordConfirm: 'Las contraseñas no coinciden',
   },
+  collections: {
+    name: 'Nombre de colección',
+    name_sub_collection: 'Nombre de subcolección',
+    collections: 'Colecciones',
+    lo_quantity: 'Cantidad de OAs',
+    sc_quantity: 'Cantidad de subcolecciones',
+    add_sub_collection: 'Agregar subcolección',
+    delete_sub_collection: 'Eliminar subcolección',
+    create_collection: 'Crear colección'
+  }
 };

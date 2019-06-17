@@ -88,7 +88,7 @@ const App = () => (
       <Resource
         name="collection"
         list={CollectionList}
-        options={{ label: 'Colecciones' }}
+        options={{ label: 'collections.collections' }}
         icon={Book}
       />
     ]}

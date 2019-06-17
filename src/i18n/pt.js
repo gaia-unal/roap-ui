@@ -86,4 +86,14 @@ export default {
     required: 'Este campo é obrigatório',
     passwordConfirm: 'As senhas não coincidem',
   },
+  collections: {
+    name: 'Nome da coleção',
+    name_sub_collection: 'Nome da subcolecção',
+    collections: 'Colecções',
+    lo_quantity: 'Montante de OAs',
+    sc_quantity: 'Número de subcolecções',
+    add_sub_collection: 'Adicionar subcolecção',
+    delete_sub_collection: 'Eliminar subcolecção',
+    create_collection: 'Criar coleção'
+  }
 };

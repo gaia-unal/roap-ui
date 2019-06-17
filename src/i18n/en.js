@@ -88,9 +88,13 @@ export default {
     passwordConfirm: 'Passwords do not match',
   },
   collections: {
-    name: 'Name',
+    name: 'Name collection',
+    name_sub_collection: 'Name subcollection',
     collections: 'Collections',
     lo_quantity: 'LOs quantity',
-    sc_quantity: 'Sub collections quantity'
+    sc_quantity: 'Sub collections quantity',
+    add_sub_collection: 'Add subcollection',
+    delete_sub_collection: 'Remove subcollection',
+    create_collection: 'Create collection'
   }
 };
