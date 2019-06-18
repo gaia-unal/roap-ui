@@ -11,6 +11,7 @@ import { UserCreate } from './user/UserCreate';
 import { UserEdit } from './user/UserEdit';
 
 import { CollectionList } from './collection/CollectionList';
+import { CollectionCreate } from './collection/CollectionCreate';
 
 import { Admin, Resource } from 'react-admin';
 import englishMessages from './i18n/en';
@@ -88,9 +89,11 @@ const App = () => (
       <Resource
         name="collection"
         list={CollectionList}
+        create={CollectionCreate}
         options={{ label: 'collections.collections' }}
         icon={Book}
-      />
+      />,
+      <Resource name="subcollection" />
     ]}
   </Admin>
 );

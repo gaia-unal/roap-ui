@@ -11,10 +11,11 @@ import {
   SelectInput,
   ReferenceArrayInput,
   SelectArrayInput,
-  BooleanInput
+  BooleanInput,
+  ReferenceInput,
+  FormDataConsumer
 } from 'react-admin';
 import SchemaService from '../custom-services/schema';
-import CollectionService from '../custom-services/collection';
 
 import { Field } from 'redux-form';
 
@@ -43,17 +44,13 @@ const renderChipList = ({ input, label, meta: { touched, error }, ...custom }) =
 export class LearningObjectEdit extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.service = new SchemaService();
-    this.collection_service = new CollectionService();
     this.state = {
       fetchingSchema: false,
-      fetchingCollections: false,
-      fetchingSubCollections: false,
       form: null,
       error: null,
       value: 0,
-      collections: [],
-      subCollections: []
     };
   }
 
@@ -147,16 +144,6 @@ export class LearningObjectEdit extends React.Component {
     }
   }
 
-  getSubCollections(collectionId) {
-    console.log(collectionId)
-    /*this.collection_service.getSubCollections(collectionId,
-      subCollections => {
-        this.setState({ subCollections })
-      },
-      error => this.setState({ fetchingSubCollections: false, error })
-    )*/
-  }
-
   componentWillMount() {
     this.setState({ fetchingSchema: true }, () => {
       this.service.getSchema(
@@ -167,15 +154,6 @@ export class LearningObjectEdit extends React.Component {
         error => this.setState({ fetchingSchema: false, error })
       );
     });
-
-    this.setState({ fetchingCollections: true }, () => {
-      this.collection_service.getCollections(
-        collections => {
-          this.setState({ collections })
-        },
-        error => this.setState({ fetchingCollections: false, error })
-      )
-    })
   }
 
   render() {
@@ -192,6 +170,7 @@ export class LearningObjectEdit extends React.Component {
                 sort={{ field: 'email', order: 'ASC' }}
                 perPage={200}
                 allowEmpty
+                onChange={evt => this.changeCollection(evt)}
               >
                 <SelectArrayInput optionText="email" />
               </ReferenceArrayInput>
@@ -210,13 +189,24 @@ export class LearningObjectEdit extends React.Component {
                 ]}
               />
             )}
-            <ReferenceArrayInput
-                label="fields_name.collection"
-                source=""
-                reference="collection"
-                sort={{ field: 'lo_quantity', order: 'DSC' }}
-                perPage={200}
-            />
+            <ReferenceInput
+              label="Colección"
+              source="collection_id"
+              reference="collection"
+              perPage={200}
+              sort={{ field: 'name', order: 'ASC' }}
+              allowEmpty
+            >
+              <SelectInput optionText="name" />
+            </ReferenceInput>
+            <FormDataConsumer>
+              {({ formData, ...rest }) =>
+                formData.collection_id && (
+                  <ReferenceInput label="Subcolección" source="sub_collection_id" reference='subcollection' filter={{ collection_id: formData.collection_id }} perPage={200} allowEmpty {...rest}>
+                    <SelectInput optionText="name" />
+                  </ReferenceInput>)
+              }
+            </FormDataConsumer>
             <DateField showTime source="created" label="fields_name.creation_date" />
             <DateField showTime source="modified" label="fields_name.modified_date" />
             {this.props.permissions === 'administrator' && <BooleanInput label="fields_name.deleted" source="deleted" />}
