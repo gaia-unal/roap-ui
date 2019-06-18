@@ -4,7 +4,8 @@ import {
   DateInput,
   Create,
   SimpleForm,
-  TextInput,
+  ReferenceInput,
+  FormDataConsumer,
   FileInput,
   FileField,
   SelectInput,
@@ -124,7 +125,24 @@ export class LearningObjectCreate extends React.Component {
     return (
       <Create {...this.props}>
         <SimpleForm>
-          <TextInput source="category" label="fields_name.category" multiple={false} />
+        <ReferenceInput
+              label="Colección"
+              source="collection_id"
+              reference="collection"
+              perPage={200}
+              sort={{ field: 'name', order: 'ASC' }}
+              allowEmpty
+            >
+              <SelectInput optionText="name" />
+            </ReferenceInput>
+            <FormDataConsumer>
+              {({ formData, ...rest }) =>
+                formData.collection_id && (
+                  <ReferenceInput label="Subcolección" source="sub_collection_id" reference='subcollection' filter={{ collection_id: formData.collection_id }} perPage={200} allowEmpty {...rest}>
+                    <SelectInput optionText="name" />
+                  </ReferenceInput>)
+              }
+            </FormDataConsumer>
           <FileInput source="files" label="fields_name.related_files">
             <FileField source="src" title="title" />
           </FileInput>

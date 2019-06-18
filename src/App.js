@@ -86,13 +86,15 @@ const App = () => (
           icon={Book}
         />
       ),
-      <Resource
+      permissions === 'administrator' ? (<Resource
         name="collection"
         list={CollectionList}
         create={CollectionCreate}
         options={{ label: 'collections.collections' }}
         icon={Book}
-      />,
+      />) : (
+        <Resource name="collection" />
+      ),
       <Resource name="subcollection" />
     ]}
   </Admin>

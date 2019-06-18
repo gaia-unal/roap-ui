@@ -89,6 +89,7 @@ export default {
   },
   collections: {
     name: 'Nombre de colección',
+    subcollections: 'Subcolecciones',
     name_sub_collection: 'Nombre de subcolección',
     collections: 'Colecciones',
     lo_quantity: 'Cantidad de OAs',

@@ -89,6 +89,7 @@ export default {
   },
   collections: {
     name: 'Name collection',
+    subcollections: 'Subcollections',
     name_sub_collection: 'Name subcollection',
     collections: 'Collections',
     lo_quantity: 'LOs quantity',
