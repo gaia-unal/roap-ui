@@ -1,9 +1,10 @@
 import React from 'react';
-import { List, EditButton, ShowButton, TextInput, Filter, SelectInput, translate } from 'react-admin';
+import { List, EditButton, ShowButton, TextInput, Filter, SelectInput, translate, ReferenceInput, FormDataConsumer } from 'react-admin';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
+import { change } from 'redux-form';
 
 import decodeJwt from 'jwt-decode';
 import Notification from '../notification';
@@ -63,6 +64,33 @@ LearningObjectGird.defaultProps = {
 const LearningObjectFilter = ({ translate, permissions, user, ...props }) => (
   <Filter {...props}>
     <TextInput label={translate('lo.search')} id="inputSearchLo" style={{ width: 225 }} source="q" alwaysOn />
+    <FormDataConsumer form={'filterForm'} source='collection_id' alwaysOn>
+      {({ formData, dispatch, ...rest }) => (
+        <ReferenceInput
+          label="Colección"
+          resource={props.resource}
+          source='collection_id'
+          reference='collection'
+          onChange={value => {
+            dispatch(change('filterForm', 'sub_collection_id', null));
+          }}
+          allowEmpty>
+          <SelectInput optionText='name' />
+        </ReferenceInput>
+      )}
+    </FormDataConsumer>
+
+    {(props.filterValues.collection_id) && (
+      <ReferenceInput
+        label="Subcolección"
+        key={props.filterValues.collection_id}
+        source='sub_collection_id'
+        reference='subcollection'
+        filter={{ collection_id: props.filterValues.collection_id }}>
+        <SelectInput optionText='name' />
+      </ReferenceInput>
+    )}
+
     {permissions === 'administrator' && (
       <SelectInput
         alwaysOn
