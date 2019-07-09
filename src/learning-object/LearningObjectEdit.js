@@ -202,7 +202,7 @@ export class LearningObjectEdit extends React.Component {
             <FormDataConsumer>
               {({ formData, ...rest }) =>
                 formData.collection_id && (
-                  <ReferenceInput label="Subcolección" source="sub_collection_id" reference='subcollection' filter={{ collection_id: formData.collection_id }} perPage={200} allowEmpty {...rest}>
+                  <ReferenceInput label="Subcolección" source="sub_collection_id" reference='subcollection' filter={{ _id: formData.collection_id }} perPage={200} allowEmpty {...rest}>
                     <SelectInput optionText="name" />
                   </ReferenceInput>)
               }

@@ -12,6 +12,7 @@ import { UserEdit } from './user/UserEdit';
 
 import { CollectionList } from './collection/CollectionList';
 import { CollectionCreate } from './collection/CollectionCreate';
+import { CollectionEdit } from './collection/CollectionEdit';
 
 import { Admin, Resource } from 'react-admin';
 import englishMessages from './i18n/en';
@@ -90,6 +91,7 @@ const App = () => (
         name="collection"
         list={CollectionList}
         create={CollectionCreate}
+        edit={CollectionEdit}
         options={{ label: 'collections.collections' }}
         icon={Book}
       />) : (

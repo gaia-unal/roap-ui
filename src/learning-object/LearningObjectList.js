@@ -86,7 +86,7 @@ const LearningObjectFilter = ({ translate, permissions, user, ...props }) => (
         key={props.filterValues.collection_id}
         source='sub_collection_id'
         reference='subcollection'
-        filter={{ collection_id: props.filterValues.collection_id }}>
+        filter={{ _id: props.filterValues.collection_id }}>
         <SelectInput optionText='name' />
       </ReferenceInput>
     )}
