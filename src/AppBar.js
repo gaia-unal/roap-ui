@@ -23,7 +23,9 @@ const CustomAppBar = withStyles(styles)(({ classes, ...props }) => (
     style={{ background: '#F1F1F1', color: 'black' }}
     userMenu={<CustomUserMenu />}
   >
+    
     <Logo />
+    <h1>Repositorio Facultad de Administración</h1>
     <span className={classes.spacer} />
   </AppBar>
 ));
