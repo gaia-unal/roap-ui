@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { userLogin } from 'react-admin';
 import { push } from 'react-router-redux';
-
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-
 import { showNotification } from 'react-admin';
-
 import { translate } from 'react-admin';
 import GetRecoverPassword from '../getRecoverPassword';
 import GetValidateAccountToken from '../getValidateAccountToken';
@@ -31,6 +28,14 @@ class LoginPage extends Component {
 
   handleClickClose() {
     this.setState({ openRecoverPasswordModal: false });
+  }
+
+  keyPress = e => {
+    if (e.keyCode === 13) {
+      if (this.props.isValid) {
+        this.submit(this.props.values)
+      }
+    }
   }
 
   submit = credentials => {
@@ -59,13 +64,13 @@ class LoginPage extends Component {
           flexDirection: 'column',
         }}
       >
-        <Notification/>
+        <Notification />
         <GetRecoverPassword
           open={this.state.openRecoverPasswordModal}
           translate={translate}
           close={() => this.handleClickClose.bind(this)}
         />
-        <GetValidateAccountToken/>
+        <GetValidateAccountToken />
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
           <TextField
             id="email"
@@ -75,6 +80,7 @@ class LoginPage extends Component {
             helperText={touched.email ? translate(errors.email) : ''}
             error={touched.email && Boolean(errors.email)}
             onChange={this.change.bind(null, 'email')}
+            onKeyDown={this.keyPress}
             fullWidth
           />
           <TextField
@@ -85,6 +91,7 @@ class LoginPage extends Component {
             helperText={touched.password ? translate(errors.password) : ''}
             error={touched.password && Boolean(errors.password)}
             onChange={this.change.bind(null, 'password')}
+            onKeyDown={this.keyPress}
             fullWidth
             type="password"
           />
@@ -96,7 +103,7 @@ class LoginPage extends Component {
             onClick={() => this.submit(values)}
             disabled={!isValid}
           >
-            {translate('ra.auth.sign_in')}
+            {translate('auth.sign_in')}
           </Button>
           <Button onClick={() => this.handleClickOpen()} variant="outlined" color="primary" style={{ marginTop: 10 }}>
             {translate('recover_password.forgot_your_password')}

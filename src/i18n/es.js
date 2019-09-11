@@ -7,6 +7,7 @@ export default {
     sign_up: 'Regístrate',
     confirm_password: 'Confirmar contraseña',
     change_password: 'Cambiar contraseña',
+    sign_in: 'Iniciar sesión'
   },
 
   lo: {
