@@ -81,6 +81,14 @@ class SignupPage extends Component {
     this.props.setFieldTouched(name, true, false);
   };
 
+  keyPress = e => {
+    if (e.keyCode === 13) {
+      if (this.props.isValid) {
+        this.submit(this.props.values)
+      }
+    }
+  }
+
   render() {
     const { values, errors, touched, isValid, translate } = this.props;
 
@@ -105,6 +113,7 @@ class SignupPage extends Component {
             onChange={this.change.bind(null, 'email')}
             helperText={touched.email ? translate(errors.email) : ''}
             error={touched.email && Boolean(errors.email)}
+            onKeyDown={this.keyPress}
             autoFocus
             required
           />
@@ -116,6 +125,7 @@ class SignupPage extends Component {
             autoComplete="current-text"
             onChange={this.change.bind(null, 'name')}
             helperText={touched.name ? translate(errors.name) : ''}
+            onKeyDown={this.keyPress}
             error={touched.name && Boolean(errors.name)}
             required
           />
@@ -128,6 +138,7 @@ class SignupPage extends Component {
             onChange={this.change.bind(null, 'password')}
             helperText={touched.password ? translate(errors.password) : ''}
             error={touched.password && Boolean(errors.password)}
+            onKeyDown={this.keyPress}
             required
           />
           <TextField
@@ -139,6 +150,7 @@ class SignupPage extends Component {
             onChange={this.change.bind(null, 'passwordConfirm')}
             helperText={touched.passwordConfirm ? translate(errors.passwordConfirm) : ''}
             error={touched.passwordConfirm && Boolean(errors.passwordConfirm)}
+            onKeyDown={this.keyPress}
             required
           />
           <Button
