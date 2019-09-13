@@ -113,7 +113,7 @@ class LoginPage extends Component {
           variant="outlined"
           color="primary"
           style={{ marginTop: 10 }}
-          onClick={() => push('/configuration')}
+          onClick={() => push('/learning-object-collection')}
         >
           {translate('lo.go_to')}
         </Button>
