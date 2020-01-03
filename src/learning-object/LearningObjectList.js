@@ -1,11 +1,10 @@
-import React from 'react';
-import { List, EditButton, ShowButton, TextInput, Filter, SelectInput, translate, ReferenceInput, FormDataConsumer } from 'react-admin';
+import React, { Fragment, Form } from 'react';
+import { List, EditButton, ShowButton, TextInput, Filter, SelectInput, useTranslate, ReferenceInput, FormDataConsumer } from 'react-admin';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import { change } from 'redux-form';
-
+import { useForm } from 'react-final-form';
 import decodeJwt from 'jwt-decode';
 import Notification from '../notification';
 const styles = {
@@ -61,8 +60,10 @@ LearningObjectGird.defaultProps = {
   ids: [],
 };
 
-const LearningObjectFilter = ({ translate, permissions, user, ...props }) => (
-  <Filter {...props}>
+const LearningObjectFilter = ({ permissions, user, ...props }) => {
+  const form = useForm();
+  const translate = useTranslate();
+  return (<Fragment><Filter {...props}>
     <TextInput label={translate('lo.search')} id="inputSearchLo" style={{ width: 225 }} source="q" alwaysOn />
     <FormDataConsumer form={'filterForm'} source='collection_id' alwaysOn>
       {({ formData, dispatch, ...rest }) => (
@@ -71,9 +72,7 @@ const LearningObjectFilter = ({ translate, permissions, user, ...props }) => (
           resource={props.resource}
           source='collection_id'
           reference='collection'
-          onChange={value => {
-            dispatch(change('filterForm', 'sub_collection_id', null));
-          }}
+          onChange={value => form.change('sub_collection_id', null)}
           allowEmpty>
           <SelectInput optionText='name' />
         </ReferenceInput>
@@ -133,22 +132,25 @@ const LearningObjectFilter = ({ translate, permissions, user, ...props }) => (
       />
     )}
   </Filter>
-);
+  </Fragment>);
+};
 
-const LearningObjectList = ({ translate, permissions, ...props }) => (
-  <List
+const LearningObjectList = ({ permissions, ...props }) => {
+  const translate = useTranslate();
+  return <List
     {...props}
     title={translate('lo.all')}
     filters={
+      <Form>
       <LearningObjectFilter
-        translate={translate}
         permissions={permissions}
         user={decodeJwt(localStorage.getItem('token'))}
       />
+      </Form>
     }
   >
     <LearningObjectGird user={decodeJwt(localStorage.getItem('token'))} permissions={permissions} />
   </List>
-);
+};
 
-export default translate(LearningObjectList);
+export default LearningObjectList;

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  LongTextInput,
   TabbedForm,
   FormTab,
   Edit,
@@ -13,11 +12,12 @@ import {
   SelectArrayInput,
   BooleanInput,
   ReferenceInput,
-  FormDataConsumer
+  FormDataConsumer,
+  TextInput
 } from 'react-admin';
 import SchemaService from '../custom-services/schema';
 
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 
 import ChipInput from 'material-ui-chip-input';
 
@@ -118,13 +118,14 @@ export class LearningObjectEdit extends React.Component {
         } else {
           return (
             <React.Fragment key={key}>
-              <LongTextInput
+              <TextInput
                 label={title}
                 source={key}
                 key={title}
                 id={key}
                 defaultValue={''}
                 style={{ background: required ? '#97CAFF' : 'white' }}
+                multiline
               />
               <br />
             </React.Fragment>

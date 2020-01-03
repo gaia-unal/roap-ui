@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import ReactJson from 'react-json-view';
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 
 const user = new userService();
 

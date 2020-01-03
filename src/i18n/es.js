@@ -1,4 +1,4 @@
-import spanishMessages from 'ra-language-spanish';
+import spanishMessages from '@blackbox-vision/ra-language-spanish';
 
 export default {
   ...spanishMessages,

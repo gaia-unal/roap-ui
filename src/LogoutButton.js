@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { userLogout, translate } from 'react-admin';
+import { userLogout, useTranslate } from 'react-admin';
 import MenuItem from '@material-ui/core/MenuItem';
 import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 
-const MyLogoutButton = ({ translate, userLogout, push, ...rest }) => {
+
+const MyLogoutButton = ({ userLogout, push, ...rest }) => {
+  const translate = useTranslate();
   return localStorage.getItem('role') !== 'external' ? (
     <MenuItem onClick={() => userLogout('/login')}>
       <PowerSettingsNew /> {translate('ra.auth.logout')}
@@ -26,4 +28,4 @@ const MyLogoutButton = ({ translate, userLogout, push, ...rest }) => {
 export default connect(
   null,
   { userLogout: userLogout, push: push }
-)(translate(MyLogoutButton));
+)(MyLogoutButton);

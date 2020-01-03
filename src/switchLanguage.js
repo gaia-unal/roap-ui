@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { changeLocale as changeLocaleAction } from 'react-admin';
+import { useSetLocale } from 'react-admin';
 import Cookies from 'universal-cookie';
 
 class SwitchLanguage extends Component {
   constructor() {
     super();
     this.cookies = new Cookies();
+    this.changeLocale = useSetLocale();
   }
 
   switchToSpanish = () => {
     this.cookies.set('user_lang', 'es_CO', { path: '/' });
-    this.props.changeLocale('es');
+    this.changeLocale('es');
   };
 
   switchToEnglish = () => {
     this.cookies.set('user_lang', 'en_US', { path: '/' });
-    this.props.changeLocale('en');
+    this.changeLocale('en');
   };
 
   switchToPortuguese = () => {
     this.cookies.set('user_lang', 'pt_BR', { path: '/' });
-    this.props.changeLocale('pt');
+    this.changeLocale('pt');
   };
 
   render() {
@@ -58,7 +58,4 @@ class SwitchLanguage extends Component {
   }
 }
 
-export default connect(
-  undefined,
-  { changeLocale: changeLocaleAction }
-)(SwitchLanguage);
+export default SwitchLanguage;

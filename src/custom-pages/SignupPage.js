@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 
 import userService from '../custom-services/user';
 
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 
 import { translate } from 'react-admin';
 import Notification, { openNotification } from '../notification';

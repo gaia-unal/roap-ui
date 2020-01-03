@@ -3,37 +3,41 @@ import decodeJwt from 'jwt-decode';
 import jwt from 'jwt-simple';
 import { openNotification } from '../notification';
 import { openGetValidateAccountToken } from '../getValidateAccountToken';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { translate } from 'react-admin';
+import { useTranslate } from 'react-admin';
 
-const _SignUpButton = ({ message, push, translate }) => (
-  <Button key="signup" onClick={() => push('/signup')}>
+const _SignUpButton = ({ message, push }) => {
+  const translate = useTranslate();
+
+  return <Button key="signup" onClick={() => push('/signup')}>
     {translate(message)}
   </Button>
-);
+};
 
 const SignUpButton = connect(
   null,
   {
     push,
   }
-)(translate(_SignUpButton));
+)(_SignUpButton);
 
-const _GetValidateAccountButton = ({ message, translate }) => (
-  <Button key="signup" onClick={() => openGetValidateAccountToken()}>
+const _GetValidateAccountButton = ({ message }) => {
+  const translate = useTranslate();
+  
+  return <Button key="signup" onClick={() => openGetValidateAccountToken()}>
     {translate(message)}
   </Button>
-);
+};
 
 const GetValidateAccountButton = connect(
   null,
   {
     push,
   }
-)(translate(_GetValidateAccountButton));
+)(_GetValidateAccountButton);
 
 export default (type, params) => {
   if (type === AUTH_LOGIN) {

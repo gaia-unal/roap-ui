@@ -34,7 +34,7 @@ import Layout from './Layout';
 import Book from '@material-ui/icons/Book';
 
 import LogoutButton from './LogoutButton';
-
+import polyglotI18nProvider from 'ra-i18n-polyglot';
 const BACKEND_HOST = `${process.env.NODE_ENV === 'production' ? '/v1' : 'http://localhost:8081/v1'}`;
 
 const uploadCapableDataProvider = addUploadFeature(dataProvider(BACKEND_HOST));
@@ -51,8 +51,8 @@ const validLocale = {
   en_US: 'en',
 };
 
-const i18nProvider = locale => messages[locale];
 const cookies = new Cookies();
+const i18nProvider = polyglotI18nProvider(locale => messages[locale], validLocale[cookies.get('user_lang')] || 'es');
 
 const App = () => (
   <Admin
@@ -61,9 +61,8 @@ const App = () => (
     loginPage={LoginPage}
     logoutButton={LogoutButton}
     customRoutes={customRoutes}
-    appLayout={Layout}
+    layout={Layout}
     title="Roap"
-    locale={validLocale[cookies.get('user_lang')] || 'es'}
     i18nProvider={i18nProvider}
   >
     {permissions => [

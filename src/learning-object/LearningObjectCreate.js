@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  LongTextInput,
   DateInput,
   Create,
   SimpleForm,
@@ -9,9 +8,10 @@ import {
   FileInput,
   FileField,
   SelectInput,
+  TextInput
 } from 'react-admin';
 
-import { Field } from 'redux-form';
+import { Field } from 'react-final-form';
 
 import ChipInput from 'material-ui-chip-input';
 
@@ -86,12 +86,13 @@ export class LearningObjectCreate extends React.Component {
           );
         } else {
           return (
-            <LongTextInput
+            <TextInput
               label={title}
               source={key}
               key={title}
               defaultValue={''}
               style={{ background: required ? '#3992F0' : 'white' }}
+              multiline
             />
           );
         }

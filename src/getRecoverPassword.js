@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,12 +9,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import userService from './custom-services/user';
-import { translate } from 'react-admin';
+import { useTranslate } from 'react-admin';
 import { withFormik } from 'formik';
 import { string, object } from 'yup';
 
 const user = new userService();
-
 class GetRecoverPassword extends Component {
   handleRequestToken() {
     user.sendEmailRecoverPassword(
@@ -29,7 +28,7 @@ class GetRecoverPassword extends Component {
   }
 
   render() {
-    const { translate } = this.props;
+    const translate = useTranslate();
 
     return (
       <Dialog open={this.props.open} aria-labelledby="get-recover-password-title">
@@ -69,7 +68,6 @@ export default connect(
   null,
   { push }
 )(
-  translate(
     withFormik({
       mapPropsToValues: () => ({ email: '' }),
       validationSchema: object({
@@ -78,5 +76,4 @@ export default connect(
           .required('errorMessages.required'),
       }),
     })(GetRecoverPassword)
-  )
 );

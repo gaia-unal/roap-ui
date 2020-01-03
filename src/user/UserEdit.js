@@ -1,11 +1,11 @@
 import React from 'react';
-import { TextInput, BooleanInput, DisabledInput, SelectInput, SimpleForm, Edit } from 'react-admin';
+import { TextInput, BooleanInput, SelectInput, SimpleForm, Edit } from 'react-admin';
 
 export const UserEdit = props => (
   <Edit title="User edition" {...props}>
     <SimpleForm>
-      <TextInput label="user.name" source="name" />
-      <DisabledInput label="E-mail" source="email" />
+      <TextInput label="user.name" source="name" disabled/>
+      <TextInput label="E-mail" source="email" />
       <SelectInput
         label="user.role"
         source="role"
@@ -20,11 +20,11 @@ export const UserEdit = props => (
           { id: 'rejected', name: 'lo.filters.rejected' },
         ]}
       />
-      <DisabledInput label="fields_name.creation_date" source="created" />
-      <DisabledInput label="fields_name.modified_date" source="modified" />
+      <TextInput label="fields_name.creation_date" source="created" disabled/>
+      <TextInput label="fields_name.modified_date" source="modified" disabled />
       <BooleanInput label="fields_name.deleted" source="deleted" />
-      <DisabledInput label="fields_name.email_validated" source="validated" />
-      <DisabledInput label="fields_name.last_activity" source="last_activity" />
+      <TextInput label="fields_name.email_validated" source="validated" disabled/>
+      <TextInput label="fields_name.last_activity" source="last_activity" disabled/>
     </SimpleForm>
   </Edit>
 );
