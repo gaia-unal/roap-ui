@@ -34,8 +34,6 @@ export const UserList = ({ permissions, ...props }) => (
       <EmailField source="email" />
       <TextField label="user.role" source="role" />
       <TextField label="fields_name.status" source="status" />
-      <DateField label="fields_name.creation_date" source="created" />
-      <DateField label="fields_name.modified_date" source="modified" />
       <BooleanField label="fields_name.deleted" source="deleted" />
       <BooleanField label="fields_name.validated" source="validated" />
       <DateField label="fields_name.last_activity" source="last_activity" />
