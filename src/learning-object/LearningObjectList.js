@@ -7,40 +7,42 @@ import Typography from '@material-ui/core/Typography';
 import { useForm } from 'react-final-form';
 import decodeJwt from 'jwt-decode';
 import Notification from '../notification';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = {
+const useStyles = makeStyles({
   card: {
     width: 400,
     margin: '0.5em',
-    display: 'inline-block',
-    verticalAlign: 'top',
+    display: 'inline-block'
   },
   cardActions: {
     textAlign: 'right',
   },
-};
 
-const styleDeleted = {
-  border: 'solid red',
-};
+  deleted: {
+    border: 'solid red'
+  }
+});
 
-const LearningObjectGird = ({ permissions, user, ids, data, basePath }) => (
-  <div>
+
+const LearningObjectGrid = ({ permissions, user, ids, data, basePath }) => {
+  const classes = useStyles();
+  return <div>
     <Notification />
     {ids.map((id, i) => (
-      <Card key={i} style={data[id].deleted ? { ...styles.card, ...styleDeleted } : styles.card}>
+      <Card key={i} className={data[id].deleted ? classes.deleted : classes.card}>
         <CardContent>
-          <Typography noWrap variant="title" gutterBottom>
+          <Typography variant="h5" gutterBottom>
             {data[id].metadata && data[id].metadata.general && data[id].metadata.general.title}
           </Typography>
-          <Typography noWrap variant="caption" gutterBottom>
+          <Typography color="textSecondary" gutterBottom>
             {data[id].created}
           </Typography>
-          <Typography noWrap variant="subheading" color="textSecondary" gutterBottom>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
             {data[id].metadata && data[id].metadata.general && data[id].metadata.general.description}
           </Typography>
         </CardContent>
-        <CardActions style={styles.cardActions}>
+        <CardActions className={classes.cardActions}>
           {(data[id].creator_id === user._id || user.role === 'administrator') && (
             <EditButton
               resource="learning-object-collection"
@@ -54,9 +56,9 @@ const LearningObjectGird = ({ permissions, user, ids, data, basePath }) => (
       </Card>
     ))}
   </div>
-);
+};
 
-LearningObjectGird.defaultProps = {
+LearningObjectGrid.defaultProps = {
   data: {},
   ids: [],
 };
@@ -150,7 +152,7 @@ const LearningObjectList = ({ permissions, ...props }) => {
       />
     }
   >
-    <LearningObjectGird user={decodeJwt(localStorage.getItem('token'))} permissions={permissions} />
+    <LearningObjectGrid user={decodeJwt(localStorage.getItem('token'))} permissions={permissions} />
   </List>
 };
 
