@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { translate, changeLocale, Title } from 'react-admin';
+import { useTranslate, useSetLocale, useLocale, Title } from 'react-admin';
 import withStyles from '@material-ui/core/styles/withStyles';
 import compose from 'recompose/compose';
 import SwitchLanguage from '../switchLanguage';
@@ -12,28 +12,27 @@ const styles = {
   button: { margin: '1em' },
 };
 
-const Configuration = ({ classes, locale, translate }) => (
-  <Card>
+const Configuration = ({ classes }) => {
+  const translate = useTranslate();
+  const locale = useLocale();
+  const changeLocale = useSetLocale();
+
+  return <Card>
     <Title title={translate('tabs_name.configuration')} />
     <CardContent>
       <div className={classes.label}>{translate('tabs_name.language')}</div>
-      <SwitchLanguage locale={locale} classes={classes} />
+      <SwitchLanguage locale={locale} changeLocale={changeLocale} classes={classes} />
     </CardContent>
   </Card>
-);
+};
 
 const mapStateToProps = state => ({
   theme: state.theme,
-  locale: state.i18n.locale,
 });
 
 export default compose(
   connect(
-    mapStateToProps,
-    {
-      changeLocale,
-    }
+    mapStateToProps
   ),
-  translate,
   withStyles(styles)
 )(Configuration);

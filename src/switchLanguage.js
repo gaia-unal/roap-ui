@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import { useSetLocale } from 'react-admin';
 import Cookies from 'universal-cookie';
 
 class SwitchLanguage extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.cookies = new Cookies();
-    this.changeLocale = useSetLocale();
+    this.locale = this.props.locale;
+    this.classes = this.props.classes;
+    this.changeLocale = this.props.changeLocale;
   }
 
   switchToSpanish = () => {
@@ -26,29 +27,29 @@ class SwitchLanguage extends Component {
   };
 
   render() {
-    const { locale, classes } = this.props;
+    
     return (
       <div>
         <Button
           variant="raised"
-          className={classes.button}
-          color={locale === 'en' ? 'primary' : 'default'}
+          className={this.classes.button}
+          color={this.locale === 'en' ? 'primary' : 'default'}
           onClick={this.switchToEnglish}
         >
           EN
         </Button>
         <Button
           variant="raised"
-          className={classes.button}
-          color={locale === 'es' ? 'primary' : 'default'}
+          className={this.classes.button}
+          color={this.locale === 'es' ? 'primary' : 'default'}
           onClick={this.switchToSpanish}
         >
           ES
         </Button>
         <Button
           variant="raised"
-          className={classes.button}
-          color={locale === 'pt' ? 'primary' : 'default'}
+          className={this.classes.button}
+          color={this.locale === 'pt' ? 'primary' : 'default'}
           onClick={this.switchToPortuguese}
         >
           PT

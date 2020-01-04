@@ -1,4 +1,4 @@
-import React, { Fragment, Form } from 'react';
+import React, { Fragment } from 'react';
 import { List, EditButton, ShowButton, TextInput, Filter, SelectInput, useTranslate, ReferenceInput, FormDataConsumer } from 'react-admin';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { useForm } from 'react-final-form';
 import decodeJwt from 'jwt-decode';
 import Notification from '../notification';
+
 const styles = {
   card: {
     width: 400,
@@ -59,26 +60,29 @@ LearningObjectGird.defaultProps = {
   data: {},
   ids: [],
 };
-
+const CollectionPicker = ({ formData, classes, resource, ...rest }) => {
+  const form = useForm()
+  return (
+    <Fragment>
+      <ReferenceInput
+        label="Colección"
+        resource={resource}
+        source='collection_id'
+        reference='collection'
+        onChange={value => form.change('sub_collection_id', null)}
+        allowEmpty>
+        <SelectInput optionText='name' />
+      </ReferenceInput>
+    </Fragment>
+  );
+}
 const LearningObjectFilter = ({ permissions, user, ...props }) => {
-  const form = useForm();
   const translate = useTranslate();
-  return (<Fragment><Filter {...props}>
+  return <Filter {...props}>
     <TextInput label={translate('lo.search')} id="inputSearchLo" style={{ width: 225 }} source="q" alwaysOn />
     <FormDataConsumer form={'filterForm'} source='collection_id' alwaysOn>
-      {({ formData, dispatch, ...rest }) => (
-        <ReferenceInput
-          label="Colección"
-          resource={props.resource}
-          source='collection_id'
-          reference='collection'
-          onChange={value => form.change('sub_collection_id', null)}
-          allowEmpty>
-          <SelectInput optionText='name' />
-        </ReferenceInput>
-      )}
+      {formDataProps => <CollectionPicker {...formDataProps} />}
     </FormDataConsumer>
-
     {(props.filterValues.collection_id) && (
       <ReferenceInput
         label="Subcolección"
@@ -132,7 +136,6 @@ const LearningObjectFilter = ({ permissions, user, ...props }) => {
       />
     )}
   </Filter>
-  </Fragment>);
 };
 
 const LearningObjectList = ({ permissions, ...props }) => {
@@ -141,12 +144,10 @@ const LearningObjectList = ({ permissions, ...props }) => {
     {...props}
     title={translate('lo.all')}
     filters={
-      <Form>
       <LearningObjectFilter
         permissions={permissions}
         user={decodeJwt(localStorage.getItem('token'))}
       />
-      </Form>
     }
   >
     <LearningObjectGird user={decodeJwt(localStorage.getItem('token'))} permissions={permissions} />
