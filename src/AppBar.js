@@ -2,9 +2,8 @@ import React from 'react';
 import { AppBar, MenuItemLink } from 'react-admin';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { withStyles } from "@material-ui/core/styles";
-
 const Logo = props => (
-  <img src="images/roap_logo.png" style={{ width: 100, height:70 }} alt="Logo ROAp"/>
+  <img src="images/roap_logo.png" style={{ width: 100, height: 50 }} alt="Logo ROAp"/>
 );
 
 const styles = {
@@ -20,7 +19,6 @@ const CustomAppBar = withStyles(styles)(({ classes, translate,...props }) => (
     <Logo />
     <span className={classes.spacer} />
     <MenuItemLink to="/configuration" leftIcon={<SettingsIcon />}/>
-    
   </AppBar>
 ));
 

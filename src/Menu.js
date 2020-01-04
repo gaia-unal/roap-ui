@@ -1,15 +1,15 @@
 import React, { createElement } from 'react';
-import { connect } from 'react-redux';
-import { MenuItemLink, getResources, Responsive } from 'react-admin';
+import { MenuItemLink, getResources } from 'react-admin';
+import { useSelector } from 'react-redux';
+import { useMediaQuery } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-// import LabelIcon from '@material-ui/icons/Label';
-
 import Divider from '@material-ui/core/Divider';
 
-//import decodeJwt from 'jwt-decode';
 
-const Menu = ({ resources, onMenuClick, logout }) => {
-  // const user = decodeJwt(localStorage.getItem('token'));
+const Menu = ({  onMenuClick, logout }) => {
+  const isXSmall = useMediaQuery(theme => theme.breakpoints.down('xs'));
+  const resources = useSelector(getResources);
+  const open = useSelector(state => state.admin.ui.sidebarOpen);
   return (
     <div>
       {resources.map((resource, id) => (
@@ -19,26 +19,14 @@ const Menu = ({ resources, onMenuClick, logout }) => {
           primaryText={resource.options.label}
           leftIcon={createElement(resource.icon)}
           onClick={onMenuClick}
+          sidebarIsOpen={open}
         />
       ))}
       <Divider />
-      {/*user.status !== 'accepted' &&
-      <React.Fragment>
-        <MenuItemLink
-          to={'/login'}
-          primaryText={'Login'}
-          leftIcon={<LabelIcon />}
-          onClick={onMenuClick}
-        />
-      </React.Fragment>
-    */}
-      <Responsive xsmall={logout} />
+      {isXSmall && logout}
     </div>
   );
 };
 
-const mapStateToProps = state => ({
-  resources: getResources(state),
-});
 
-export default withRouter(connect(mapStateToProps)(Menu));
+export default withRouter(Menu);

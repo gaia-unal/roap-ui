@@ -92,7 +92,7 @@ const LearningObjectFilter = ({ permissions, user, ...props }) => {
         source='sub_collection_id'
         reference='subcollection'
         filter={{ _id: props.filterValues.collection_id }}>
-        <SelectInput optionText='name' />
+        <SelectInput  optionText='name' />
       </ReferenceInput>
     )}
 
@@ -142,7 +142,7 @@ const LearningObjectFilter = ({ permissions, user, ...props }) => {
 
 const LearningObjectList = ({ permissions, ...props }) => {
   const translate = useTranslate();
-  return <List
+  return <Fragment><List
     {...props}
     title={translate('lo.all')}
     filters={
@@ -154,6 +154,7 @@ const LearningObjectList = ({ permissions, ...props }) => {
   >
     <LearningObjectGrid user={decodeJwt(localStorage.getItem('token'))} permissions={permissions} />
   </List>
+  </Fragment>
 };
 
 export default LearningObjectList;
