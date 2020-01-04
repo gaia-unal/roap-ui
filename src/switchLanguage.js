@@ -31,7 +31,7 @@ class SwitchLanguage extends Component {
     return (
       <div>
         <Button
-          variant="raised"
+          variant="contained"
           className={this.classes.button}
           color={this.locale === 'en' ? 'primary' : 'default'}
           onClick={this.switchToEnglish}
@@ -39,7 +39,7 @@ class SwitchLanguage extends Component {
           EN
         </Button>
         <Button
-          variant="raised"
+          variant="contained"
           className={this.classes.button}
           color={this.locale === 'es' ? 'primary' : 'default'}
           onClick={this.switchToSpanish}
@@ -47,7 +47,7 @@ class SwitchLanguage extends Component {
           ES
         </Button>
         <Button
-          variant="raised"
+          variant="contained"
           className={this.classes.button}
           color={this.locale === 'pt' ? 'primary' : 'default'}
           onClick={this.switchToPortuguese}
