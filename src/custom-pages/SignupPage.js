@@ -10,7 +10,6 @@ import userService from '../custom-services/user';
 import { push } from 'connected-react-router';
 
 import { translate } from 'react-admin';
-import Notification, { openNotification } from '../notification';
 import { withFormik } from 'formik';
 import { object, string, ref } from 'yup';
 
@@ -45,29 +44,12 @@ class SignupPage extends Component {
           credentials.email,
           res => {
             this.props.push('/learning-object-collection');
-            openNotification({
-              message: messageWelcome,
-              variant: 'success',
-              duration: null,
-              action: resendEmailValidation(
-                resend,
-                email => {
-                  user.sendUserEmail(email, () => {}, () => {});
-                },
-                credentials.email
-              ),
-            });
+            
           },
           err => console.log(err)
         ),
       err => {
         if (err.status === 409) {
-          openNotification({
-            message: messageUserExists,
-            variant: 'error',
-            duration: null,
-            action: userExists(login, this.props.push),
-          });
         } else {
           this.setState({ showErrorMessage: JSON.parse(err.response.text) });
         }
@@ -102,7 +84,6 @@ class SignupPage extends Component {
           flexDirection: 'column',
         }}
       >
-        <Notification />
         <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
           <TextField
             label="Email"

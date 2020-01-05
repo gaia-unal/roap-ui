@@ -1,143 +1,109 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { userLogin } from 'react-admin';
-import { push } from 'connected-react-router';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import React, { useState } from "react";
+import { useLogin, useNotify, required, TextInput, SimpleForm, useTranslate, Toolbar, email as emailV, Notification } from "react-admin";
 import Paper from '@material-ui/core/Paper';
-import { showNotification } from 'react-admin';
-import { translate } from 'react-admin';
+import Button from '@material-ui/core/Button';
+import { push } from 'connected-react-router';
+import { connect } from 'react-redux';
 import GetRecoverPassword from '../getRecoverPassword';
-import GetValidateAccountToken from '../getValidateAccountToken';
-import { withFormik } from 'formik';
-import { string, object } from 'yup';
-import Notification from '../notification';
+import { useFormState } from 'react-final-form';
 
-class LoginPage extends Component {
-  constructor(props) {
-    super(props);
+const LoginToolbar = ({ translate, submit }) => {
+  const formState = useFormState();
 
-    this.state = {
-      openRecoverPasswordModal: false,
-    };
-  }
-
-  handleClickOpen() {
-    this.setState({ openRecoverPasswordModal: true });
-  }
-
-  handleClickClose() {
-    this.setState({ openRecoverPasswordModal: false });
-  }
-
-  keyPress = e => {
-    if (e.keyCode === 13) {
-      if (this.props.isValid) {
-        this.submit(this.props.values)
-      }
-    }
-  }
-
-  submit = credentials => {
-    let s = this.props.userLogin({
-      ...credentials,
-    });
-    console.log(s)
-  };
-
-  change = (name, e) => {
-    e.persist();
-    this.props.handleChange(e);
-    this.props.setFieldTouched(name, true, false);
-  };
-
-  render() {
-    const { values, errors, touched, isValid, translate, push } = this.props;
-
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-        }}
+  return (
+    <Toolbar>
+      <Button
+        fullWidth
+        variant="outlined"
+        color="primary"
+        style={{ marginTop: 10 }}
+        onClick={submit}
+        disabled={!formState.valid}
       >
-        <Notification />
+        {translate('auth.sign_in')}
+      </Button>
+
+    </Toolbar>
+  );
+
+}
+
+const MyLoginPage = ({ push }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [openRecoverPasswordModal, setOpenRecoverPasswordModal] = useState(false);
+  const validateEmail = [required(), emailV()];
+  const login = useLogin();
+  const notify = useNotify();
+  const translate = useTranslate();
+
+  const submit = e => {
+    e.preventDefault();
+    login({ email, password }).catch(() => notify("Invalid email or password"));
+  };
+  const handleClickClose = () => {
+    setOpenRecoverPasswordModal(false)
+  }
+
+  const handleClickOpen = () => {
+    setOpenRecoverPasswordModal(true)
+    console.log('open')
+  }
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        flexDirection: 'column',
+      }}
+    >
+
+
+      <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }} elevation={5}>
         <GetRecoverPassword
-          open={this.state.openRecoverPasswordModal}
+          open={openRecoverPasswordModal}
           translate={translate}
-          close={() => this.handleClickClose.bind(this)}
+          close={handleClickClose}
         />
-        <GetValidateAccountToken />
-        <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
-          <TextField
+        <SimpleForm toolbar={<LoginToolbar translate={translate} submit={submit} />}>
+          <TextInput
             id="email"
             name="email"
             label="Email"
-            value={values.email}
-            helperText={touched.email ? translate(errors.email) : ''}
-            error={touched.email && Boolean(errors.email)}
-            onChange={this.change.bind(null, 'email')}
-            onKeyDown={this.keyPress}
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            validate={validateEmail}
             fullWidth
           />
-          <TextField
+          <TextInput
             id="password"
             name="password"
             label={translate('ra.auth.password')}
-            value={values.password}
-            helperText={touched.password ? translate(errors.password) : ''}
-            error={touched.password && Boolean(errors.password)}
-            onChange={this.change.bind(null, 'password')}
-            onKeyDown={this.keyPress}
+            value={password}
             fullWidth
+            onChange={e => setPassword(e.target.value)}
             type="password"
+            validate={required()}
           />
-          <Button
-            fullWidth
-            variant="outlined"
-            color="primary"
-            style={{ marginTop: 10 }}
-            onClick={() => this.submit(values)}
-            disabled={!isValid}
-          >
-            {translate('auth.sign_in')}
-          </Button>
-          <Button onClick={() => this.handleClickOpen()} variant="outlined" color="primary" style={{ marginTop: 10 }}>
-            {translate('recover_password.forgot_your_password')}
-          </Button>
-        </Paper>
-        <Button
-          variant="outlined"
-          color="primary"
-          style={{ marginTop: 10 }}
-          onClick={() => push('/learning-object-collection')}
-        >
-          {translate('lo.go_to')}
+        </SimpleForm>
+        <Button onClick={handleClickOpen} variant="outlined" color="primary" style={{ marginTop: 10 }}>
+          {translate('recover_password.forgot_your_password')}
         </Button>
-      </div>
-    );
-  }
-}
+      </Paper>
+      <Button
+        variant="outlined"
+        color="primary"
+        style={{ marginTop: 10 }}
+        onClick={() => push('/learning-object-collection')}
+      >
+        {translate('lo.go_to')}
+      </Button>
+      <Notification />
+    </div>
+  );
+};
 
-export default connect(
-  null,
-  { userLogin, push, showNotification }
-)(
-  translate(
-    withFormik({
-      mapPropsToValues: () => ({
-        email: '',
-        password: '',
-      }),
-      validationSchema: object({
-        email: string('')
-          .email('errorMessages.email')
-          .required('errorMessages.required'),
-        password: string('').required('errorMessages.required'),
-      }),
-    })(LoginPage)
-  )
-);
+export default connect(null, { push })(MyLoginPage);

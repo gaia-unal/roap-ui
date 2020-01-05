@@ -6,7 +6,6 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { useForm } from 'react-final-form';
 import decodeJwt from 'jwt-decode';
-import Notification from '../notification';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -28,7 +27,6 @@ const useStyles = makeStyles({
 const LearningObjectGrid = ({ permissions, user, ids, data, basePath }) => {
   const classes = useStyles();
   return <div>
-    <Notification />
     {ids.map((id, i) => (
       <Card key={i} className={data[id].deleted ? classes.deleted : classes.card}>
         <CardContent>

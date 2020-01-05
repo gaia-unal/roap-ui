@@ -1,7 +1,6 @@
 import { AUTH_LOGIN, AUTH_CHECK, AUTH_LOGOUT, AUTH_ERROR, AUTH_GET_PERMISSIONS } from 'react-admin';
 import decodeJwt from 'jwt-decode';
 import jwt from 'jwt-simple';
-import { openNotification } from '../notification';
 import { openGetValidateAccountToken } from '../getValidateAccountToken';
 import { push } from 'connected-react-router';
 import React from 'react';
@@ -54,42 +53,37 @@ export default (type, params) => {
       .then(response => {
         switch (response.status) {
           case 404:
-            response.json().then(json =>
-              openNotification({
-                message: json.message,
-                variant: 'error',
-                duration: null,
-                action: <SignUpButton message="auth.sign_up" />,
-              })
-            );
-            return Promise.reject();
+            
+            //return Promise.reject();
+            throw new Error(response.statusText);
+            return;
           case 401:
             response.json().then(json =>
-              openNotification({
+              /*openNotification({
                 message: json.message,
                 variant: 'error',
                 duration: null,
                 action: <GetValidateAccountButton message="action.resend" />,
-              })
-            );
+              })*/
+            {});
             return Promise.reject();
           case 403:
             response.json().then(json =>
-              openNotification({
+              /*openNotification({
                 message: json.message,
                 variant: 'error',
                 duration: null,
-              })
-            );
+              })*/
+            {});
             return Promise.reject();
           case 500:
             response.json().then(json =>
-              openNotification({
+              /*openNotification({
                 message: json.message,
                 variant: 'error',
                 duration: null,
-              })
-            );
+              })*/
+            {});
             return Promise.reject();
           default:
             break;
@@ -120,7 +114,7 @@ export default (type, params) => {
     return Promise.resolve();
   }
   if (type === AUTH_ERROR) {
-    // ...
+    console.log('swsw')
   }
   if (type === AUTH_CHECK) {
     return localStorage.getItem('token') ? Promise.resolve() : Promise.reject();

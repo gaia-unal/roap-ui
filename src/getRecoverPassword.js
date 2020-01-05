@@ -9,11 +9,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import userService from './custom-services/user';
-import { useTranslate } from 'react-admin';
 import { withFormik } from 'formik';
 import { string, object } from 'yup';
 
 const user = new userService();
+
 class GetRecoverPassword extends Component {
   handleRequestToken() {
     user.sendEmailRecoverPassword(
@@ -28,7 +28,7 @@ class GetRecoverPassword extends Component {
   }
 
   render() {
-    const translate = useTranslate();
+    const { translate } = this.props;
 
     return (
       <Dialog open={this.props.open} aria-labelledby="get-recover-password-title">
@@ -40,22 +40,15 @@ class GetRecoverPassword extends Component {
             id="emailRecoverPassword"
             name="email"
             label="Email"
-            onChange={e => {
-              e.persist();
-              this.props.handleChange(e);
-              this.props.setFieldTouched('email', true, false);
-            }}
             type="email"
-            helperText={this.props.touched.email ? translate(this.props.errors.email) : ''}
-            error={this.props.touched.email && Boolean(this.props.errors.email)}
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.close()} color="primary">
+          <Button onClick={() => this.props.close()} color="primary">
             {translate('ra.action.cancel')}
           </Button>
-          <Button onClick={() => this.handleRequestToken()} color="primary" disabled={!this.props.isValid}>
+          <Button onClick={() => this.handleRequestToken()} color="primary">
             {translate('action.send')}
           </Button>
         </DialogActions>
@@ -67,13 +60,5 @@ class GetRecoverPassword extends Component {
 export default connect(
   null,
   { push }
-)(
-    withFormik({
-      mapPropsToValues: () => ({ email: '' }),
-      validationSchema: object({
-        email: string('')
-          .email('errorMessages.email')
-          .required('errorMessages.required'),
-      }),
-    })(GetRecoverPassword)
+)((GetRecoverPassword)
 );
