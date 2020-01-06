@@ -1,39 +1,40 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import TextField from '@material-ui/core/TextField';
-
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-
 import userService from '../custom-services/user';
-
 import { push } from 'connected-react-router';
+import { useTranslate, TextInput, email, required, minLength, useNotify } from 'react-admin';
+import { Form, Field } from 'react-final-form';
 
-import { translate } from 'react-admin';
-import { withFormik } from 'formik';
-import { object, string, ref } from 'yup';
 
 const user = new userService();
-const resendEmailValidation = (message, sendEmail, email) => (
-  <Button key="resend" variant="outlined" size="small" onClick={() => sendEmail(email)}>
-    {message}
-  </Button>
-);
 
-const userExists = (message, push) => (
-  <Button key="goToLogin" variant="outlined" size="small" onClick={() => push('/login')}>
-    {message}
-  </Button>
-);
 
-class SignupPage extends Component {
-  submit = credentials => {
-    const { translate } = this.props;
-    const resend = translate('action.resend');
-    const messageWelcome = translate('signUp.welcome');
-    const messageUserExists = translate('signUp.userExists');
-    const login = translate('ra.auth.sign_in');
+const renderInput = ({
+  meta: { touched, error } = { touched: false, error: undefined },
+  input: { ...inputProps },
+  forvalidate,
+  ...props
+}) => (
+    <TextInput
+      {...inputProps}
+      {...props}
+      validate={forvalidate}
+      fullWidth
+    />
+  )
 
+
+const SignUpPage = ({ push, validate }) => {
+  const translate = useTranslate();
+  const notify = useNotify();
+  const validatePassword = (value, allValues) => {
+    return value !== allValues.password;
+  }
+
+  const handleSubmit = (credentials) => {
+    credentials.requestedRole = 'creator';
     user.post(
       credentials.email,
       credentials.password,
@@ -43,136 +44,80 @@ class SignupPage extends Component {
         user.sendUserEmail(
           credentials.email,
           res => {
-            this.props.push('/learning-object-collection');
-            
+            push('/learning-object-collection');
+            notify(translate('signUp.welcome'))
+
           },
           err => console.log(err)
         ),
       err => {
-        if (err.status === 409) {
-        } else {
-          this.setState({ showErrorMessage: JSON.parse(err.response.text) });
-        }
+        notify(JSON.parse(err.response.text).message)
       }
     );
-  };
-
-  change = (name, e) => {
-    e.persist();
-    this.props.handleChange(e);
-    this.props.setFieldTouched(name, true, false);
-  };
-
-  keyPress = e => {
-    if (e.keyCode === 13) {
-      if (this.props.isValid) {
-        this.submit(this.props.values)
-      }
-    }
   }
 
-  render() {
-    const { values, errors, touched, isValid, translate } = this.props;
-
-    return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          flexDirection: 'column',
-        }}
-      >
-        <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            autoComplete="current-email"
-            value={values.email}
-            onChange={this.change.bind(null, 'email')}
-            helperText={touched.email ? translate(errors.email) : ''}
-            error={touched.email && Boolean(errors.email)}
-            onKeyDown={this.keyPress}
-            autoFocus
-            required
-          />
-          <TextField
-            label={translate('user.name')}
-            name="name"
-            type="text"
-            value={values.name}
-            autoComplete="current-text"
-            onChange={this.change.bind(null, 'name')}
-            helperText={touched.name ? translate(errors.name) : ''}
-            onKeyDown={this.keyPress}
-            error={touched.name && Boolean(errors.name)}
-            required
-          />
-          <TextField
-            label={translate('ra.auth.password')}
-            name="password"
-            type="password"
-            value={values.password}
-            autoComplete="current-password"
-            onChange={this.change.bind(null, 'password')}
-            helperText={touched.password ? translate(errors.password) : ''}
-            error={touched.password && Boolean(errors.password)}
-            onKeyDown={this.keyPress}
-            required
-          />
-          <TextField
-            label={translate('ra.auth.password')}
-            name="passwordConfirm"
-            type="password"
-            value={values.passwordConfirm}
-            autoComplete="current-password"
-            onChange={this.change.bind(null, 'passwordConfirm')}
-            helperText={touched.passwordConfirm ? translate(errors.passwordConfirm) : ''}
-            error={touched.passwordConfirm && Boolean(errors.passwordConfirm)}
-            onKeyDown={this.keyPress}
-            required
-          />
-          <Button
-            variant="outlined"
-            style={{ marginTop: '10px' }}
-            color="primary"
-            disabled={!isValid}
-            onClick={() => this.submit({ ...values, role: 'creator' })}
-          >
-            {translate('auth.sign_up')}
-          </Button>
-        </Paper>
-      </div>
-    );
-  }
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        flexDirection: 'column',
+      }}
+    >
+      <Paper style={{ width: 250, padding: 20, display: 'flex', flexDirection: 'column' }}>
+        <Form
+          onSubmit={handleSubmit}
+          validate={validate}
+          render={({ handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
+              <Field
+                label="Email"
+                name="email"
+                type="email"
+                component={renderInput}
+                forvalidate={[required(), email()]}
+              />
+              <Field
+                label={translate('user.name')}
+                name="name"
+                type="text"
+                component={renderInput}
+                forvalidate={[required(), minLength(3)]}
+              />
+              <Field
+                label={translate('ra.auth.password')}
+                name="password"
+                type="password"
+                component={renderInput}
+                forvalidate={[required(), minLength(6)]}
+              />
+              <Field
+                label={translate('ra.auth.password')}
+                name="passwordConfirm"
+                type="password"
+                component={renderInput}
+                forvalidate={[required(), validatePassword]}
+              />
+              <Button
+                variant="outlined"
+                style={{ marginTop: '10px' }}
+                color="primary"
+                type="submit"
+              >
+                {translate('auth.sign_up')}
+              </Button>
+            </form>
+          )}
+        />
+      </Paper>
+    </div>
+  );
 }
+
 
 export default connect(
   null,
   { push }
-)(
-  translate(
-    withFormik({
-      mapPropsToValues: () => ({
-        email: '',
-        name: '',
-        password: '',
-        passwordConfirm: '',
-      }),
-      validationSchema: object({
-        email: string('')
-          .email('errorMessages.email')
-          .required('errorMessages.required'),
-        name: string('').required('errorMessages.required'),
-        password: string('')
-          .min(8, 'errorMessages.passwordLen')
-          .required('errorMessages.required'),
-        passwordConfirm: string('')
-          .oneOf([ref('password'), null], 'errorMessages.passwordConfirm')
-          .required('errorMessages.required'),
-      }),
-    })(SignupPage)
-  )
-);
+)(SignUpPage)
