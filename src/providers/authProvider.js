@@ -1,45 +1,8 @@
-import { AUTH_LOGIN, AUTH_CHECK, AUTH_LOGOUT, AUTH_ERROR, AUTH_GET_PERMISSIONS } from 'react-admin';
 import decodeJwt from 'jwt-decode';
 import jwt from 'jwt-simple';
-import { openGetValidateAccountToken } from '../getValidateAccountToken';
-import { push } from 'connected-react-router';
-import React from 'react';
-import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
-import { useTranslate } from 'react-admin';
 
-const _SignUpButton = ({ message, push }) => {
-  const translate = useTranslate();
-
-  return <Button key="signup" onClick={() => push('/signup')}>
-    {translate(message)}
-  </Button>
-};
-
-const SignUpButton = connect(
-  null,
-  {
-    push,
-  }
-)(_SignUpButton);
-
-const _GetValidateAccountButton = ({ message }) => {
-  const translate = useTranslate();
-  
-  return <Button key="signup" onClick={() => openGetValidateAccountToken()}>
-    {translate(message)}
-  </Button>
-};
-
-const GetValidateAccountButton = connect(
-  null,
-  {
-    push,
-  }
-)(_GetValidateAccountButton);
-
-export default (type, params) => {
-  if (type === AUTH_LOGIN) {
+export default {
+  login: params => {
     const { email, password } = params;
     const request = new Request(
       `${process.env.NODE_ENV === 'production' ? '/v1/user-login' : 'http://localhost:8081/v1/user-login'}`,
@@ -50,54 +13,25 @@ export default (type, params) => {
       }
     );
     return fetch(request)
-      .then(response => {
+      .then(async (response) => {
         switch (response.status) {
           case 404:
-            
-            //return Promise.reject();
-            throw new Error(response.statusText);
-            return;
           case 401:
-            response.json().then(json =>
-              /*openNotification({
-                message: json.message,
-                variant: 'error',
-                duration: null,
-                action: <GetValidateAccountButton message="action.resend" />,
-              })*/
-            {});
-            return Promise.reject();
           case 403:
-            response.json().then(json =>
-              /*openNotification({
-                message: json.message,
-                variant: 'error',
-                duration: null,
-              })*/
-            {});
-            return Promise.reject();
           case 500:
-            response.json().then(json =>
-              /*openNotification({
-                message: json.message,
-                variant: 'error',
-                duration: null,
-              })*/
-            {});
-            return Promise.reject();
+            const res = await response.json()
+            return Promise.reject(res);
           default:
             break;
         }
-
         return response.json();
-      })
-      .then(({ token }) => {
+      }).then(({ token }) => {
         const decodedToken = decodeJwt(token);
         localStorage.setItem('token', token);
         localStorage.setItem('role', decodedToken.role);
       });
-  }
-  if (type === AUTH_LOGOUT) {
+  },
+  logout: params => {
     const payload = {
       _id: 'external_user',
       deleted: false,
@@ -112,16 +46,14 @@ export default (type, params) => {
     localStorage.setItem('token', jwt.encode(payload, secret, false, 'HS256'));
     localStorage.setItem('role', 'external');
     return Promise.resolve();
-  }
-  if (type === AUTH_ERROR) {
-    console.log('swsw')
-  }
-  if (type === AUTH_CHECK) {
+  },
+  checkAuth: params => {
     return localStorage.getItem('token') ? Promise.resolve() : Promise.reject();
-  }
-  if (type === AUTH_GET_PERMISSIONS) {
+  },
+  checkError: error => Promise.resolve(),
+  getPermissions: params => {
     const role = localStorage.getItem('role');
     return role ? Promise.resolve(role) : Promise.reject();
   }
-  // return Promise.reject('Unkown method');
-};
+}
+

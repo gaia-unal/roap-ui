@@ -39,7 +39,9 @@ const MyLoginPage = ({ push }) => {
 
   const submit = e => {
     e.preventDefault();
-    login({ email, password }).catch(() => notify("Invalid email or password"));
+    login({ email, password }).catch((err) => {
+      notify(err.message)
+    });
   };
   const handleClickClose = () => {
     setOpenRecoverPasswordModal(false)
