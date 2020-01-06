@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import TextField from '@material-ui/core/TextField';
 import { push } from 'connected-react-router';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,52 +8,69 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import userService from './custom-services/user';
-import { withFormik } from 'formik';
-import { string, object } from 'yup';
+import { Form, Field } from 'react-final-form';
+import { email, TextInput, useNotify } from 'react-admin';
 
 const user = new userService();
 
-class GetRecoverPassword extends Component {
-  handleRequestToken() {
-    user.sendEmailRecoverPassword(
-      this.props.values.email,
-      res => this.props.push('/learning-object-collection'),
-      err => console.error(err)
-    );
+const renderInput = ({
+  meta: { touched, error } = { touched: false, error: undefined },
+  input: { ...inputProps },
+  ...props
+}) => (
+    <TextInput
+      {...inputProps}
+      {...props}
+      fullWidth
+    />
+  )
+
+
+const GetRecoverPassword = ({ translate, values, push, close, open, validate }) => {
+  const notify = useNotify();
+  const handleSubmit = (values) => {
+    if ('email' in values) {
+      user.sendEmailRecoverPassword(
+        values.email,
+        res => push('/learning-object-collection'),
+        err => console.error(err)
+      );
+    } else {
+      notify('errorMessages.email')
+    }
   }
 
-  handleClickClose() {
-    this.props.close();
-  }
-
-  render() {
-    const { translate } = this.props;
-
-    return (
-      <Dialog open={this.props.open} aria-labelledby="get-recover-password-title">
-        <DialogTitle id="get-recover-password-title">{translate('recover_password.title_modal')}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{translate('recover_password.message_modal')}</DialogContentText>
-          <TextField
-            autoFocus
-            id="emailRecoverPassword"
-            name="email"
-            label="Email"
-            type="email"
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => this.props.close()} color="primary">
-            {translate('ra.action.cancel')}
-          </Button>
-          <Button onClick={() => this.handleRequestToken()} color="primary">
-            {translate('action.send')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
+  return (
+    <Dialog open={open} aria-labelledby="get-recover-password-title">
+      <DialogTitle id="get-recover-password-title">{translate('recover_password.title_modal')}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{translate('recover_password.message_modal')}</DialogContentText>
+        <Form
+          onSubmit={handleSubmit}
+          validate={validate}
+          render={({ handleSubmit }) => (
+            <form onSubmit={handleSubmit} id="getRecoverPasswordForm" noValidate>
+              <Field
+                autoFocus
+                name="email"
+                component={renderInput}
+                label='Email'
+                validate={email()}
+              />
+            </form>
+          )}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => close()} color="primary" >
+          {translate('ra.action.cancel')}
+        </Button>
+        <Button onClick={() => document.getElementById('getRecoverPasswordForm').dispatchEvent(new Event('submit', { cancelable: true }))} color="primary">
+          {translate('action.send')}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }
 
 export default connect(
