@@ -3,7 +3,6 @@ import {
   TabbedForm,
   FormTab,
   Edit,
-  DateInput,
   TextField,
   DateField,
   FunctionField,
@@ -14,22 +13,21 @@ import {
   ReferenceInput,
   FormDataConsumer,
   TextInput,
-  TabbedFormTabs,
-  FormWithRedirect,
-  NullableBooleanInput,
+  Toolbar,
   SaveButton,
-  DeleteButton,
-  required
+  required,
+  DateInput
 } from 'react-admin';
 import { Field } from 'react-final-form';
 import ChipInput from 'material-ui-chip-input';
-import { CardContent, Typography, Box, Toolbar, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Grid } from '@material-ui/core';
+import { Typography, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Grid } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const renderChipInput = ({ input, label }) => (
-  <ChipInput
+const renderChipInput = ({ input, label }) => {
+  return (<ChipInput
     value={input.value}
     label={label}
+    variant="filled"
     onAdd={chip => {
       return input.onChange([...input.value, chip]);
     }}
@@ -37,9 +35,10 @@ const renderChipInput = ({ input, label }) => (
       return input.onChange(input.value.filter(v => v !== chip));
     }}
   />
-);
+  )
+};
 
-const ControlledExpansionPanels = () => {
+const MetadataForm = () => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChange = panel => (event, isExpanded) => {
@@ -47,7 +46,7 @@ const ControlledExpansionPanels = () => {
   };
 
   return (
-    <div >
+    <div>
       <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -66,7 +65,7 @@ const ControlledExpansionPanels = () => {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <TextInput label="title" source="metadata.general.title" validate={required()} fullWidth />
+              <TextInput label="title" source="metadata.general.title" resource="learning-object-collection.metadata" validate={required()} fullWidth />
               <TextInput label="language" source="metadata.general.language" fullWidth />
               <TextInput label="description" source="metadata.general.description" validate={required()} fullWidth />
               <Field label="keyword" name="metadata.general.keyword" component={renderChipInput} />
@@ -92,7 +91,7 @@ const ControlledExpansionPanels = () => {
             <div style={{ marginLeft: 20 }}>
               <Typography>contribute</Typography>
               <TextInput label="role" source="metadata.lifecycle.contribute.role" fullWidth />
-              <TextInput label="date" source="metadata.lifecycle.contribute.date" fullWidth />
+              <DateInput label="date" source="metadata.lifecycle.contribute.date" />
               <TextInput label="entity" source="metadata.lifecycle.contribute.entity" fullWidth />
             </div>
           </Grid>
@@ -325,25 +324,71 @@ const ControlledExpansionPanels = () => {
   );
 }
 
-const MetadataForm = (props) => (
-  <FormWithRedirect
-    {...props}
-    render={formProps => (
-      // here starts the custom form layout
-      <ControlledExpansionPanels />
-    )}
-  />
+const CustomToolbar = props => (
+  <Toolbar {...props}>
+    <SaveButton />
+  </Toolbar>
 );
 
-
-export const LearningObjectEdit = (props) => (
-  <Edit {...props}>
-    <TabbedForm tabs={<TabbedFormTabs />}>
+export const LearningObjectEdit = (props) => {
+  return (<Edit undoable={false} title="Learning object edition" {...props}>
+    <TabbedForm toolbar={<CustomToolbar />}>
       <FormTab label="summary">
+        {props.permissions === 'administrator' ? (
+          <ReferenceArrayInput
+            label="Expert"
+            source="expert_ids"
+            reference="user-collection"
+            filter={{ role: 'expert' }}
+            sort={{ field: 'email', order: 'ASC' }}
+            perPage={200}
+            allowEmpty
+            onChange={evt => { }}
+          >
+            <SelectArrayInput optionText="email" />
+          </ReferenceArrayInput>
+        ) : (
+            <TextField source="expert_ids" label="Evaluator" />
+          )}
+        {props.permissions === 'administrator' && (
+          <SelectInput
+            label="fields_name.status"
+            source="status"
+            choices={[
+              { id: 'pending', name: 'lo.filters.pending' },
+              { id: 'evaluated', name: 'lo.filters.evaluated' },
+              { id: 'accepted', name: 'lo.filters.accepted' },
+              { id: 'rejected', name: 'lo.filters.rejected' },
+            ]}
+          />
+        )}
+        <ReferenceInput
+          label="Colección"
+          source="collection_id"
+          reference="collection"
+          perPage={200}
+          sort={{ field: 'name', order: 'ASC' }}
+          allowEmpty
+        >
+          <SelectInput optionText="name" />
+        </ReferenceInput>
+        <FormDataConsumer>
+          {({ formData, ...rest }) =>
+            formData.collection_id && (
+              <ReferenceInput label="Subcolección" source="sub_collection_id" reference='subcollection' filter={{ _id: formData.collection_id }} perPage={200} allowEmpty {...rest}>
+                <SelectInput optionText="name" />
+              </ReferenceInput>)
+          }
+        </FormDataConsumer>
+        <DateField showTime source="created" label="fields_name.creation_date" />
+        <DateField showTime source="modified" label="fields_name.modified_date" />
+        {props.permissions === 'administrator' && <BooleanInput label="fields_name.deleted" source="deleted" />}
+        <FunctionField label="fields_name.evaluated" render={record => (record.evaluated ? 'Yes' : 'No')} />
+        <TextField source="file_metadata.name" label="fields_name.file_name" />
       </FormTab>
       <FormTab label="metadata">
         <MetadataForm />
       </FormTab>
     </TabbedForm>
-  </Edit>
-);
+  </Edit>)
+};
