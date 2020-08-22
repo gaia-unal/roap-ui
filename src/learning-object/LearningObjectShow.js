@@ -65,6 +65,9 @@ const supportedMediaMimetypes = [
   'image/vnd.microsoft.icon',
   'application/zip', //Special mimetype for support html content
   'application/pdf',
+  'application/octet-stream',
+  'application/x-zip-compressed',
+  'multipart/x-zip'
 ];
 
 const LearningObjectFrame = ({ record }) => {

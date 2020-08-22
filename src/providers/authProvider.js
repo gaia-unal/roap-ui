@@ -39,7 +39,7 @@ export default (type, params) => {
   if (type === AUTH_LOGIN) {
     const { email, password } = params;
     const request = new Request(
-      `${process.env.NODE_ENV === 'production' ? '/v1/user-login' : 'http://localhost:8081/v1/user-login'}`,
+      `${process.env.NODE_ENV === 'production' ? '/v1/user-login' : 'http://192.168.1.56:8081/v1/user-login'}`,
       {
         method: 'POST',
         body: JSON.stringify({ email, password }),

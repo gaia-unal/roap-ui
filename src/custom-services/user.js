@@ -2,7 +2,7 @@ import request from 'superagent';
 
 class userService {
   constructor() {
-    this.url = `${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8081'}`;
+    this.url = `${process.env.NODE_ENV === 'production' ? '' : 'http://192.168.1.56:8081'}`;
   }
 
   post(email, password, name, requestedRole, response, error) {

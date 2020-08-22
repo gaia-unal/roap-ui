@@ -35,7 +35,7 @@ import Book from '@material-ui/icons/Book';
 
 import LogoutButton from './LogoutButton';
 
-const BACKEND_HOST = `${process.env.NODE_ENV === 'production' ? '/v1' : 'http://localhost:8081/v1'}`;
+const BACKEND_HOST = `${process.env.NODE_ENV === 'production' ? '/v1' : 'http://192.168.1.56:8081/v1'}`;
 
 const uploadCapableDataProvider = addUploadFeature(dataProvider(BACKEND_HOST));
 
