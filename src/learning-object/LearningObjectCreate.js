@@ -143,7 +143,7 @@ export class LearningObjectCreate extends React.Component {
                   </ReferenceInput>)
               }
             </FormDataConsumer>
-          <FileInput source="files" label="fields_name.related_files">
+          <FileInput source="files" label="fields_name.related_files" maxSize={100000000}>
             <FileField source="src" title="title" />
           </FileInput>
           {this.state.form}
