@@ -1,0 +1,13 @@
+.ap-learning-object__metadata-set {
+    margin-left: 20px;
+}
+
+.ap-learning-object__metadata-set > * {
+    display: inline-block !important;
+    width: auto !important;
+    margin-left: 20px !important;
+}
+
+.ap-learning-object__metadata-set > p {
+    width: 100% !important;
+}

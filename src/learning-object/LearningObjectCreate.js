@@ -16,6 +16,7 @@ import { Field } from 'redux-form';
 import ChipInput from 'material-ui-chip-input';
 
 import SchemaService from '../custom-services/schema';
+import './learningObject.css'
 
 const renderChipList = ({ input, label, meta: { touched, error }, ...custom }) => (
   <React.Fragment>
@@ -50,7 +51,7 @@ export class LearningObjectCreate extends React.Component {
         formContent.push(
           <React.Fragment key={strKey}>
             <p>{key}</p>
-            <div style={{ marginLeft: 20 }}>{this.generateNestedForm(lom[key].fields, strKeys)}</div>
+            <div class="ap-learning-object__metadata-set">{this.generateNestedForm(lom[key].fields, strKeys)}</div>
           </React.Fragment>
         );
         strKeys.splice(-1, 1);
